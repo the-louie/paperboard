@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-15 (`todo` — Config flow: hub entry).
+**Current ticket:** Sprint 01 T-15 (`in-progress` — Config flow: hub entry).
 **Last completed:** Sprint 01 T-14 (commit `20019e2`).
 
 ## Sprints
