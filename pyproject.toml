@@ -9,6 +9,8 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM", "N", "RUF"]
+# U+2212 MINUS SIGN is deliberate typography on the display, not a typo for "-".
+allowed-confusables = ["−"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

@@ -31,3 +31,26 @@ The spike PNG is not committed; regenerate it with
 - resvg needs **TTF/OTF**, not WOFF2. Bundle `.ttf` files.
 - With `font_dirs=[bundled]` and `skip_system_fonts=True`, output does not depend on the host.
   That is required for golden tests.
+
+## Text metrics: Pillow vs resvg (T-07, 2026-11-08)
+
+`python -m scripts.spikes.spike_metrics` takes 5 strings with åäö, °, the − sign and
+commas, across all 10 font/size pairs we use. It compares resvg's **advance width** (derived
+from the ink shift between a start-anchored and an end-anchored copy) with Pillow's
+`FreeTypeFont.getlength()`.
+
+| Font | Sizes | max \|Δ advance\| |
+|---|---|---|
+| TRMNL12/16/21, Regular and Bold | 12, 16, 21 | **0.0 px** |
+| Inter Medium/Bold/ExtraBold | 26, 38, 58, 74 | **≤ 0.8 px** |
+
+**Decision:**
+- Widgets measure with `FontRegistry.pillow(...).getlength(text)`, i.e. advance widths. That
+  is what `text-anchor="end"` and column layout depend on.
+- Right-aligned figures use `text-anchor="end"` in SVG, so resvg aligns them itself; Pillow is
+  only needed for fitting and truncation.
+- Ink bounding boxes differ by up to 11 px at 74 px, because Pillow's `getbbox` includes side
+  bearings differently. Never use them for layout. Use advance plus the font's ascent and
+  descent.
+- A sub-pixel error of ≤ 0.8 px only shows on large Inter numerals, and those are never
+  truncated. Leave a 1 px safety margin in fit calculations.
