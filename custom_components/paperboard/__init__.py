@@ -23,7 +23,7 @@ from .const import (
     PROFILES,
     SUBENTRY_SCREEN,
 )
-from .data import ForecastCache
+from .data import ForecastCache, PriceProvider
 from .devices import DeviceStore
 from .fonts import load_fonts
 from .layout_watch import LayoutWatcher
@@ -62,6 +62,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     entry.async_on_unload(RoleWatcher(hass, hub.roles).async_start())
     hub.forecasts = ForecastCache(hass, hub.roles.get("weather"))
     entry.async_on_unload(hub.forecasts.async_start())
+    hub.prices = PriceProvider(hass, hub.roles.get("price"))
+    entry.async_on_unload(hub.prices.async_start())
     registry = dr.async_get(hass)
     wanted: set[str] = set()
     for subentry in list(entry.subentries.values()):

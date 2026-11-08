@@ -38,7 +38,7 @@ async def test_options_flow_updates_and_reloads(hass: HomeAssistant) -> None:
     result = await hass.config_entries.options.async_configure(
         result["flow_id"], {CONF_BASE_URL: "", CONF_REFRESH_RATE: 300})
     assert result["type"] is FlowResultType.CREATE_ENTRY
-    await hass.async_block_till_done()
+    await hass.async_block_till_done(wait_background_tasks=True)
     assert entry.options[CONF_REFRESH_RATE] == 300
 
 
@@ -51,6 +51,7 @@ async def test_roles_all_optional(hass: HomeAssistant) -> None:
                                                              {"next_step_id": "roles"})
     result = await hass.config_entries.options.async_configure(flow["flow_id"], {})
     assert result["type"] is FlowResultType.CREATE_ENTRY
+    await hass.async_block_till_done(wait_background_tasks=True)  # let the reload finish
     assert entry.options["roles"] == {}
     assert entry.options[CONF_REFRESH_RATE] == 900  # hub settings untouched
 

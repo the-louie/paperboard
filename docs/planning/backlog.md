@@ -74,7 +74,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-033 · Repairs for missing entities**~~ — CLOSED 2026-11-08 (Sprint 02 T-07): see commit "T-07: Repairs for missing entities"
 - ~~**B-034 · Data: weather forecasts**~~ — CLOSED 2026-11-08 (Sprint 02 T-08): see commit "T-08: Data: weather forecasts"
 - ~~**B-035 · Research: price sources**~~ — CLOSED 2026-11-08 (Sprint 02 T-09): see commit "T-09: Research: price sources"
-- → Sprint 02 T-10 (B-036 · Price adapters)
+- ~~**B-036 · Price adapters**~~ — CLOSED 2026-11-08 (Sprint 02 T-10): see commit "T-10: Price adapters"
 - → Sprint 02 T-11 (B-037 · Research: solar forecast source)
 - → Sprint 02 T-12 (B-038 · Solar forecast adapter)
 - → Sprint 02 T-13 (B-039 · TimeAxis object)

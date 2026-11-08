@@ -29,6 +29,7 @@ class Snapshot:
     lang: str = "sv"
     roles: dict[str, Any] = field(default_factory=dict)  # role -> entity id / list of ids
     forecasts: dict[str, list[dict[str, Any]]] = field(default_factory=dict)  # hourly/daily
+    prices: Any = None  # prices.PriceSnapshot or None
 
     def role_state(self, role: str) -> dict[str, Any] | None:
         """State dict of the entity bound to a single role, or None."""

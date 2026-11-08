@@ -25,6 +25,7 @@ from .fmt import to_float
 from .fonts import FontRegistry
 from .layouts import Layout, Snapshot
 from .pipeline import PanelProfile, PipelineError, render
+from .prices import PriceSnapshot
 from .role_watch import bound_entities
 from .runtime import ScreenRuntime, battery_percent
 from .text import Measurer
@@ -96,12 +97,16 @@ class ScreenRenderer:
                         lang="sv" if self.hass.config.language.startswith("sv") else "en",
                         roles=dict(self.hub.roles) if self.hub is not None else {},
                         forecasts={k: list(v) for k, v in self.hub.forecasts.forecasts.items()}
-                        if self.hub is not None and self.hub.forecasts is not None else {})
+                        if self.hub is not None and self.hub.forecasts is not None else {},
+                        prices=PriceSnapshot.of(self.hub.prices.series())
+                        if self.hub is not None and self.hub.prices is not None else None)
 
     def _hash(self, snap: Snapshot) -> str:
         bucket = int(snap.now.timestamp()) // self.layout.clock_resolution
         blob = json.dumps([bucket, snap.screen_name, snap.states, snap.stale_since,
-                           snap.battery, snap.forecasts], sort_keys=True, default=str)
+                           snap.battery, snap.forecasts,
+                           snap.prices.points if snap.prices else None],
+                          sort_keys=True, default=str)
         return hashlib.sha256(blob.encode()).hexdigest()
 
     async def async_render(self) -> None:
