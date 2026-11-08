@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-14 (`todo` — Weather icon set).
+**Current ticket:** Sprint 02 T-14 (`in-progress` — Weather icon set).
 **Last completed:** Sprint 02 T-13 (commit `d9bca94`).
 
 ## Sprints
