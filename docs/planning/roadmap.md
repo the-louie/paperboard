@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-03 (`todo` — Type scale and style tokens).
+**Current ticket:** Sprint 02 T-03 (`in-progress` — Type scale and style tokens).
 **Last completed:** Sprint 02 T-02 (commit `6dfdd46`).
 
 ## Sprints
