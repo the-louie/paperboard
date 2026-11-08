@@ -28,168 +28,33 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 ## Phase 0 — Spike: prove the rendering stack (goal: one mockup rendered in-process, ready for go/no-go)
 
-- [ ] **B-001 · Repo scaffold** · 3h · prio P1 · src: R §HACS publishing, CLAUDE.md
-      Includes:
-      - `custom_components/paperboard/` (`__init__.py`, `manifest.json` with domain, version,
-        documentation, issue_tracker, codeowners, `requirements: ["resvg-py==<ver>"]`,
-        `iot_class: local_push`) and `hacs.json` (`homeassistant: "2026.3.0"`);
-      - `pyproject.toml` (ruff, pytest config), `.gitignore`, `README.md` stub;
-      - a Python 3.14 venv via uv.
-
-      Acceptance: `ruff check` is clean and `pytest` runs 1 trivial test.
-- [ ] **B-002 · Research: the HA test harness on Python 3.14** · 2h · prio P1 · src: R §testing, N ha_integration_engineering §testing
-      The research found pytest-homeassistant-custom-component "declares itself broken" and its
-      replacement is core's `pytest-homeassistant`. Confirm:
-      - the package name and version on PyPI;
-      - how to install it in the venv;
-      - the fixtures (`hass`, `hass_client`, `aioclient_mock`) and its pin to an HA version.
-
-      Fallback: install `homeassistant` from PyPI plus `pytest-asyncio` fixtures by hand.
-      Acceptance: a written note in `docs/design/testing.md`, and B-001's venv runs a test that
-      gets a `hass` fixture.
-- [ ] **B-003 · Research: route collision and auth under `/api`** · 2h · prio P1 · src: R §risks 1, N trmnl_protocol §pointing at HA
-      Checks:
-      - grep HA core 2026.11 for registered views at `/api/setup`, `/api/display`, `/api/log`
-        (and `/api/display/current`);
-      - confirm a `requires_auth=False` view under `/api` is reachable without a Bearer token;
-      - how the `ip_ban` / `login_attempts_threshold` middleware counts our own 401s;
-      - whether HA gzips `web.Response` bodies (the firmware must not get gzip).
-
-      Acceptance: findings and a "safe/unsafe" verdict in `docs/design/device-api.md`. If unsafe,
-      design an escape hatch (another base path plus a firmware URL setting).
-- [ ] **B-004 · Research: the owner's TRMNL OG facts** · 1h · prio P1 · src: R phase 0, N trmnl_protocol §image limits
-      Read from byos-host's trmnl-service logs and status page (`ssh -i ~/.ssh/<key> root@192.168.1.10`):
-      FW-Version, Model, Width/Height headers, refresh rate, battery voltage, image bytes served.
-
-      Acceptance: the facts in `docs/design/device-api.md`; 2-bit PNG support (FW ≥ 1.6.0)
-      confirmed or not.
-- [ ] **B-005 · Spike: resvg-py in an HA 2026.11 throwaway container** · 3h · prio P1 · needs: B-001 · src: R §engines, N rendering_engines
-      Steps:
-      - `docker run --rm` the official image on dev-host (not ha-host);
-      - `pip install` resvg-py into the container;
-      - render a fixture SVG with the bundled fonts;
-      - measure ms per frame, % grey pixels, and PNG bytes.
-
-      Delete the image afterwards; the owner asked to keep dev-host clean.
-      Acceptance: numbers recorded in `docs/design/rendering.md`.
-- [ ] **B-006 · Spike: text metrics, Pillow vs resvg** · 3h · prio P1 · needs: B-007 · src: R §risks 5
-      Widgets must measure text in Python (right-aligned figures, truncation) before resvg
-      draws it. For TRMNL12/16/21 and Inter at 26/38/58/74 px, compare `ImageFont.getlength`
-      with the rendered ink width from resvg (bbox of the black pixels).
-
-      Acceptance: max deviation in px per size, and the chosen measurement method in
-      `docs/design/rendering.md`.
-- [ ] **B-007 · Fonts: bundle and load** · 2h · prio P1 · needs: B-001 · src: N rendering_engines §licences
-      Bundle TRMNL12/16/21 (Regular and Bold) and Inter (variable or 500/700/800 static) with
-      the OFL licence texts in `custom_components/paperboard/fonts/`. Verify the TRMNL fonts'
-      upstream origin and licence (the research found only the copy in hass-eink-dashboard).
-      Write a font registry loaded in the executor.
-      Acceptance: `fonts/LICENSES.md` with the source URL of each font, and a unit test that
-      loads every font.
-- [ ] **B-008 · Pipeline: SVG → panel PNG** · 4h · prio P1 · needs: B-005, B-007 · src: R §engines, `<the maintainer's earlier TRMNL server>`
-      A pure function `render(svg: str, profile) -> bytes`. Steps:
-      1. resvg with `font_dirs` and `skip_system_fonts`;
-      2. Pillow to `L`;
-      3. a threshold to an exact 2-colour (or 4-grey) palette;
-      4. a hand-made 1-bit/2-bit PNG encoder (port from trmnl-service, credit it);
-      5. enforce the byte limit: 90 000 on the OG, 750 000 on PSRAM boards.
-
-      No `getdata()`. Acceptance: unit tests for both depths and for the size limit.
-- [ ] **B-009 · Golden-image test harness** · 3h · prio P1 · needs: B-008 · src: R §testing
-      Contents:
-      - `tests/fixtures/states/*.json` (a real snapshot from the owner's HA, read-only,
-        anonymised where needed);
-      - frozen time;
-      - `tests/golden/*.png` with an exact-match compare and a diff image on failure;
-      - `scripts/update_golden.py`.
-
-      Acceptance: a deliberate 1-px change fails with a readable diff.
-- [ ] **B-010 · Static render of mockup 01 (go/no-go)** · 4h · prio P1 · needs: B-008, B-009 · src: M 01-tidslinjen.html, V row 01
-      Hand-written SVG builder (no layout engine yet) for mockup 01 including the owner's
-      changes: no "Tryck", and a solar forecast graph on the price time axis.
-      Acceptance: the PNG is under 90 kB with 0 % grey, the golden test is green, and the
-      go/no-go is written in the roadmap.
+- → Sprint 01 T-01 (B-001 · Repo scaffold)
+- → Sprint 01 T-02 (B-002 · Research: HA test harness on Python 3.14)
+- → Sprint 01 T-03 (B-003 · Research: route collision and auth under /api)
+- → Sprint 01 T-04 (B-004 · Research: the owner's TRMNL OG facts)
+- → Sprint 01 T-05 (B-005 · Spike: resvg-py in an HA 2026.11 throwaway container)
+- → Sprint 01 T-07 (B-006 · Spike: text metrics, Pillow vs resvg)
+- → Sprint 01 T-06 (B-007 · Fonts: bundle and load)
+- → Sprint 01 T-10 (B-008 · Pipeline: SVG → panel PNG)
+- → Sprint 01 T-11 (B-009 · Golden-image test harness)
+- → Sprint 01 T-13 (B-010 · Static render of mockup 01 (go/no-go))
 
 ## Phase 1 — Device server (goal: the owner's OG is served from HA, battery and liveness monitored)
 
-- [ ] **B-011 · Research: pairing semantics** · 2h · prio P1 · needs: B-003 · src: N trmnl_protocol §setup, `<the maintainer's earlier TRMNL server>`
-      Questions:
-      - what the firmware does with the `/api/setup` response (`api_key` and `friendly_id`
-        storage, re-pair after reset);
-      - status 202 versus 200 for an unregistered MAC;
-      - how trmnl-service derives keys (`derived_api_key`).
-
-      Then decide the pairing UX: a window opened by a button entity or service, 5 min.
-      Acceptance: the flow is written in `docs/design/device-api.md`.
-- [ ] **B-012 · Config flow: hub entry** · 3h · prio P1 · needs: B-002 · src: N ha_integration_engineering §config
-      A single hub entry: base URL hint (LAN), default refresh rates, translations (en, sv).
-      `OptionsFlowWithReload`. Acceptance: config-flow tests pass.
-- [ ] **B-013 · Config subentry: Screen** · 4h · prio P1 · needs: B-012 · src: N ha_integration_engineering §subentries
-      Fields: name, panel profile (OG 800×480 1-bit to start with), layout file, refresh rate.
-      One device in the registry per subentry. A reconfigure flow.
-      Acceptance: tests cover add, edit and remove.
-- [ ] **B-014 · View: `/api/setup` with a pairing window** · 4h · prio P1 · needs: B-011, B-013 · src: R §serving
-      - Opening: a `button.paperboard_pair_<screen>` entity opens a 5-minute window.
-      - In the window: an unknown MAC gets a fresh `api_key`, stored in the subentry data.
-      - Outside the window: 404 or 202, per B-011.
-      - Hygiene: compare keys in constant time, and redact keys in diagnostics.
-
-      Acceptance: tests with the emulated client (B-016).
-- [ ] **B-015 · View: `/api/display`** · 4h · prio P1 · needs: B-014, B-018 · src: N trmnl_protocol §response fields
-      - Auth: `ID` plus `Access-Token`. A failed check returns 401 only when an `Authorization`
-        header was sent, otherwise 403 (HA ban rules, B-003).
-      - Response: `status`, `image_url`, `filename` (content hash), `refresh_rate`.
-      - Telemetry: copy the header values to the screen state.
-
-      Acceptance: tests for the auth matrix and the response.
-- [ ] **B-016 · Emulated TRMNL client** · 3h · prio P1 · needs: B-001 · src: N trmnl_protocol §headers (firmware 1.8.19)
-      A `scripts/fake_trmnl.py` and test helper that sends the real header set (ID,
-      Access-Token, Battery-Voltage, FW-Version, Model, Width, Height, RSSI, Refresh-Rate,
-      Image-Cached). It runs setup → display → image GET → log. It follows a single 307/308,
-      fails on a 302, and refuses gzip.
-      Acceptance: it runs against byos-host's trmnl-service, read-only, as a reference check.
-- [ ] **B-017 · View: `/api/log`** · 2h · prio P2 · needs: B-015 · src: N trmnl_protocol §log
-      Store the last 50 entries per screen and expose them in config-entry diagnostics.
-      Acceptance: a test posts `{"logs":[...]}`.
-- [ ] **B-018 · Image view plus last-good cache** · 3h · prio P1 · needs: B-008 · src: R §serving
-      - Path: `/api/paperboard/image/<screen>/<token>/<hash>.png`.
-      - Requests: `ETag`, `HEAD` and `Content-Length`, with no gzip.
-      - Content: the cached bytes. A failed render keeps the previous image and marks it stale.
-
-      Acceptance: tests for 200, 304, a wrong token, and HEAD.
-- [ ] **B-019 · ImageEntity per screen** · 2h · prio P2 · needs: B-018 · src: N ha_integration_engineering §image entity
-      `async_image` returns the cached bytes; bump `image_last_updated` on each new hash.
-      Acceptance: the image shows in the HA UI in the test harness.
-- [ ] **B-020 · Render scheduler** · 5h · prio P1 · needs: B-008, B-013 · src: R §threading
-      Behaviour:
-      - In the loop: collect a snapshot (states plus cached service data); skip when its hash
-        is unchanged.
-      - In the executor: render.
-      - Triggers: `async_track_state_change_event` on referenced entities with `Debouncer`, a
-        clock tick, and a lead-time render 120 s before the expected check-in.
-      - Never render on the request path.
-
-      Acceptance: a test proves no blocking call in the loop, and that a state change gives
-      exactly one render after the debounce.
-- [ ] **B-021 · Telemetry sensors** · 3h · prio P1 · needs: B-015 · src: R §monitoring (O2/O4)
-      Per screen: battery voltage, battery %, RSSI, firmware version, last check-in
-      (timestamp), last render error (diagnostic). Battery % uses trmnl-service's
-      `battery_percent` curve, with credit.
-      Acceptance: entity tests pass.
-- [ ] **B-022 · Missed-check-in problem sensor** · 2h · prio P1 · needs: B-021 · src: R §monitoring
-      A `binary_sensor` with device_class problem: on when there has been no check-in for
-      3 × refresh_rate. The README documents how to alert on it.
-      Acceptance: a time-travel test.
-- [ ] **B-023 · Widgets: "now" block and status footer** · 4h · prio P1 · needs: B-010 · src: M 01 left column, V design rules
-      - "Now" block: outdoor temperature (or weather state), condition, key/value list; every
-        field optional.
-      - Footer: render time (always shown), stale flag, battery.
-
-      Acceptance: golden tests for full data and for an empty house.
-- [ ] **B-024 · Diagnostics and redaction** · 2h · prio P2 · needs: B-014 · src: N ha_integration_engineering
-      Config-entry diagnostics: screens, last check-in, last logs, and render timings. Keys and
-      tokens are redacted.
-      Acceptance: a snapshot test with syrupy.
+- → Sprint 01 T-14 (B-011 · Research: pairing semantics)
+- → Sprint 01 T-15 (B-012 · Config flow: hub entry)
+- → Sprint 01 T-16 (B-013 · Config subentry: Screen)
+- → Sprint 01 T-19 (B-014 · View: /api/setup with a pairing window)
+- → Sprint 01 T-20 (B-015 · View: /api/display)
+- → Sprint 01 T-17 (B-016 · Emulated TRMNL client)
+- → Sprint 01 T-21 (B-017 · View: /api/log)
+- → Sprint 01 T-18 (B-018 · Image view plus last-good cache)
+- → Sprint 01 T-22 (B-019 · ImageEntity per screen)
+- → Sprint 01 T-23 (B-020 · Render scheduler)
+- → Sprint 01 T-24 (B-021 · Telemetry sensors)
+- → Sprint 01 T-25 (B-022 · Missed-check-in problem sensor)
+- → Sprint 01 T-26 (B-023 · Widgets: "now" block and status footer)
+- → Sprint 01 T-27 (B-024 · Diagnostics and redaction)
 - [ ] **B-025 · decision: deploy to production HA (ha-host)** · 2h · prio P1 · needs: B-015, B-018, B-020, B-021, B-023 · src: CLAUDE.md working rules
       Copying to `/docker/hass/homeassistant/custom_components/` and restarting HA needs the
       owner's OK. Claude prepares the exact commands and a rollback, then verifies with the
@@ -393,33 +258,15 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 ## Cross-cutting
 
-- [ ] **B-073 · Security review of the device endpoints** · 2h · prio P1 · needs: B-015, B-018 · src: R §serving, CLAUDE.md
-      Covers:
-      - the unauthenticated surface;
-      - rate limits;
-      - constant-time compares;
-      - token length and entropy;
-      - logging hygiene;
-      - Nabu Casa exposure (the views are also reachable through the cloud URL).
-
-      Write it up in `docs/design/device-api.md`.
-- [ ] **B-074 · Performance budget** · 2h · prio P2 · needs: B-020 · src: R §threading
-      Measure render ms and memory for all 8 layouts; alert in diagnostics if a render takes
-      more than 500 ms.
+- → Sprint 01 T-28 (B-073 · Security review of the device endpoints)
+- → Sprint 01 T-29 (B-074 · Performance budget)
 - [ ] **B-075 · Localisation of widget texts** · 3h · prio P3 · needs: B-051 · src: M (Swedish), HACS audience
       Weekday and month names, units, decimal separator per HA language (sv, en).
-- [ ] **B-076 · Fixture capture script** · 2h · prio P1 · needs: B-009 · src: CLAUDE.md credentials rule
-      A read-only script that snapshots the bound roles' states and service responses from the
-      owner's HA into `tests/fixtures/`. It strips the token, calendar personal names (replaced
-      with placeholders) and location.
+- → Sprint 01 T-12 (B-076 · Fixture capture script)
 - [ ] **B-077 · Device liveness → owner alert** · 1h · prio P2 · needs: B-022, B-025 · src: O4 in <the maintainer's HA repo>
       Add the problem sensor to the owner's AppDaemon watchdog or notification path (that
       change is made in the `<the maintainer's HA repo>` repo).
 - [ ] **B-078 · Spike: a Lovelace preview card (optional)** · 3h · prio P3 · src: R (the cryptomilk editor is a card)
       Only a read-only preview of the ImageEntity with a layout picker; no WYSIWYG editing.
-- [ ] **B-079 · Unit-format helpers** · 2h · prio P2 · needs: B-001 · src: M (fmt/sgn helpers)
-      Decimal comma, signed values (−/+/±), °, kW/kWh, the em dash for missing values, with
-      tests.
-- [ ] **B-080 · Text measurement and wrap utility** · 3h · prio P1 · needs: B-006 · src: B-006 result
-      Width measurement, ellipsis truncation, and wrapping to N lines, using the method chosen
-      in B-006.
+- → Sprint 01 T-09 (B-079 · Unit-format helpers)
+- → Sprint 01 T-08 (B-080 · Text measurement and wrap utility)
