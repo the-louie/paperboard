@@ -1,6 +1,6 @@
 # Sprint 01 — Skeleton and device server: the stack proven, HA serves a TRMNL image
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-13 (`todo` — Static render of mockup 01 (go/no-go))
+**Current ticket:** T-13 (`in-progress` — Static render of mockup 01 (go/no-go))
 **Last completed:** T-12 (`done` — commit `2158d1e`)
 **Budget:** 81h estimated (band 80–120h)
 
@@ -27,7 +27,7 @@ Prove the resvg + Pillow stack and build the integration skeleton, so that a pap
 | T-10 | Pipeline: SVG → panel PNG | 4 | T-05, T-06 | B-008 | done | Landed in 5098412 |
 | T-11 | Golden-image test harness | 3 | T-10 | B-009 | done | Landed in 6bbee34 |
 | T-12 | Fixture capture script | 2 | T-11 | B-076 | done | Landed in 2158d1e |
-| T-13 | Static render of mockup 01 (go/no-go) | 4 | T-10, T-11, T-08, T-09 | B-010 | todo | spec: backlog row B-010 (git show 13b3751:docs/planning/backlog.md) |
+| T-13 | Static render of mockup 01 (go/no-go) | 4 | T-10, T-11, T-08, T-09 | B-010 | in-progress | spec: backlog row B-010 (git show 13b3751:docs/planning/backlog.md) |
 | T-14 | Research: pairing semantics | 2 | T-03 | B-011 | todo | spec: backlog row B-011 (git show 13b3751:docs/planning/backlog.md) |
 | T-15 | Config flow: hub entry | 3 | T-02 | B-012 | todo | spec: backlog row B-012 (git show 13b3751:docs/planning/backlog.md) |
 | T-16 | Config subentry: Screen | 4 | T-15 | B-013 | todo | spec: backlog row B-013 (git show 13b3751:docs/planning/backlog.md) |
