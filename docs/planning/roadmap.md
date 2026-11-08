@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-03 (`todo` — Area frames: rounded boxes and an inverted hero).
+**Current ticket:** Sprint 03 T-03 (`in-progress` — Area frames: rounded boxes and an inverted hero).
 **Last completed:** Sprint 03 T-02 (commit `474eb77`).
 
 ## Sprints
