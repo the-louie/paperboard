@@ -10,6 +10,7 @@ from __future__ import annotations
 import datetime as dt
 import logging
 from collections.abc import Callable
+from dataclasses import replace
 from typing import Any
 
 from .grid import Grid
@@ -55,12 +56,21 @@ def render_spec(spec: LayoutSpec, snap: Snapshot, measure: Measurer, theme: Them
                 notes: list[str] | None = None) -> str:
     notes = notes if notes is not None else []
     g = spec.grid
-    margin = g.get("margin", 0)
-    grid = Grid.build(g["columns"], g["rows"], g["areas"], snap.width - 2 * margin,
-                      snap.height - 2 * margin, g.get("gap", 0))
-    padding = g.get("padding", [8, 16])
+    # Layouts are designed on spec.canvas (800x480); bigger panels scale geometry and type.
+    scale = min(snap.width / spec.canvas[0], snap.height / spec.canvas[1])
+    if abs(scale - 1) > 0.01:
+        theme = replace(theme, scale_factor=scale)
+
+    def px(v: Any) -> Any:
+        return v * scale if isinstance(v, int | float) else v
+
+    margin = px(g.get("margin", 0))
+    grid = Grid.build([px(c) for c in g["columns"]], [px(r) for r in g["rows"]], g["areas"],
+                      snap.width - 2 * margin, snap.height - 2 * margin, px(g.get("gap", 0)))
+    padding = [px(p) for p in g.get("padding", [8, 16])]
     frames: dict[str, str] = g.get("frames", {})
-    paddings: dict[str, list[int]] = g.get("paddings", {})
+    paddings: dict[str, list[float]] = {a: [px(v) for v in p]
+                                        for a, p in g.get("paddings", {}).items()}
 
     def outer(area: str) -> Rect:
         r = grid.rect(area)
@@ -100,12 +110,12 @@ def render_spec(spec: LayoutSpec, snap: Snapshot, measure: Measurer, theme: Them
         elif frame in ("inverted", "panel"):
             svg.rect(box.x, box.y, box.w, box.h, "#000", rx=12 if frame == "inverted" else 0)
         rect = _inner(box, paddings.get(area, padding))
-        fixed = sum(w.get("height", 0) for w in widgets)
+        fixed = sum(px(w.get("height", 0)) for w in widgets)
         flexible = [w for w in widgets if not w.get("height")]
         share = (rect.h - fixed) / len(flexible) if flexible else 0
         y = rect.y
         for w in widgets:
-            h = w.get("height") or share
+            h = px(w.get("height")) or share
             sub = Rect(rect.x, y, rect.w, h) if len(widgets) > 1 else rect
             y += h
             frag = _draw(REGISTRY[w["type"]], sub, snap, measure, theme, w["options"], notes,
@@ -117,7 +127,8 @@ def render_spec(spec: LayoutSpec, snap: Snapshot, measure: Measurer, theme: Them
                 svg.adopt_patterns(frag)
     if g.get("rules", 2) and not g.get("gap", 0):
         for x1, y1, x2, y2 in grid.rules():
-            svg.line(x1 + margin, y1 + margin, x2 + margin, y2 + margin, g["rules"])
+            svg.line(x1 + margin, y1 + margin, x2 + margin, y2 + margin,
+                     max(1, round(g["rules"] * scale)))
     return str(svg)
 
 

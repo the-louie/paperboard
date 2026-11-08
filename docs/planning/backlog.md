@@ -1,6 +1,6 @@
 # Backlog — paperboard
 
-Next ID: **B-087**
+Next ID: **B-088**
 
 **Sources:**
 - R = `docs/research/HACS e-ink dashboard renderer.md` (deep research 2026-11-08), § = section.
@@ -144,8 +144,14 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       Forecast. Without this, the HA energy dashboard has no forecast, and B-037/B-038 have no
       hourly data to test against. Mirrored as H-54 in `<the maintainer's HA repo>`.
 - → Sprint 03 T-17 (B-082 · Rotate-image-token button per screen)
-- → Sprint 03 T-15 (B-083 · Scale YAML layouts to larger panels)
+- ~~**B-083 · Scale YAML layouts to larger panels**~~ — CLOSED 2026-11-08 (Sprint 03 T-15): see commit "T-15: Scale YAML layouts to larger panels"
 - ~~**B-084 · Area frames: rounded boxes and an inverted hero**~~ — CLOSED 2026-11-08 (Sprint 03 T-03): see commit "T-03: Area frames: rounded boxes and an inverted hero"
 - ~~**B-085 · Header variants: masthead and title bar**~~ — CLOSED 2026-11-08 (Sprint 03 T-04): see commit "T-04: Header variants: masthead and title bar"
 - ~~**B-086 · Inverted now panel (Tavlan)**~~ — CLOSED 2026-11-08 (Sprint 03 T-05): see commit "T-05: Inverted now panel (Tavlan)"
+- [ ] **B-087 · Widget-internal offsets scale with the panel** · 6h · prio P3 · src: Sprint 03 T-15 (returned part of B-083)
+      Grid geometry and type now scale (T-15). Widgets still place baselines with fixed px
+      offsets (e.g. `r.y + 12`), so on TRMNL X (1872×1404) the now block's summary line
+      overlaps the numeral and rows sit too tight (golden `tidslinjen_trmnl_x`). Route every
+      widget offset through `theme.px()` and line heights through the type scale; verify with
+      the TRMNL X golden of every layout.
 
