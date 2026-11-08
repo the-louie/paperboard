@@ -66,7 +66,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 ## Phase 2 — Layout engine and the hard widgets (goal: mockup 01 live on real price, solar and weather data)
 
 - ~~**B-027 · Research: schema library for layouts**~~ — CLOSED 2026-11-08 (Sprint 02 T-01): see commit "T-01: Research: schema library for layouts"
-- → Sprint 02 T-02 (B-028 · Design: layout YAML schema)
+- ~~**B-028 · Design: layout YAML schema**~~ — CLOSED 2026-11-08 (Sprint 02 T-02): see commit "T-02: Design: layout YAML schema"
 - → Sprint 02 T-05 (B-029 · Layout loader and validation)
 - → Sprint 02 T-04 (B-030 · Grid engine with reflow)
 - → Sprint 02 T-03 (B-031 · Type scale and style tokens)
