@@ -164,3 +164,10 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       A unit test cannot catch this: the `hass` test fixture never runs HA's process exit.
       Also during the outage the old code answered `/api/display` with 500, which unpairs the
       panel; 8fc7be2 now answers 202.
+- [ ] **B-093 · Remember the last check-in across restarts** · 2h · prio P1 · src: live 2026-11-08 19:14
+      `last_checkin` lives only in memory. After a restart it is None, and
+      `binary_sensor.<screen>_missed_checkin` stays **off** forever if the device never comes
+      back. That happened on 2026-11-08: the panel lost its pairing in the 18:48–18:59 outage
+      and nothing alerted, so B-077's alert was blind.
+      - Persist `last_checkin` with the device store.
+      - Treat "no check-in for 3 polls since start-up" as missed as well.
