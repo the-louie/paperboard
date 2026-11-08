@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-07 (`in-progress` — Spike: text metrics, Pillow vs resvg).
-**Last completed:** Sprint 01 T-06 (commit `da23d2e`).
+**Current ticket:** Sprint 01 T-08 (`todo` — Text measurement and wrap utility).
+**Last completed:** Sprint 01 T-07 (commit `25119f4`).
 
 ## Sprints
 | Sprint | Goal | Status |
