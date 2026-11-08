@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 import logging
+from dataclasses import dataclass, field
 from typing import Any
 
 from homeassistant.core import Event, EventStateChangedData, HomeAssistant, callback
@@ -16,8 +17,10 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.event import async_track_state_change_event, async_track_time_interval
+from homeassistant.loader import async_get_integration
 from homeassistant.util import dt as dt_util
 
+from .fmt import to_float
 from .prices import PriceSeries, from_service, from_state
 
 _LOGGER = logging.getLogger(__name__)
@@ -130,6 +133,95 @@ class PriceProvider:
         unsub = async_track_time_interval(self.hass, self._tick, REFRESH)
         self.hass.async_create_background_task(self.async_refresh(), "paperboard prices")
         return unsub
+
+    async def _tick(self, _now: dt.datetime) -> None:
+        await self.async_refresh()
+
+
+@dataclass
+class SolarSnapshot:
+    """Plain-data expected solar for the render snapshot."""
+
+    hours: list[tuple[str, float]] = field(default_factory=list)  # (iso start, Wh)
+    today_kwh: float | None = None
+
+    def wh_at(self) -> dict[dt.datetime, float]:
+        return {dt.datetime.fromisoformat(s): wh for s, wh in self.hours}
+
+
+class SolarProvider:
+    """Expected solar from the energy platform of the bound sensor's own integration."""
+
+    def __init__(self, hass: HomeAssistant, entity_id: str | None) -> None:
+        self.hass, self.entity = hass, entity_id
+        self._hours: list[tuple[str, float]] = []
+        self._platform: str | None = None
+        self._entry_id: str | None = None
+        if entity_id and (reg := er.async_get(hass).async_get(entity_id)) is not None:
+            self._platform, self._entry_id = reg.platform, reg.config_entry_id
+
+    async def _get_forecast_fn(self) -> Any:
+        if not self._platform:
+            return None
+        try:
+            integration = await async_get_integration(self.hass, self._platform)
+            module = await integration.async_get_platform("energy")
+        except Exception:
+            return None
+        return getattr(module, "async_get_solar_forecast", None)
+
+    async def async_refresh(self) -> None:
+        fn = await self._get_forecast_fn()
+        data = None
+        if fn is not None and self._entry_id:
+            try:
+                data = await fn(self.hass, self._entry_id)
+            except Exception as err:
+                _LOGGER.debug("Solar forecast from %s failed: %s", self._platform, err)
+        if data and isinstance(data.get("wh_hours"), dict):
+            self._hours = sorted((str(k), float(v)) for k, v in data["wh_hours"].items()
+                                 if to_float(v) is not None)
+            return
+        self._hours = self._from_attributes()
+
+    def _from_attributes(self) -> list[tuple[str, float]]:
+        """Solcast-style detailedHourly [{period_start, pv_estimate (kW)}] (unverified)."""
+        state = self.hass.states.get(self.entity) if self.entity else None
+        rows = state.attributes.get("detailedHourly") if state else None
+        out = []
+        for row in rows if isinstance(rows, list) else []:
+            if isinstance(row, dict) and (kw := to_float(row.get("pv_estimate"))) is not None:
+                out.append((str(row.get("period_start")), kw * 1000))
+        return out
+
+    def snapshot(self) -> SolarSnapshot:
+        state = self.hass.states.get(self.entity) if self.entity else None
+        total = to_float(state.state) if state else None
+        if state is not None and str(state.attributes.get("unit_of_measurement")) == "Wh" \
+                and total is not None:
+            total /= 1000
+        if total is None and self._hours:
+            today = dt_util.now().date()
+            total = sum(wh for s, wh in self._hours
+                        if dt_util.as_local(dt.datetime.fromisoformat(s)).date() == today) / 1000
+        return SolarSnapshot(hours=list(self._hours), today_kwh=total)
+
+    @callback
+    def async_start(self) -> callback:
+        if not self.entity:
+            return lambda: None
+        unsub_timer = async_track_time_interval(self.hass, self._tick, REFRESH)
+        unsub_state = async_track_state_change_event(self.hass, [self.entity], self._changed)
+        self.hass.async_create_background_task(self.async_refresh(), "paperboard solar")
+
+        def _stop() -> None:
+            unsub_timer()
+            unsub_state()
+        return _stop
+
+    @callback
+    def _changed(self, _event: Event[EventStateChangedData]) -> None:
+        self.hass.async_create_background_task(self.async_refresh(), "paperboard solar")
 
     async def _tick(self, _now: dt.datetime) -> None:
         await self.async_refresh()

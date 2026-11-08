@@ -99,13 +99,16 @@ class ScreenRenderer:
                         forecasts={k: list(v) for k, v in self.hub.forecasts.forecasts.items()}
                         if self.hub is not None and self.hub.forecasts is not None else {},
                         prices=PriceSnapshot.of(self.hub.prices.series())
-                        if self.hub is not None and self.hub.prices is not None else None)
+                        if self.hub is not None and self.hub.prices is not None else None,
+                        solar=self.hub.solar.snapshot()
+                        if self.hub is not None and self.hub.solar is not None else None)
 
     def _hash(self, snap: Snapshot) -> str:
         bucket = int(snap.now.timestamp()) // self.layout.clock_resolution
         blob = json.dumps([bucket, snap.screen_name, snap.states, snap.stale_since,
                            snap.battery, snap.forecasts,
-                           snap.prices.points if snap.prices else None],
+                           snap.prices.points if snap.prices else None,
+                           (snap.solar.hours, snap.solar.today_kwh) if snap.solar else None],
                           sort_keys=True, default=str)
         return hashlib.sha256(blob.encode()).hexdigest()
 
