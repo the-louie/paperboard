@@ -1,6 +1,6 @@
 # Backlog — paperboard
 
-Next ID: **B-081**
+Next ID: **B-082**
 
 **Sources:**
 - R = `docs/research/HACS e-ink dashboard renderer.md` (deep research 2026-11-08), § = section.
@@ -37,7 +37,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-007 · Fonts: bundle and load**~~ — CLOSED 2026-11-08 (Sprint 01 T-06): see commit "T-06: Fonts: bundle and load"
 - ~~**B-008 · Pipeline: SVG → panel PNG**~~ — CLOSED 2026-11-08 (Sprint 01 T-10): see commit "T-10: Pipeline: SVG → panel PNG"
 - ~~**B-009 · Golden-image test harness**~~ — CLOSED 2026-11-08 (Sprint 01 T-11): see commit "T-11: Golden-image test harness"
-- → Sprint 01 T-13 (B-010 · Static render of mockup 01 (go/no-go))
+- ~~**B-010 · Static render of mockup 01 (go/no-go)**~~ — CLOSED 2026-11-08 (Sprint 01 T-13): see commit "T-13: Static render of mockup 01 (go/no-go)"
 
 ## Phase 1 — Device server (goal: the owner's OG is served from HA, battery and liveness monitored)
 
@@ -270,3 +270,10 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       Only a read-only preview of the ImageEntity with a layout picker; no WYSIWYG editing.
 - ~~**B-079 · Unit-format helpers**~~ — CLOSED 2026-11-08 (Sprint 01 T-09): see commit "T-09: Unit-format helpers"
 - ~~**B-080 · Text measurement and wrap utility**~~ — CLOSED 2026-11-08 (Sprint 01 T-08): see commit "T-08: Text measurement and wrap utility"
+- [ ] **B-081 · decision: relink the solar forecast in the owner's Energy settings** · 1h · prio P1 · src: Sprint 01 T-13
+      The `energy/solar_forecast` websocket returns `{}`. The energy prefs point at config entry
+      `dfa24fc0…`, which no longer exists, while the loaded forecast_solar entry is `01KSDE…`
+      ("Hemma"). The owner relinks it in Settings → Energy → Solar panels →
+      Forecast. Without this, the HA energy dashboard has no forecast, and B-037/B-038 have no
+      hourly data to test against. Mirrored as H-54 in `<the maintainer's HA repo>`.
+

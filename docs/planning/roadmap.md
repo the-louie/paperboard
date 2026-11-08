@@ -10,3 +10,11 @@
 |---|---|---|
 | 01 | Skeleton and device server: the stack proven (phase 0), and HA serving a TRMNL-compatible image with telemetry to the emulated client (phase 1 code) | in progress |
 | 02 | Layout engine and the hard widgets: mockup 01 on real price, solar and weather data (phase 2) | goal only |
+
+## Go/no-go (Sprint 01 T-13, 2026-11-08)
+**GO.** Mockup 01 with the owner's changes was hand-built from the 2026-11-08 fixture and
+rendered by the pipeline: a 1-bit PNG of ~6.3 kB, 0 % grey, crisp TRMNL pixel fonts, and
+price and solar on one shared time axis
+(`tests/golden/proto_tidslinjen.png`). The solar curve in the prototype is an approximation
+(see B-081).
+
