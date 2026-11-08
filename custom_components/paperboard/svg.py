@@ -74,6 +74,16 @@ class Svg:
             f'font-weight="{style.weight}" font-size="{style.size}" text-anchor="{anchor}" '
             f'fill="{color}">{escape(content)}</text>')
 
+    def fragment(self) -> str:
+        """The drawn elements without the document wrapper (for composing)."""
+        return "".join(self._parts)
+
+    def adopt_patterns(self, fragment: str) -> None:
+        """Register patterns referenced by a fragment drawn on another Svg."""
+        for name in PATTERNS:
+            if f"url(#{name})" in fragment:
+                self._used.add(name)
+
     def __str__(self) -> str:
         defs = "".join(PATTERNS[p] for p in sorted(self._used))
         return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{self.width}" '

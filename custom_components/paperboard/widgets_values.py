@@ -128,7 +128,8 @@ def rooms(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
           columns: int = 1, labels: list[str] | None = None, title: str | None = None) -> bool:
     """Room temperatures in 1-3 columns; a missing room shows an em dash, no rooms collapses."""
     ids = snap.roles.get("rooms") or []
-    if not isinstance(ids, list) or not ids:
+    ids = [i for i in ids if isinstance(i, str)] if isinstance(ids, list) else []
+    if not ids:
         return False
     rows = []
     for i, eid in enumerate(ids):

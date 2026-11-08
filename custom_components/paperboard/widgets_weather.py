@@ -25,10 +25,12 @@ def _weather_attrs(snap: Snapshot) -> dict[str, Any]:
     return (st or {}).get("attributes", {})
 
 
-def _when(item: dict[str, Any], snap: Snapshot) -> dt.datetime | None:
+def _when(item: Any, snap: Snapshot) -> dt.datetime | None:
+    if not isinstance(item, dict):
+        return None
     try:
         return dt.datetime.fromisoformat(str(item["datetime"])).astimezone(snap.now.tzinfo)
-    except (KeyError, ValueError):
+    except (KeyError, ValueError, TypeError):
         return None
 
 
