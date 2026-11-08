@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-01 (`todo` — Repo scaffold).
+**Current ticket:** Sprint 01 T-01 (`in-progress` — Repo scaffold).
 **Last completed:** —
 
 ## Sprints
