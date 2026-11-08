@@ -94,7 +94,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       `calendar.get_events` (cached), grouped per day, truncation by measured width, "No
       events" or collapse.
 - → Sprint 02 T-22 (B-050 · Widget: sun and moon)
-- → Sprint 02 T-19 (B-051 · Widget: stat / key-value)
+- ~~**B-051 · Widget: stat / key-value**~~ — CLOSED 2026-11-08 (Sprint 02 T-19): see commit "T-19: Widget: stat / key-value"
 - [ ] **B-052 · Widget: headline/prose text slot** · 3h · prio P3 · needs: B-031 · src: M 02, R §Jinja only in text slots
       HA Jinja is rendered per slot in the loop, under try/except, with a timeout. The text is
       wrapped by measured width.
