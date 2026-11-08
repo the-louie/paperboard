@@ -1,7 +1,7 @@
 # Sprint 01 — Skeleton and device server: the stack proven, HA serves a TRMNL image
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-20 (`in-progress` — View: /api/display)
-**Last completed:** T-19 (`done` — commit `e5f798b`)
+**Current ticket:** T-21 (`todo` — View: /api/log)
+**Last completed:** T-20 (`done` — commit `1e4621c`)
 **Budget:** 81h estimated (band 80–120h)
 
 ## Goal
@@ -34,7 +34,7 @@ Prove the resvg + Pillow stack and build the integration skeleton, so that a pap
 | T-17 | Emulated TRMNL client | 3 | T-01 | B-016 | done | Landed in feaffea |
 | T-18 | Image view plus last-good cache | 3 | T-10, T-02 | B-018 | done | Landed in 7b25cc3 |
 | T-19 | View: /api/setup with a pairing window | 4 | T-14, T-16, T-17 | B-014 | done | Landed in e5f798b |
-| T-20 | View: /api/display | 4 | T-19, T-18 | B-015 | in-progress | spec: backlog row B-015 (git show 13b3751:docs/planning/backlog.md) |
+| T-20 | View: /api/display | 4 | T-19, T-18 | B-015 | done | Landed in 1e4621c |
 | T-21 | View: /api/log | 2 | T-20 | B-017 | todo | spec: backlog row B-017 (git show 13b3751:docs/planning/backlog.md) |
 | T-22 | ImageEntity per screen | 2 | T-18, T-16 | B-019 | todo | spec: backlog row B-019 (git show 13b3751:docs/planning/backlog.md) |
 | T-23 | Render scheduler | 5 | T-10, T-16 | B-020 | todo | spec: backlog row B-020 (git show 13b3751:docs/planning/backlog.md) |
