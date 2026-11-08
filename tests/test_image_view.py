@@ -15,6 +15,7 @@ async def test_image_lifecycle(hass: HomeAssistant, hub_entry, hass_client_no_au
     client = await hass_client_no_auth()
     base = f"/api/paperboard/image/screen1/{screen.image_token}/x.png"
 
+    screen.frame = None  # as before the first render
     assert (await client.get(base)).status == HTTPStatus.SERVICE_UNAVAILABLE
 
     screen.set_frame(Frame(png=PNG, sha="abc123"))

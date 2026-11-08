@@ -5,6 +5,7 @@ from __future__ import annotations
 import time
 from collections import deque
 from dataclasses import dataclass, field
+from typing import Any
 
 from .devices import DeviceStore
 from .pipeline import Frame, encode_bmp_1bit
@@ -53,6 +54,7 @@ class ScreenRuntime:
 class HubRuntime:
     devices: DeviceStore
     screens: dict[str, ScreenRuntime] = field(default_factory=dict)
+    renderers: dict[str, Any] = field(default_factory=dict)  # subentry id -> ScreenRenderer
     base_url: str = ""
     pairing_screen: str | None = None
     last_rejected: dict[str, str] | None = None

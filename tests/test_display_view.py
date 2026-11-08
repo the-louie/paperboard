@@ -25,7 +25,8 @@ async def test_display_ok_with_telemetry(hass: HomeAssistant, hub_entry,
     client = await hass_client_no_auth()
     dev = await _paired(hass, client)
 
-    assert (await dev.display())["status"] == 202  # nothing rendered yet
+    screen.frame = None  # as before the first render
+    assert (await dev.display())["status"] == 202
 
     frame = render(SVG, PanelProfile(), FONT_DIR)
     screen.set_frame(frame)

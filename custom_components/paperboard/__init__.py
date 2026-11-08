@@ -12,14 +12,21 @@ from homeassistant.helpers import device_registry as dr
 from .const import (
     CONF_BASE_URL,
     CONF_IMAGE_TOKEN,
+    CONF_LAYOUT,
     CONF_NAME,
     CONF_PROFILE,
     CONF_REFRESH_RATE,
+    DEFAULT_PROFILE,
     DEFAULT_REFRESH_RATE,
     DOMAIN,
+    PROFILES,
     SUBENTRY_SCREEN,
 )
 from .devices import DeviceStore
+from .fonts import load_fonts
+from .layouts import get_layout
+from .pipeline import PanelProfile
+from .renderer import ScreenRenderer
 from .runtime import HubRuntime, ScreenRuntime
 from .views import DisplayView, ImageView, LogView, SetupView
 
@@ -40,6 +47,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
         hass.http.register_view(LogView(hass))
         hass.data[_VIEWS_REGISTERED] = True
 
+    fonts = await hass.async_add_executor_job(load_fonts)
     store = DeviceStore(hass, entry.entry_id)
     await store.async_load()
     hub = HubRuntime(devices=store, base_url=entry.options.get(CONF_BASE_URL, ""))
@@ -54,7 +62,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
                 entry, subentry,
                 data={**subentry.data, CONF_IMAGE_TOKEN: secrets.token_urlsafe(32)})
             subentry = entry.subentries[subentry.subentry_id]
-        hub.screens[subentry.subentry_id] = ScreenRuntime(
+        screen = hub.screens[subentry.subentry_id] = ScreenRuntime(
             subentry_id=subentry.subentry_id,
             name=subentry.data.get(CONF_NAME, subentry.title),
             image_token=subentry.data[CONF_IMAGE_TOKEN],
@@ -78,6 +86,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
 
     entry.runtime_data = hub
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    for subentry_id, screen in hub.screens.items():
+        data = entry.subentries[subentry_id].data
+        width, height, depth, limit = PROFILES.get(data.get(CONF_PROFILE, DEFAULT_PROFILE),
+                                                   PROFILES[DEFAULT_PROFILE])
+        renderer = ScreenRenderer(hass, screen, get_layout(data.get(CONF_LAYOUT, "")),
+                                  PanelProfile(width, height, depth, limit), fonts)
+        hub.renderers[subentry_id] = renderer
+        renderer.async_start()
+        entry.async_on_unload(renderer.async_stop)
     # Options and subentry changes both fire update listeners; reload picks them all up.
     entry.async_on_unload(entry.add_update_listener(_async_reload))
     return True

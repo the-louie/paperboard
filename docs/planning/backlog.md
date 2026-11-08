@@ -50,7 +50,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-017 · View: /api/log**~~ — CLOSED 2026-11-08 (Sprint 01 T-21): see commit "T-21: View: /api/log"
 - ~~**B-018 · Image view plus last-good cache**~~ — CLOSED 2026-11-08 (Sprint 01 T-18): see commit "T-18: Image view plus last-good cache"
 - ~~**B-019 · ImageEntity per screen**~~ — CLOSED 2026-11-08 (Sprint 01 T-22): see commit "T-22: ImageEntity per screen"
-- → Sprint 01 T-23 (B-020 · Render scheduler)
+- ~~**B-020 · Render scheduler**~~ — CLOSED 2026-11-08 (Sprint 01 T-23): see commit "T-23: Render scheduler"
 - → Sprint 01 T-24 (B-021 · Telemetry sensors)
 - → Sprint 01 T-25 (B-022 · Missed-check-in problem sensor)
 - → Sprint 01 T-26 (B-023 · Widgets: "now" block and status footer)
