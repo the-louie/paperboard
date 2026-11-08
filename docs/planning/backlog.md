@@ -145,7 +145,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       hourly data to test against. Mirrored as H-54 in `<the maintainer's HA repo>`.
 - → Sprint 03 T-17 (B-082 · Rotate-image-token button per screen)
 - → Sprint 03 T-15 (B-083 · Scale YAML layouts to larger panels)
-- → Sprint 03 T-03 (B-084 · Area frames: rounded boxes and an inverted hero)
+- ~~**B-084 · Area frames: rounded boxes and an inverted hero**~~ — CLOSED 2026-11-08 (Sprint 03 T-03): see commit "T-03: Area frames: rounded boxes and an inverted hero"
 - → Sprint 03 T-04 (B-085 · Header variants: masthead and title bar)
 - → Sprint 03 T-05 (B-086 · Inverted now panel (Tavlan))
 

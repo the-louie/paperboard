@@ -21,6 +21,7 @@ BUNDLED_DIR = Path(__file__).parent / "layouts_yaml"
 WIDGET_TYPES = ("header", "now", "timeline", "hourly_table", "daily", "energy", "energy_flow",
                 "rooms", "stat", "sun_moon", "agenda", "text", "footer")
 COLLAPSE = ("left", "right", "up", "down", "none")
+FRAMES = ("none", "box", "rounded", "inverted")
 
 
 def _track(value: Any) -> int | str:
@@ -49,6 +50,9 @@ LAYOUT = vol.Schema({
         vol.Optional("rules", default=2): vol.All(int, vol.Range(min=0, max=8)),
         vol.Optional("padding", default=[8, 16]): vol.All([vol.All(int, vol.Range(min=0))],
                                                           vol.Length(min=2, max=2)),
+        vol.Optional("gap", default=0): vol.All(int, vol.Range(min=0, max=40)),
+        vol.Optional("margin", default=0): vol.All(int, vol.Range(min=0, max=40)),
+        vol.Optional("frames", default={}): {str: vol.In(FRAMES)},
     },
     vol.Required("widgets"): vol.All([WIDGET], vol.Length(min=1)),
     vol.Optional("clock_resolution", default=300): vol.All(int, vol.Range(min=60)),
@@ -89,12 +93,15 @@ def parse(text: str, source: str) -> LayoutSpec:
         raise ValueError("\n".join(format_errors(err))) from err
     g = data["grid"]
     try:
-        grid = Grid.build(g["columns"], g["rows"], g["areas"], *data["canvas"])
+        m = g["margin"]
+        grid = Grid.build(g["columns"], g["rows"], g["areas"], data["canvas"][0] - 2 * m,
+                          data["canvas"][1] - 2 * m, g["gap"])
     except GridError as err:
         raise ValueError(f"grid: {err}") from err
     names = set(grid.names())
     bad = [f"widgets[{i}].area: unknown area {w['area']!r}"
            for i, w in enumerate(data["widgets"]) if w["area"] not in names]
+    bad += [f"grid.frames.{a}: unknown area" for a in g["frames"] if a not in names]
     if bad:
         raise ValueError("\n".join(bad))
     return LayoutSpec(name=data["name"], title=data.get("title", data["name"]),

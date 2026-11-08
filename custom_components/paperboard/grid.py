@@ -43,17 +43,18 @@ class Grid:
     columns: list[float]
     rows: list[float]
     cells: list[list[str]]
+    gap: float = 0.0
 
     @classmethod
     def build(cls, columns: list[int | str], rows: list[int | str], areas: list[str],
-              width: float, height: float) -> Grid:
+              width: float, height: float, gap: float = 0.0) -> Grid:
         cells = [row.split() for row in areas]
         if len(cells) != len(rows):
             raise GridError(f"{len(cells)} area rows for {len(rows)} grid rows")
         for i, row in enumerate(cells):
             if len(row) != len(columns):
                 raise GridError(f"area row {i} has {len(row)} names for {len(columns)} columns")
-        grid = cls(solve_tracks(columns, width), solve_tracks(rows, height), cells)
+        grid = cls(solve_tracks(columns, width, gap), solve_tracks(rows, height, gap), cells, gap)
         for name in grid.names():
             grid._check_rectangular(name)
         return grid
@@ -83,8 +84,10 @@ class Grid:
 
     def rect(self, name: str) -> Rect:
         r0, c0, r1, c1 = self._span(name)
-        x, y = sum(self.columns[:c0]), sum(self.rows[:r0])
-        return Rect(x, y, sum(self.columns[c0:c1 + 1]), sum(self.rows[r0:r1 + 1]))
+        g = self.gap
+        x, y = sum(self.columns[:c0]) + g * c0, sum(self.rows[:r0]) + g * r0
+        return Rect(x, y, sum(self.columns[c0:c1 + 1]) + g * (c1 - c0),
+                    sum(self.rows[r0:r1 + 1]) + g * (r1 - r0))
 
     def neighbour(self, name: str, direction: str) -> str | None:
         """The single area sharing `name`'s whole edge in `direction`, if any."""
@@ -123,8 +126,12 @@ class Grid:
     def rules(self) -> list[tuple[float, float, float, float]]:
         """Line segments where adjacent cells belong to different (non-empty) areas."""
         segs = []
-        xs = [sum(self.columns[:i]) for i in range(len(self.columns) + 1)]
-        ys = [sum(self.rows[:i]) for i in range(len(self.rows) + 1)]
+        g = self.gap
+        # A rule sits in the middle of the gap between two tracks.
+        xs = [sum(self.columns[:i]) + g * i - (g / 2 if 0 < i < len(self.columns) else 0)
+              for i in range(len(self.columns) + 1)]
+        ys = [sum(self.rows[:i]) + g * i - (g / 2 if 0 < i < len(self.rows) else 0)
+              for i in range(len(self.rows) + 1)]
         for r, row in enumerate(self.cells):
             for c, name in enumerate(row):
                 if c + 1 < len(row) and name != row[c + 1]:

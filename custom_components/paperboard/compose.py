@@ -55,8 +55,15 @@ def render_spec(spec: LayoutSpec, snap: Snapshot, measure: Measurer, theme: Them
                 notes: list[str] | None = None) -> str:
     notes = notes if notes is not None else []
     g = spec.grid
-    grid = Grid.build(g["columns"], g["rows"], g["areas"], snap.width, snap.height)
+    margin = g.get("margin", 0)
+    grid = Grid.build(g["columns"], g["rows"], g["areas"], snap.width - 2 * margin,
+                      snap.height - 2 * margin, g.get("gap", 0))
     padding = g.get("padding", [8, 16])
+    frames: dict[str, str] = g.get("frames", {})
+
+    def outer(area: str) -> Rect:
+        r = grid.rect(area)
+        return Rect(r.x + margin, r.y + margin, r.w, r.h)
     by_area: dict[str, list[dict[str, Any]]] = {}
     for w in spec.widgets:
         by_area.setdefault(w["area"], []).append(w)
@@ -65,7 +72,7 @@ def render_spec(spec: LayoutSpec, snap: Snapshot, measure: Measurer, theme: Them
     empty: list[str] = []
     for area in grid.names():
         widgets = by_area.get(area, [])
-        rect = _inner(grid.rect(area), padding)
+        rect = _inner(outer(area), padding)
         if not widgets or all(
             _draw(REGISTRY[w["type"]], rect, snap, measure, theme, w["options"], notes,
                   w["type"]) is None for w in widgets if w["type"] in REGISTRY):
@@ -84,19 +91,34 @@ def render_spec(spec: LayoutSpec, snap: Snapshot, measure: Measurer, theme: Them
         widgets = [w for w in by_area.get(area, []) if w["type"] in REGISTRY]
         if not widgets:
             continue
-        rect = _inner(grid.rect(area), padding)
+        frame = frames.get(area, "none")
+        box = outer(area)
+        if frame in ("box", "rounded"):
+            svg.rect(box.x + 1, box.y + 1, box.w - 2, box.h - 2, "#fff", stroke="#000",
+                     stroke_width=2, rx=12 if frame == "rounded" else 0)
+        elif frame == "inverted":
+            svg.rect(box.x, box.y, box.w, box.h, "#000", rx=12)
+        rect = _inner(box, padding)
         share = rect.h / len(widgets)
         for i, w in enumerate(widgets):
             sub = Rect(rect.x, rect.y + i * share, rect.w, share) if len(widgets) > 1 else rect
             frag = _draw(REGISTRY[w["type"]], sub, snap, measure, theme, w["options"], notes,
                          w["type"])
             if frag:
+                if frame == "inverted":
+                    frag = invert_colors(frag)
                 svg.raw(frag)
                 svg.adopt_patterns(frag)
-    if g.get("rules", 2):
+    if g.get("rules", 2) and not g.get("gap", 0):
         for x1, y1, x2, y2 in grid.rules():
-            svg.line(x1, y1, x2, y2, g["rules"])
+            svg.line(x1 + margin, y1 + margin, x2 + margin, y2 + margin, g["rules"])
     return str(svg)
+
+
+def invert_colors(fragment: str) -> str:
+    """Swap black and white in a drawn fragment (widgets in an inverted area)."""
+    return (fragment.replace('"#000"', '"@INK@"').replace('"#fff"', '"#000"')
+            .replace('"@INK@"', '"#fff"'))
 
 
 def as_layout(spec: LayoutSpec, theme_for: Callable[[], Theme] | None = None) -> Layout:
