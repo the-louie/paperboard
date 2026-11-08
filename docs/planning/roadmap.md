@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-16 (`in-progress` — Config subentry: Screen).
-**Last completed:** Sprint 01 T-15 (commit `fcc0162`).
+**Current ticket:** Sprint 01 T-17 (`todo` — Emulated TRMNL client).
+**Last completed:** Sprint 01 T-16 (commit `1cab556`).
 
 ## Sprints
 | Sprint | Goal | Status |
