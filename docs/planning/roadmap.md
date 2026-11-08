@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-09 (`todo` — Research: price sources).
+**Current ticket:** Sprint 02 T-09 (`in-progress` — Research: price sources).
 **Last completed:** Sprint 02 T-08 (commit `792ce28`).
 
 ## Sprints
