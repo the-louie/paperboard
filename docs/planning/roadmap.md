@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-12 (`in-progress` — Fixture capture script).
-**Last completed:** Sprint 01 T-11 (commit `6bbee34`).
+**Current ticket:** Sprint 01 T-13 (`todo` — Static render of mockup 01 (go/no-go)).
+**Last completed:** Sprint 01 T-12 (commit `2158d1e`).
 
 ## Sprints
 | Sprint | Goal | Status |
