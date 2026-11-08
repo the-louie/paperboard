@@ -1,6 +1,6 @@
 # Backlog — paperboard
 
-Next ID: **B-084**
+Next ID: **B-087**
 
 **Sources:**
 - R = `docs/research/HACS e-ink dashboard renderer.md` (deep research 2026-11-08), § = section.
@@ -182,4 +182,14 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       padding, rules and the Theme scale_factor are still applied at scale 1.0, so a layout
       renders small in a corner of a big panel. Multiply px tracks, padding and rule widths by
       the profile's scale_factor, and pass scale_factor to Theme.
+- [ ] **B-084 · Area frames: rounded boxes and an inverted hero** · 3h · prio P2 · src: Sprint 02 retro, M 03/06
+      Per-area `frame: box | rounded | inverted | none` in the grid spec, with inverted areas
+      drawing their widgets in paper on ink. Needed by 03 Bento (rounded tiles, black hero) and
+      06 TRMNL (title bars).
+- [ ] **B-085 · Header variants: masthead and title bar** · 2h · prio P2 · src: Sprint 02 retro, M 02/06
+      `header` options `style: line | masthead | titlebar`: masthead is serif-like big bold
+      with a double rule (02 Tidningen); titlebar is the TRMNL-style black bar at the bottom of
+      an area (06).
+- [ ] **B-086 · Inverted now panel (Tavlan)** · 2h · prio P2 · src: Sprint 02 retro, M 05
+      `now` and `energy` options `style: inverted` for the black left panel of 05 Tavlan.
 
