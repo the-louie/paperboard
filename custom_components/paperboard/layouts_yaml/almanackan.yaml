@@ -1,0 +1,23 @@
+# 07 Almanackan - calendar first, with the owner's change from 2026-11-08: "Uterum" is the
+# last cell of the now row, because the other values belong to "Ute" on the left.
+name: almanackan
+title: Almanackan
+grid:
+  columns: [250, fr]
+  rows: [124, fr, 70, 76]
+  rules: 2
+  padding: [6, 14]
+  areas:
+    - date  now
+    - week  week
+    - hours hours
+    - sky   bottom
+widgets:
+  - {type: date, area: date}
+  - type: now_grid
+    area: now
+    options: {rows: [feels_like, humidity, wind, pressure, rain_today, tomorrow_07, indoor]}
+  - {type: week, area: week, options: {days: 6}}
+  - {type: hourly_strip, area: hours, options: {hours: 12}}
+  - {type: sun_moon, area: sky, options: {show: sun}}
+  - {type: energy, area: bottom, options: {rows: [price_now, solar_expected_today, battery], title: false}}

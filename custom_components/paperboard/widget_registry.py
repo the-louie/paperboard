@@ -17,6 +17,7 @@ from .svg import Svg
 from .text import Measurer
 from .widgets import CONDITION, LABELS, Rect, _ms
 from .widgets_agenda import HOLIDAY_SV, agenda
+from .widgets_almanac import date_block, week
 from .widgets_flow import energy_flow
 from .widgets_series import axis_labels, night_shading, now_marker, price_chart, solar_chart
 from .widgets_sky import sun_moon
@@ -323,3 +324,74 @@ def _strip(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) ->
 @widget("tomorrow")
 def _tomorrow(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
     return tomorrow_at(svg, r, snap, m, t, int(o.get("hour", 7)))
+
+
+@widget("date")
+def _date(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
+    return date_block(svg, r, snap, m, t, _flag(snap) if o.get("show_flag", True) else "")
+
+
+@widget("week")
+def _week(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
+    return week(svg, r, snap, m, t, int(o.get("days", 6)))
+
+
+@widget("now_grid")
+def _now_grid(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
+    """Outdoor now as a big numeral plus a grid of label/value cells (07 Almanackan).
+    The cells follow options.rows in order - the owner wants 'Uterum' last."""
+    lang = snap.lang
+    attrs = _weather_attrs(snap)
+    temp, _u = role_value(snap, "outdoor_temp")
+    if temp is None:
+        temp = fmt.to_float(attrs.get("temperature"))
+    cells = []
+    wanted = o.get("rows", ["feels_like", "humidity", "wind", "pressure", "rain_today",
+                            "tomorrow_07", "indoor"])
+    target = (snap.now + dt.timedelta(days=1)).replace(hour=7, minute=0, second=0,
+                                                       microsecond=0)
+    unit = attrs.get("wind_speed_unit")
+    for key in wanted:
+        if key == "indoor" and snap.roles.get("indoor_temp"):
+            label = o.get("indoor_label") or room_name(snap.role_state("indoor_temp"),
+                                                       snap.roles["indoor_temp"])
+            cells.append((label, fmt.with_unit(role_value(snap, "indoor_temp")[0], "°", 1, lang)))
+        elif key == "feels_like" and snap.roles.get("feels_like"):
+            cells.append((NOW_ROWS[lang]["feels_like"],
+                          fmt.with_unit(role_value(snap, "feels_like")[0], "°", 1, lang)))
+        elif key == "humidity" and (snap.roles.get("outdoor_humidity") or "humidity" in attrs):
+            value = role_value(snap, "outdoor_humidity")[0] if snap.roles.get(
+                "outdoor_humidity") else attrs.get("humidity")
+            cells.append((NOW_ROWS[lang]["humidity"], fmt.with_unit(value, "%", 0, lang)))
+        elif key == "wind" and (speed := _ms(attrs.get("wind_speed"), unit)) is not None:
+            cells.append((NOW_ROWS[lang]["wind"], f"{fmt.number(speed, 1, lang)} m/s"))
+        elif key == "pressure" and "pressure" in attrs:
+            cells.append((NOW_ROWS[lang]["pressure"],
+                          fmt.with_unit(attrs.get("pressure"), "hPa", 0, lang)))
+        elif key == "rain_today" and snap.roles.get("rain_today"):
+            cells.append((NOW_ROWS[lang]["rain_today"],
+                          fmt.with_unit(role_value(snap, "rain_today")[0], "mm", 1, lang)))
+        elif key == "tomorrow_07" and (item := _hourly_at(snap, target)) is not None:
+            cells.append(("Imorgon 07" if lang == "sv" else "Tomorrow 07",
+                          fmt.with_unit(item.get("temperature"), "°", 1, lang)))
+    if temp is None and not cells:
+        return False
+    hero = t.numeral("xxl")
+    hero_w = m.width("−00,0°", hero) + 12
+    svg.text(r.x, r.y + 12, LABELS[lang]["now"], t.text("xs", bold=True))
+    svg.text(r.x - 2, r.y + 18 + hero.size * 0.9, fmt.with_unit(temp, "°", 1, lang), hero)
+    cond = CONDITION[lang].get(str((snap.role_state("weather") or {}).get("state", "")), "")
+    if cond:
+        svg.text(r.x, r.y + r.h - 4, cond, t.text("s"))
+    svg.line(r.x + hero_w, r.y + 4, r.x + hero_w, r.y + r.h - 4, 1)
+    cols = 4
+    gx, gw = r.x + hero_w + 12, r.w - hero_w - 12
+    cw, rh = gw / cols, (r.h - 4) / max(1, -(-len(cells) // cols))
+    for i, (label, value) in enumerate(cells):
+        cx, cy = gx + (i % cols) * cw, r.y + (i // cols) * rh
+        svg.text(cx, cy + 14, m.truncate(label.upper(), t.text("xs", bold=True), cw - 6),
+                 t.text("xs", bold=True))
+        vstyle = t.text("m", bold=True) if m.fits(value, t.text("m", bold=True), cw - 6) \
+            else t.text("s", bold=True)
+        svg.text(cx, cy + 34, m.truncate(value, vstyle, cw - 6), vstyle)
+    return True

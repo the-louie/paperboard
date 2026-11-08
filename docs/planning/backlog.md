@@ -98,7 +98,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-054 · Layout 03 Bento**~~ — CLOSED 2026-11-08 (Sprint 03 T-09): see commit "T-09: Layout 03 Bento"
 - ~~**B-055 · Layout 05 Tavlan**~~ — CLOSED 2026-11-08 (Sprint 03 T-10): see commit "T-10: Layout 05 Tavlan"
 - ~~**B-056 · Layout 06 TRMNL**~~ — CLOSED 2026-11-08 (Sprint 03 T-11): see commit "T-11: Layout 06 TRMNL"
-- → Sprint 03 T-12 (B-057 · Layout 07 Almanackan)
+- ~~**B-057 · Layout 07 Almanackan**~~ — CLOSED 2026-11-08 (Sprint 03 T-12): see commit "T-12: Layout 07 Almanackan"
 - → Sprint 03 T-13 (B-058 · Layout 08 Energi)
 - → Sprint 03 T-14 (B-059 · Layout 04 Instrument (bar-chart parts only))
 - ~~**B-060 · Schedule: time-of-day layouts**~~ — CLOSED 2026-11-08 (Sprint 03 T-06): see commit "T-06: Schedule: time-of-day layouts"

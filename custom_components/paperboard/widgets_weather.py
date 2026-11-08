@@ -173,7 +173,7 @@ def hourly_strip(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Th
         y += 16
     cw = r.w / len(items)
     known = [t for t in temps if t is not None]
-    if len(known) >= 2:
+    if len(known) >= 2 and r.h - (y - r.y) >= 84:  # the line only when there is room
         lo, hi = min(known), max(known)
         span = (hi - lo) or 1
         pts = [(r.x + (i + 0.5) * cw, y + 4 + 18 * (1 - (t - lo) / span))
