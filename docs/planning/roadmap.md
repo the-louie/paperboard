@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-29 (`in-progress` — Performance budget).
-**Last completed:** Sprint 01 T-28 (commit `f5fd2d4`).
+**Current ticket:** Sprint 01 —.
+**Last completed:** Sprint 01 T-29 (commit `01612e5`).
 
 ## Sprints
 | Sprint | Goal | Status |
