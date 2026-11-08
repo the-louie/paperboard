@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-07 (`in-progress` — Repairs for missing entities).
-**Last completed:** Sprint 02 T-06 (commit `32c21ff`).
+**Current ticket:** Sprint 02 T-08 (`todo` — Data: weather forecasts).
+**Last completed:** Sprint 02 T-07 (commit `f0e2b6b`).
 
 ## Sprints
 | Sprint | Goal | Status |
