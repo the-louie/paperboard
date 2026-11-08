@@ -17,3 +17,13 @@ def test_manifest_has_hacs_required_keys() -> None:
 def test_hacs_json_minimum_version() -> None:
     hacs = json.loads((ROOT / "hacs.json").read_text())
     assert hacs["homeassistant"] >= "2026.3.0"
+
+
+def test_brand_images() -> None:
+    from PIL import Image
+
+    brand = ROOT / "custom_components/paperboard/brand"
+    assert Image.open(brand / "icon.png").size == (256, 256)
+    assert Image.open(brand / "icon@2x.png").size == (512, 512)
+    w, h = Image.open(brand / "logo.png").size
+    assert 128 <= min(w, h) <= 256
