@@ -90,38 +90,19 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 - ~~**B-047 · Widget: energy flow**~~ — CLOSED 2026-11-08 (Sprint 02 T-21): see commit "T-21: Widget: energy flow"
 - ~~**B-048 · Widget: room list**~~ — CLOSED 2026-11-08 (Sprint 02 T-20): see commit "T-20: Widget: room list"
-- [ ] **B-049 · Widget: calendar agenda** · 4h · prio P2 · needs: B-032 · src: M 07
-      `calendar.get_events` (cached), grouped per day, truncation by measured width, "No
-      events" or collapse.
+- → Sprint 03 T-01 (B-049 · Widget: calendar agenda)
 - ~~**B-050 · Widget: sun and moon**~~ — CLOSED 2026-11-08 (Sprint 02 T-22): see commit "T-22: Widget: sun and moon"
 - ~~**B-051 · Widget: stat / key-value**~~ — CLOSED 2026-11-08 (Sprint 02 T-19): see commit "T-19: Widget: stat / key-value"
-- [ ] **B-052 · Widget: headline/prose text slot** · 3h · prio P3 · needs: B-031 · src: M 02, R §Jinja only in text slots
-      HA Jinja is rendered per slot in the loop, under try/except, with a timeout. The text is
-      wrapped by measured width.
-- [ ] **B-053 · Layout 02 Tidningen** · 2h · prio P2 · needs: B-043, B-048, B-052 · src: V row 02
-      Add "Sol idag förväntat" under ENERGI; warning inversion in the forecast row.
-- [ ] **B-054 · Layout 03 Bento** · 2h · prio P2 · needs: B-048, B-051 · src: V row 03
-      Remove "mot igår"; expected solar today under ENERGI.
-- [ ] **B-055 · Layout 05 Tavlan** · 2h · prio P2 · needs: B-042 · src: V row 05
-      Expected solar today instead of "Huset nu · idag". Intended for 07–08 on school days.
-- [ ] **B-056 · Layout 06 TRMNL** · 2h · prio P3 · needs: B-051 · src: V row 06
-      Expected solar today.
-- [ ] **B-057 · Layout 07 Almanackan** · 2h · prio P3 · needs: B-049, B-050 · src: V row 07
-      "Uterum" last in its row.
-- [ ] **B-058 · Layout 08 Energi** · 2h · prio P2 · needs: B-040, B-041, B-047 · src: V row 08
-      Solar forecast chart directly under the price chart (shared axis) instead of the weather;
-      flow figures beside the nodes.
-- [ ] **B-059 · Layout 04 Instrument (bar-chart parts only)** · 1h · prio P3 · src: V row 04
-      The owner rejected the gauges. Only check that the filled/outlined bar style is
-      available in B-040; no layout ships.
-- [ ] **B-060 · Schedule: time-of-day layouts** · 4h · prio P1 · needs: B-029 · src: R §schedule, V Times of day
-      Schedule windows (time range, weekday or workday condition via a binary_sensor, layout,
-      refresh_rate). `/api/display` picks the layout per poll, and `refresh_rate` aims at the
-      next switch.
-      Acceptance: time-travel tests.
-- [ ] **B-061 · Night sleep and refresh policy** · 2h · prio P2 · needs: B-060 · src: N trmnl_protocol §refresh
-      A long refresh_rate at night, the TRMNL full-refresh cadence (every 8th update) documented,
-      and the battery impact measured from the telemetry.
+- → Sprint 03 T-02 (B-052 · Widget: headline/prose text slot)
+- → Sprint 03 T-08 (B-053 · Layout 02 Tidningen)
+- → Sprint 03 T-09 (B-054 · Layout 03 Bento)
+- → Sprint 03 T-10 (B-055 · Layout 05 Tavlan)
+- → Sprint 03 T-11 (B-056 · Layout 06 TRMNL)
+- → Sprint 03 T-12 (B-057 · Layout 07 Almanackan)
+- → Sprint 03 T-13 (B-058 · Layout 08 Energi)
+- → Sprint 03 T-14 (B-059 · Layout 04 Instrument (bar-chart parts only))
+- → Sprint 03 T-06 (B-060 · Schedule: time-of-day layouts)
+- → Sprint 03 T-07 (B-061 · Night sleep and refresh policy)
 - [ ] **B-062 · decision: which layout when** · 1h · prio P2 · needs: B-060 · src: V
       The owner picks the schedule.
 - [ ] **B-063 · decision: decommission byos-host trmnl-byos and the screenshot cron** · 1h · prio P3 · needs: B-026, B-062 · src: V phase 3
@@ -131,24 +112,14 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 - ~~**B-064 · Panel profiles from the TRMNL model table**~~ — CLOSED 2026-11-08 (Sprint 02 T-25): see commit "T-25: Panel profiles from the TRMNL model table"
 - ~~**B-065 · 2-bit and 4-bit render paths**~~ — CLOSED 2026-11-08 (Sprint 02 T-26): see commit "T-26: 2-bit and 4-bit render paths"
-- [ ] **B-066 · Generic image clients** · 3h · prio P3 · needs: B-018 · src: R §serving (Alias, ESPHome online_image, Kindle, LaraPaper)
-      Document and test the token URL with the ESPHome `online_image` ETag behaviour and BMP
-      output for old firmware.
+- → Sprint 03 T-18 (B-066 · Generic image clients)
 
 ## Phase 5 — Publish (goal: a public HACS install another home can configure with no code)
 
-- [ ] **B-067 · README and documentation** · 5h · prio P2 · src: R §HACS publishing
-      Install, configuration, layout reference, a widget catalogue with images, and FAQ
-      ("works without sensor X").
-- [ ] **B-068 · Brand assets** · 1h · prio P3 · src: N ha_integration_engineering §brand
-      `custom_components/paperboard/brand/icon.png` and `logo.png` (HA ≥ 2026.3).
-- [ ] **B-069 · CI workflow** · 3h · prio P2 · needs: B-045 · src: R §testing
-      GitHub Actions: hassfest, the HACS action, ruff, pytest, golden images, empty house.
-      Verify the action input names (the research did not).
-- [ ] **B-070 · Research: aarch64 verification** · 2h · prio P2 · src: R §risks 4
-      Run resvg-py in the aarch64 HA image under qemu (`docker run --platform linux/arm64`) and
-      render a golden fixture.
-      Acceptance: the result is recorded; a mismatch blocks release.
+- → Sprint 03 T-23 (B-067 · README and documentation)
+- → Sprint 03 T-22 (B-068 · Brand assets)
+- → Sprint 03 T-21 (B-069 · CI workflow)
+- → Sprint 03 T-20 (B-070 · Research: aarch64 verification)
 - [ ] **B-071 · decision: release and HACS default PR** · 1h · prio P3 · needs: B-067, B-069, B-070 · src: N HACS rules
       The owner pushes, tags the release, and opens a PR to hacs/default.
 - [ ] **B-072 · Upstream offer to cryptomilk** · 1h · prio P3 · needs: B-071 · src: R §build new
@@ -158,14 +129,12 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 - ~~**B-073 · Security review of the device endpoints**~~ — CLOSED 2026-11-08 (Sprint 01 T-28): see commit "T-28: Security review of the device endpoints"
 - ~~**B-074 · Performance budget**~~ — CLOSED 2026-11-08 (Sprint 01 T-29): see commit "T-29: Performance budget"
-- [ ] **B-075 · Localisation of widget texts** · 3h · prio P3 · needs: B-051 · src: M (Swedish), HACS audience
-      Weekday and month names, units, decimal separator per HA language (sv, en).
+- → Sprint 03 T-16 (B-075 · Localisation of widget texts)
 - ~~**B-076 · Fixture capture script**~~ — CLOSED 2026-11-08 (Sprint 01 T-12): see commit "T-12: Fixture capture script"
 - [ ] **B-077 · Device liveness → owner alert** · 1h · prio P2 · needs: B-022, B-025 · src: O4 in <the maintainer's HA repo>
       Add the problem sensor to the owner's AppDaemon watchdog or notification path (that
       change is made in the `<the maintainer's HA repo>` repo).
-- [ ] **B-078 · Spike: a Lovelace preview card (optional)** · 3h · prio P3 · src: R (the cryptomilk editor is a card)
-      Only a read-only preview of the ImageEntity with a layout picker; no WYSIWYG editing.
+- → Sprint 03 T-19 (B-078 · Spike: a Lovelace preview card (optional))
 - ~~**B-079 · Unit-format helpers**~~ — CLOSED 2026-11-08 (Sprint 01 T-09): see commit "T-09: Unit-format helpers"
 - ~~**B-080 · Text measurement and wrap utility**~~ — CLOSED 2026-11-08 (Sprint 01 T-08): see commit "T-08: Text measurement and wrap utility"
 - [ ] **B-081 · decision: relink the solar forecast in the owner's Energy settings** · 1h · prio P1 · src: Sprint 01 T-13
@@ -174,22 +143,9 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       ("Hemma"). The owner relinks it in Settings → Energy → Solar panels →
       Forecast. Without this, the HA energy dashboard has no forecast, and B-037/B-038 have no
       hourly data to test against. Mirrored as H-54 in `<the maintainer's HA repo>`.
-- [ ] **B-082 · Rotate-image-token button per screen** · 2h · prio P3 · src: Sprint 01 T-28
-      A config-category button that mints a new image token without deleting the screen, so a
-      URL leaked through proxy logs or a shared screenshot of diagnostics can be revoked.
-- [ ] **B-083 · Scale YAML layouts to larger panels** · 4h · prio P3 · src: Sprint 02 T-25
-      Profiles now resolve TRMNL X (1872×1404, scale 1.8) and Kindles. Layout px tracks,
-      padding, rules and the Theme scale_factor are still applied at scale 1.0, so a layout
-      renders small in a corner of a big panel. Multiply px tracks, padding and rule widths by
-      the profile's scale_factor, and pass scale_factor to Theme.
-- [ ] **B-084 · Area frames: rounded boxes and an inverted hero** · 3h · prio P2 · src: Sprint 02 retro, M 03/06
-      Per-area `frame: box | rounded | inverted | none` in the grid spec, with inverted areas
-      drawing their widgets in paper on ink. Needed by 03 Bento (rounded tiles, black hero) and
-      06 TRMNL (title bars).
-- [ ] **B-085 · Header variants: masthead and title bar** · 2h · prio P2 · src: Sprint 02 retro, M 02/06
-      `header` options `style: line | masthead | titlebar`: masthead is serif-like big bold
-      with a double rule (02 Tidningen); titlebar is the TRMNL-style black bar at the bottom of
-      an area (06).
-- [ ] **B-086 · Inverted now panel (Tavlan)** · 2h · prio P2 · src: Sprint 02 retro, M 05
-      `now` and `energy` options `style: inverted` for the black left panel of 05 Tavlan.
+- → Sprint 03 T-17 (B-082 · Rotate-image-token button per screen)
+- → Sprint 03 T-15 (B-083 · Scale YAML layouts to larger panels)
+- → Sprint 03 T-03 (B-084 · Area frames: rounded boxes and an inverted hero)
+- → Sprint 03 T-04 (B-085 · Header variants: masthead and title bar)
+- → Sprint 03 T-05 (B-086 · Inverted now panel (Tavlan))
 
