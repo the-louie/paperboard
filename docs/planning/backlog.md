@@ -259,7 +259,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 ## Cross-cutting
 
 - ~~**B-073 · Security review of the device endpoints**~~ — CLOSED 2026-11-08 (Sprint 01 T-28): see commit "T-28: Security review of the device endpoints"
-- → Sprint 01 T-29 (B-074 · Performance budget)
+- ~~**B-074 · Performance budget**~~ — CLOSED 2026-11-08 (Sprint 01 T-29): see commit "T-29: Performance budget"
 - [ ] **B-075 · Localisation of widget texts** · 3h · prio P3 · needs: B-051 · src: M (Swedish), HACS audience
       Weekday and month names, units, decimal separator per HA language (sv, en).
 - ~~**B-076 · Fixture capture script**~~ — CLOSED 2026-11-08 (Sprint 01 T-12): see commit "T-12: Fixture capture script"

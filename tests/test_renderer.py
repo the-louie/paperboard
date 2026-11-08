@@ -71,3 +71,10 @@ async def test_layout_error_keeps_last_frame(hass: HomeAssistant, probe_layout,
     assert screen.frame is good
     assert screen.stale is True
     assert "layout bug" in screen.last_error
+
+
+async def test_render_timing_recorded(hass: HomeAssistant, probe_layout, hub_entry) -> None:
+    renderer = hub_entry.runtime_data.renderers["screen1"]
+    assert renderer.last_render_ms is not None
+    assert 0 < renderer.last_render_ms < 500
+    assert renderer.max_render_ms >= renderer.last_render_ms

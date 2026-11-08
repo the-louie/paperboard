@@ -54,3 +54,23 @@ from the ink shift between a start-anchored and an end-anchored copy) with Pillo
   descent.
 - A sub-pixel error of ≤ 0.8 px only shows on large Inter numerals, and those are never
   truncated. Leave a 1 px safety margin in fit calculations.
+
+## Performance budget (T-29, 2026-11-08)
+
+`python -m scripts.measure_layouts`: owner fixture, 20 renders each, on the dev-host VM
+(8 vCPU QEMU), full pipeline (SVG build, resvg, quantise, PNG):
+
+| Layout | Depth | Median | Max | Peak Python memory | PNG |
+|---|---|---|---|---|---|
+| status | 1-bit | 17 ms | 44 ms | 0.4 MB | 0.5 kB |
+| now | 1-bit | 29 ms | 34 ms | 0.4 MB | 1.7 kB |
+| proto_tidslinjen (densest mockup) | 1-bit | 64 ms | 74 ms | 0.5 MB | 6.3 kB |
+| proto_tidslinjen | 2-bit | 80 ms | 93 ms | 0.8 MB | 6.9 kB |
+
+- **Budget: 500 ms per frame.** The densest real design is 6–8× under it.
+- Each renderer records `last_render_ms` and `max_render_ms` (in diagnostics) and logs **one**
+  warning per run when a frame exceeds the budget.
+- Rendering happens at most once per debounce (5 s) or tick (60 s), and only when the snapshot
+  changed. At 80 ms that is < 0.2 % of one core in the worst case.
+- **Not measured:** resvg's own native allocations (tracemalloc only sees Python), and an aarch64
+  Pi. Re-run on a Pi in B-070.

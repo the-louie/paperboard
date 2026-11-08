@@ -11,6 +11,7 @@ import datetime as dt
 import hashlib
 import json
 import logging
+import time
 from typing import Any
 
 from homeassistant.core import Event, EventStateChangedData, HomeAssistant, callback
@@ -29,6 +30,7 @@ from .text import Measurer
 
 _LOGGER = logging.getLogger(__name__)
 TICK = dt.timedelta(seconds=60)
+SLOW_RENDER_MS = 500  # budget per frame (T-29); slower renders are logged once
 DEBOUNCE_SECONDS = 5.0
 
 
@@ -42,6 +44,9 @@ class ScreenRenderer:
         self._measurer = Measurer(fonts)
         self._last_hash: str | None = None
         self.renders = 0  # completed renders, for diagnostics and tests
+        self.last_render_ms: float | None = None
+        self.max_render_ms = 0.0
+        self._warned_slow = False
         self._debouncer = Debouncer(hass, _LOGGER, cooldown=DEBOUNCE_SECONDS, immediate=False,
                                     function=self.async_render)
         self._unsubs: list[Any] = []
@@ -96,6 +101,7 @@ class ScreenRenderer:
         digest = self._hash(snap)
         if digest == self._last_hash and self.screen.frame is not None:
             return
+        started = time.perf_counter()
         try:
             frame = await self.hass.async_add_executor_job(self._draw, snap)
         except PipelineError as err:
@@ -111,6 +117,12 @@ class ScreenRenderer:
             return
         self._last_hash = digest
         self.renders += 1
+        self.last_render_ms = (time.perf_counter() - started) * 1000
+        self.max_render_ms = max(self.max_render_ms, self.last_render_ms)
+        if self.last_render_ms > SLOW_RENDER_MS and not self._warned_slow:
+            self._warned_slow = True
+            _LOGGER.warning("Rendering %s took %.0f ms (budget %d ms)", self.screen.name,
+                            self.last_render_ms, SLOW_RENDER_MS)
         had_error = self.screen.last_error is not None
         if self.screen.set_frame(frame) or had_error:
             async_dispatcher_send(self.hass, SIGNAL_FRAME.format(self.screen.subentry_id))

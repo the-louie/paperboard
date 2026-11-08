@@ -37,6 +37,8 @@ async def async_get_config_entry_diagnostics(hass: HomeAssistant,
             "stale": screen.stale,
             "last_error": screen.last_error,
             "renders": renderer.renders if renderer else None,
+            "render_ms": {"last": round(renderer.last_render_ms or 0, 1),
+                          "max": round(renderer.max_render_ms, 1)} if renderer else None,
             "entities": list(renderer.entities) if renderer else [],
             "refresh_rate": screen.refresh_rate,
             "last_checkin": dt_util.utc_from_timestamp(screen.last_checkin).isoformat()
