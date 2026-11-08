@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-09 (`in-progress` — Unit-format helpers).
-**Last completed:** Sprint 01 T-08 (commit `65929c1`).
+**Current ticket:** Sprint 01 T-10 (`todo` — Pipeline: SVG → panel PNG).
+**Last completed:** Sprint 01 T-09 (commit `a2e9296`).
 
 ## Sprints
 | Sprint | Goal | Status |
