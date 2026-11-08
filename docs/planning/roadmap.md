@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-18 (`in-progress` — Generic image clients).
-**Last completed:** Sprint 03 T-17 (commit `fcb6873`).
+**Current ticket:** Sprint 03 T-19 (`todo` — Spike: a Lovelace preview card (optional)).
+**Last completed:** Sprint 03 T-18 (commit `da20435`).
 
 ## Sprints
 | Sprint | Goal | Status |
