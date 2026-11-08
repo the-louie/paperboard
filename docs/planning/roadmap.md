@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-08 (`in-progress` — Layout 02 Tidningen).
-**Last completed:** Sprint 03 T-07 (commit `d04f65b`).
+**Current ticket:** Sprint 03 T-09 (`todo` — Layout 03 Bento).
+**Last completed:** Sprint 03 T-08 (commit `6e69fe3`).
 
 ## Sprints
 | Sprint | Goal | Status |
