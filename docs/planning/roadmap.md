@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-15 (`in-progress` — Scale YAML layouts to larger panels).
-**Last completed:** Sprint 03 T-14 (commit `6bb7858`).
+**Current ticket:** Sprint 03 T-16 (`todo` — Localisation of widget texts).
+**Last completed:** Sprint 03 T-15 (commit `0526c30`).
 
 ## Sprints
 | Sprint | Goal | Status |
