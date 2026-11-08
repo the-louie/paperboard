@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-16 (`todo` — Localisation of widget texts).
+**Current ticket:** Sprint 03 T-16 (`in-progress` — Localisation of widget texts).
 **Last completed:** Sprint 03 T-15 (commit `0526c30`).
 
 ## Sprints

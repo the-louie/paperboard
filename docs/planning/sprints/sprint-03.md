@@ -1,6 +1,6 @@
 # Sprint 03 — All designs, the schedule, and release readiness
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-16 (`todo` — Localisation of widget texts)
+**Current ticket:** T-16 (`in-progress` — Localisation of widget texts)
 **Last completed:** T-15 (`done` — commit `0526c30`)
 **Budget:** 59h estimated (band 80–120h). **Below the band on purpose: this is all the
 schedulable work left.** The remaining rows are owner decisions (deploy, device switch,
@@ -35,7 +35,7 @@ night sleep, and the repo ready for a public HACS release (docs, CI, brand, aarc
 | T-13 | Layout 08 Energi | 2 | — | B-058 | done | Landed in 159b76e |
 | T-14 | Layout 04 Instrument (bar-chart parts only) | 1 | — | B-059 | done | Landed in 6bb7858 |
 | T-15 | Scale YAML layouts to larger panels | 4 | — | B-083 | done | Landed in 0526c30 |
-| T-16 | Localisation of widget texts | 3 | — | B-075 | todo | spec: backlog row B-075 |
+| T-16 | Localisation of widget texts | 3 | — | B-075 | in-progress | spec: backlog row B-075 |
 | T-17 | Rotate-image-token button per screen | 2 | — | B-082 | todo | spec: backlog row B-082 |
 | T-18 | Generic image clients | 3 | — | B-066 | todo | spec: backlog row B-066 |
 | T-19 | Spike: a Lovelace preview card (optional) | 3 | — | B-078 | todo | spec: backlog row B-078 |
