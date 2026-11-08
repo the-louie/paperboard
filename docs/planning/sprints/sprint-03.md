@@ -1,6 +1,6 @@
 # Sprint 03 — All designs, the schedule, and release readiness
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-18 (`todo` — Generic image clients)
+**Current ticket:** T-18 (`in-progress` — Generic image clients)
 **Last completed:** T-17 (`done` — commit `fcb6873`)
 **Budget:** 59h estimated (band 80–120h). **Below the band on purpose: this is all the
 schedulable work left.** The remaining rows are owner decisions (deploy, device switch,
@@ -37,7 +37,7 @@ night sleep, and the repo ready for a public HACS release (docs, CI, brand, aarc
 | T-15 | Scale YAML layouts to larger panels | 4 | — | B-083 | done | Landed in 0526c30 |
 | T-16 | Localisation of widget texts | 3 | — | B-075 | done | Landed in e6e3e35 |
 | T-17 | Rotate-image-token button per screen | 2 | — | B-082 | done | Landed in fcb6873 |
-| T-18 | Generic image clients | 3 | — | B-066 | todo | spec: backlog row B-066 |
+| T-18 | Generic image clients | 3 | — | B-066 | in-progress | spec: backlog row B-066 |
 | T-19 | Spike: a Lovelace preview card (optional) | 3 | — | B-078 | todo | spec: backlog row B-078 |
 | T-20 | Research: aarch64 verification | 2 | — | B-070 | todo | spec: backlog row B-070 |
 | T-21 | CI workflow | 3 | — | B-069 | todo | spec: backlog row B-069 |

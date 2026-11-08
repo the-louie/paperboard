@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-18 (`todo` — Generic image clients).
+**Current ticket:** Sprint 03 T-18 (`in-progress` — Generic image clients).
 **Last completed:** Sprint 03 T-17 (commit `fcb6873`).
 
 ## Sprints
