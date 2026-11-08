@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-02 (`in-progress` — Widget: headline/prose text slot).
-**Last completed:** Sprint 03 T-01 (commit `414ce0f`).
+**Current ticket:** Sprint 03 T-03 (`todo` — Area frames: rounded boxes and an inverted hero).
+**Last completed:** Sprint 03 T-02 (commit `474eb77`).
 
 ## Sprints
 | Sprint | Goal | Status |
