@@ -68,7 +68,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-027 · Research: schema library for layouts**~~ — CLOSED 2026-11-08 (Sprint 02 T-01): see commit "T-01: Research: schema library for layouts"
 - ~~**B-028 · Design: layout YAML schema**~~ — CLOSED 2026-11-08 (Sprint 02 T-02): see commit "T-02: Design: layout YAML schema"
 - → Sprint 02 T-05 (B-029 · Layout loader and validation)
-- → Sprint 02 T-04 (B-030 · Grid engine with reflow)
+- ~~**B-030 · Grid engine with reflow**~~ — CLOSED 2026-11-08 (Sprint 02 T-04): see commit "T-04: Grid engine with reflow"
 - ~~**B-031 · Type scale and style tokens**~~ — CLOSED 2026-11-08 (Sprint 02 T-03): see commit "T-03: Type scale and style tokens"
 - → Sprint 02 T-06 (B-032 · Roles: binding in config/options flow)
 - → Sprint 02 T-07 (B-033 · Repairs for missing entities)
