@@ -190,6 +190,30 @@ schedule:
 - **Validation:** every named layout must exist (bundled, user YAML or built-in). Otherwise
   the schedule is rejected with a Repairs issue.
 
+### The device button (B-089)
+
+TRMNL firmware reads one button. On the XIAO 7.5" panel it is the one that redraws the screen
+within seconds; the other buttons are Reset, Boot and one the firmware ignores.
+
+| Press | Effect |
+|---|---|
+| Short | The next layout in the cycle, held for `hold_minutes`; then the schedule resumes |
+| Double click, or hold 1–5 s | Back to the schedule now |
+| Hold 5–15 s | The firmware forgets Wi-Fi: avoid |
+| Hold 15 s or more | The firmware forgets its pairing: avoid |
+
+```yaml
+cycle: [tidslinjen, tavlan, energi]   # optional; default: all 7 bundled layouts
+hold_minutes: 30                      # optional; default 30
+```
+
+- **How it works:** the firmware sends `Update-Source: button` (`EXT0`/`EXT1` on ESP32-S3
+  boards) after a button wake, and `special_function: true` for a double click.
+  `/api/display` renders the new layout **before** it answers, so the same wake shows it.
+- **Waking up:** while a layout is held, the refresh rate is shortened so the device wakes
+  ~30 s after the hold ends.
+- **Plain screens:** a screen with a plain layout instead of a schedule cycles the default list.
+
 ## Mockup 04 Instrument (Sprint 03 T-14)
 
 The owner rejected the gauges, but liked the **filled/outlined bar chart**. No 04 layout ships.

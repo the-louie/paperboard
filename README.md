@@ -87,6 +87,8 @@ The device redraws only when the picture changed, which saves flashes and batter
   *Tavlan* from 07:00 to 08:00 on school days, and a quiet night layout that wakes the device
   once an hour. See [Schedules](docs/design/layout-schema.md#schedules-sprint-03-t-06) and
   [refresh policy](docs/design/refresh-policy.md).
+- **The device button:** a short press shows the next layout for 30 minutes; a double click
+  goes back to the schedule. See [the device button](docs/design/layout-schema.md#the-device-button-b-089).
 - **Other clients:** ESPHome, Kindle, TRMNL Alias and LaraPaper:
   [docs/clients.md](docs/clients.md).
 

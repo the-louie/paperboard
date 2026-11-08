@@ -10,6 +10,8 @@ default: tidslinjen
 ```
 
 `when` (optional) must be 'on' for the entry to apply; an unavailable sensor does not match.
+`cycle` and `hold_minutes` (optional) steer the device button: a short press shows the next
+layout in `cycle` for `hold_minutes`, a double click returns to the schedule (B-089).
 The device's refresh_rate is shortened so it wakes right after the next switch.
 """
 
@@ -54,6 +56,9 @@ SCHEDULE = vol.Schema({
     vol.Optional("title"): str,
     vol.Required("schedule"): vol.All([ENTRY], vol.Length(min=1)),
     vol.Required("default"): str,
+    # The device button steps through `cycle` and holds each layout `hold_minutes` (B-089).
+    vol.Optional("cycle"): vol.All([str], vol.Length(min=1)),
+    vol.Optional("hold_minutes"): vol.All(int, vol.Range(min=1, max=1440)),
 })
 
 
@@ -86,6 +91,8 @@ class ScheduleSpec:
     entries: tuple[Entry, ...]
     default: str
     source: str
+    cycle: tuple[str, ...] | None = None
+    hold_minutes: int | None = None
 
     @property
     def conditions(self) -> tuple[str, ...]:
@@ -124,4 +131,6 @@ def parse_schedule(raw: dict[str, Any], source: str) -> ScheduleSpec:
                           when=e.get("when"), refresh_rate=e.get("refresh_rate"))
                     for e in data["schedule"])
     return ScheduleSpec(name=data["name"], title=data.get("title", data["name"]),
-                        entries=entries, default=data["default"], source=source)
+                        entries=entries, default=data["default"], source=source,
+                        cycle=tuple(data["cycle"]) if "cycle" in data else None,
+                        hold_minutes=data.get("hold_minutes"))

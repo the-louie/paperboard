@@ -38,6 +38,9 @@ _LOGGER = logging.getLogger(__name__)
 TICK = dt.timedelta(seconds=60)
 SLOW_RENDER_MS = 500  # budget per frame (T-29); slower renders are logged once
 DEBOUNCE_SECONDS = 5.0
+# Device button (B-089): a short press steps through these, each held for HOLD_MINUTES.
+DEFAULT_CYCLE = ("tidslinjen", "tavlan", "almanackan", "energi", "tidningen", "bento", "trmnl")
+HOLD_MINUTES = 30
 
 
 class ScreenRenderer:
@@ -59,10 +62,65 @@ class ScreenRenderer:
         self.auto_profile = False  # set by setup: follow the device's reported model
         self.layout_name = ""
         self.hub = hub
-        roles = hub.roles if hub is not None else {}
-        bound = [eid for _role, eid in bound_entities(roles)]
-        self.entities = tuple(dict.fromkeys((*layout.resolve(hass.states.async_entity_ids()),
-                                             *bound)))
+        self.cycle: dict[str, Layout] = {}  # button cycle, name -> layout, in order
+        self.hold = dt.timedelta(minutes=HOLD_MINUTES)
+        self.held: tuple[str, dt.datetime] | None = None  # (layout name, until), button
+        self._bound = [eid for _role, eid in bound_entities(hub.roles if hub else {})]
+        self.entities = self._entities()
+
+    def _entities(self) -> tuple[str, ...]:
+        ids = self.hass.states.async_entity_ids()
+        layouts = (self.layout, *self.cycle.values())
+        return tuple(dict.fromkeys((*(e for lay in layouts for e in lay.resolve(ids)),
+                                    *self._bound)))
+
+    def set_cycle(self, cycle: dict[str, Layout], hold_minutes: int | None = None) -> None:
+        """The layouts the device button steps through (before async_start)."""
+        self.cycle = cycle
+        self.hold = dt.timedelta(minutes=hold_minutes or HOLD_MINUTES)
+        self.entities = self._entities()
+
+    def held_layout(self, now: dt.datetime) -> tuple[str, Layout] | None:
+        """The layout the button put up, while its hold lasts."""
+        if self.held is None:
+            return None
+        name, until = self.held
+        if now >= until or name not in self.cycle:
+            self.held = None
+            return None
+        return name, self.cycle[name]
+
+    def active_layout(self, now: dt.datetime) -> Layout:
+        held = self.held_layout(now)
+        return held[1] if held else self.layout
+
+    def shown_name(self, now: dt.datetime) -> str:
+        """The name of the layout on screen now (held, scheduled or fixed)."""
+        if (held := self.held_layout(now)) is not None:
+            return held[0]
+        schedule = getattr(self.layout, "schedule", None)
+        if schedule is not None:
+            states = {e: {"state": s.state} for e in schedule.conditions
+                      if (s := self.hass.states.get(e)) is not None}
+            return schedule.layout_at(now, states)
+        return self.layout_name
+
+    async def async_step(self) -> None:
+        """Button short press: the next layout in the cycle, held for the hold time."""
+        names = list(self.cycle)
+        if not names:
+            return
+        now = dt_util.now()
+        current = self.shown_name(now)
+        nxt = names[(names.index(current) + 1) % len(names)] if current in names else names[0]
+        self.held = (nxt, now + self.hold)
+        _LOGGER.debug("%s: button -> %s until %s", self.screen.name, nxt, self.held[1])
+        await self.async_render()
+
+    async def async_resume(self) -> None:
+        """Button double click: back to the schedule now."""
+        self.held = None
+        await self.async_render()
 
     @callback
     def async_start(self) -> None:
@@ -96,6 +154,7 @@ class ScreenRenderer:
             from . import layout_for  # late: __init__ imports this module
 
             self.layout = layout_for(self.hub.layouts, self.layout_name, prof.bit_depth)
+            self.cycle = {n: layout_for(self.hub.layouts, n, prof.bit_depth) for n in self.cycle}
         self._last_hash = None
         self.hass.async_create_background_task(self.async_render(), "paperboard re-profile")
 
@@ -137,7 +196,7 @@ class ScreenRenderer:
     def _render_templates(self) -> dict[str, str]:
         """HA Jinja for text slots, in the loop; a broken template shows its error briefly."""
         out = {}
-        for source in self.layout.templates:
+        for source in self.active_layout(dt_util.now()).templates:
             try:
                 out[source] = str(Template(source, self.hass).async_render(parse_result=False))
             except TemplateError as err:
@@ -145,8 +204,10 @@ class ScreenRenderer:
         return out
 
     def _hash(self, snap: Snapshot) -> str:
-        bucket = int(snap.now.timestamp()) // self.layout.clock_resolution
-        blob = json.dumps([bucket, snap.screen_name, snap.states, snap.stale_since,
+        layout = self.active_layout(snap.now)
+        bucket = int(snap.now.timestamp()) // layout.clock_resolution
+        held = self.held[0] if self.held else None
+        blob = json.dumps([bucket, held, snap.screen_name, snap.states, snap.stale_since,
                            snap.battery, snap.forecasts,
                            snap.prices.points if snap.prices else None,
                            (snap.solar.hours, snap.solar.today_kwh) if snap.solar else None,
@@ -161,7 +222,8 @@ class ScreenRenderer:
             return
         started = time.perf_counter()
         try:
-            frame = await self.hass.async_add_executor_job(self._draw, snap)
+            frame = await self.hass.async_add_executor_job(
+                self._draw, snap, self.active_layout(snap.now))
         except PipelineError as err:
             self.screen.render_failed(str(err))
             async_dispatcher_send(self.hass, SIGNAL_FRAME.format(self.screen.subentry_id))
@@ -185,9 +247,8 @@ class ScreenRenderer:
         if self.screen.set_frame(frame) or had_error:
             async_dispatcher_send(self.hass, SIGNAL_FRAME.format(self.screen.subentry_id))
 
-    def _draw(self, snap: Snapshot):  # runs in the executor
-        return render(self.layout.build(snap, self._measurer), self.profile,
-                      self.fonts.font_dir)
+    def _draw(self, snap: Snapshot, layout: Layout):  # runs in the executor
+        return render(layout.build(snap, self._measurer), self.profile, self.fonts.font_dir)
 
 
 def to_int(value: object) -> int | None:

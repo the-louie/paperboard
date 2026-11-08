@@ -131,6 +131,9 @@ class SetupView(HomeAssistantView):
 
 # Firmware headers kept as telemetry (research notes, firmware 1.8.19; WiFi-Band and Wake-Time
 # seen on the owner's 1.8.10). Never the Access-Token.
+# Update-Source values the TRMNL firmware sends after a button wake
+# (usetrmnl/firmware lib/trmnl/src/logging_parsers.cpp: GPIO -> "button", EXT0/EXT1 on S3).
+BUTTON_SOURCES = frozenset({"button", "EXT0", "EXT1"})
 TELEMETRY_HEADERS = ("Battery-Voltage", "RSSI", "FW-Version", "Model", "Width", "Height",
                      "Refresh-Rate", "Image-Cached", "Wake-Time", "Reset-Reason", "WiFi-Band",
                      "Update-Source")
@@ -150,12 +153,18 @@ def _authenticated_screen(hub: HubRuntime | None, request: web.Request) -> Scree
 def _refresh_rate(hass: HomeAssistant, hub: HubRuntime, screen: ScreenRuntime) -> int:
     """The screen's rate, shortened so the device wakes just after the next schedule switch."""
     renderer = hub.renderers.get(screen.subentry_id)
+    now = dt_util.now()
+    rate = screen.refresh_rate
     schedule = getattr(getattr(renderer, "layout", None), "schedule", None)
-    if schedule is None:
-        return screen.refresh_rate
-    states = {e: {"state": s.state} for e in schedule.conditions
-              if (s := hass.states.get(e)) is not None}
-    return schedule.refresh_rate(dt_util.now(), states, screen.refresh_rate)
+    if schedule is not None:
+        states = {e: {"state": s.state} for e in schedule.conditions
+                  if (s := hass.states.get(e)) is not None}
+        rate = schedule.refresh_rate(now, states, screen.refresh_rate)
+    if renderer is not None and renderer.held_layout(now) is not None:
+        # Wake just after a button hold ends, so the schedule comes back on time.
+        until = int((renderer.held[1] - now).total_seconds()) + 30
+        rate = max(60, min(rate, until))
+    return rate
 
 
 class DisplayView(HomeAssistantView):
@@ -184,6 +193,14 @@ class DisplayView(HomeAssistantView):
                             if h in request.headers}
         screen.last_checkin = time.time()
         async_dispatcher_send(self.hass, SIGNAL_CHECKIN.format(screen.subentry_id))
+        if request.headers.get("Update-Source") in BUTTON_SOURCES:
+            # B-089: render before answering, so this very wake shows the new layout.
+            renderer = hub.renderers.get(screen.subentry_id)
+            if renderer is not None:
+                if request.headers.get("special_function"):
+                    await renderer.async_resume()  # double click: back to the schedule
+                else:
+                    await renderer.async_step()  # short press: next layout
         if screen.frame is None:
             return _json({"status": 202, "message": "No image rendered yet",
                           "refresh_rate": 60})

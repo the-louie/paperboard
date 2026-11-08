@@ -35,7 +35,7 @@ from .layouts import Layout, get_layout
 from .pipeline import PanelProfile
 from .profiles import names as profile_names
 from .profiles import resolve as resolve_profile
-from .renderer import ScreenRenderer
+from .renderer import DEFAULT_CYCLE, ScreenRenderer
 from .role_watch import RoleWatcher
 from .runtime import HubRuntime, ScreenRuntime
 from .style import Theme
@@ -131,6 +131,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
                                                prof.byte_limit), fonts, hub)
         renderer.auto_profile = auto
         renderer.layout_name = data.get(CONF_LAYOUT, "")
+        spec = watcher.result.layouts.get(renderer.layout_name)
+        names = getattr(spec, "cycle", None) or DEFAULT_CYCLE
+        renderer.set_cycle({n: layout_for(watcher, n, prof.bit_depth) for n in names
+                            if n in watcher.result.layouts},
+                           getattr(spec, "hold_minutes", None))
         hub.renderers[subentry_id] = renderer
         renderer.async_start()
         entry.async_on_unload(renderer.async_stop)

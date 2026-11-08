@@ -146,6 +146,7 @@ def load_all(user_dir: Path | None, previous: LoadResult | None = None) -> LoadR
         targets = [e.layout for e in getattr(spec, "entries", ())]
         if hasattr(spec, "entries"):
             targets.append(spec.default)
+            targets.extend(getattr(spec, "cycle", None) or ())
             from .layouts import LAYOUTS as CODE_LAYOUTS
 
             missing = [t for t in targets
