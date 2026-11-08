@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-19 (`todo` — View: /api/setup with a pairing window).
+**Current ticket:** Sprint 01 T-19 (`in-progress` — View: /api/setup with a pairing window).
 **Last completed:** Sprint 01 T-18 (commit `7b25cc3`).
 
 ## Sprints
