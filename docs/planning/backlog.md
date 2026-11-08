@@ -32,7 +32,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-002 · Research: HA test harness on Python 3.14**~~ — CLOSED 2026-11-08 (Sprint 01 T-02): see commit "T-02: Research: HA test harness on Python 3.14"
 - ~~**B-003 · Research: route collision and auth under /api**~~ — CLOSED 2026-11-08 (Sprint 01 T-03): see commit "T-03: Research: route collision and auth under /api"
 - ~~**B-004 · Research: the owner's TRMNL OG facts**~~ — CLOSED 2026-11-08 (Sprint 01 T-04): see commit "T-04: Research: the owner's TRMNL OG facts"
-- → Sprint 01 T-05 (B-005 · Spike: resvg-py in an HA 2026.11 throwaway container)
+- ~~**B-005 · Spike: resvg-py in an HA 2026.11 throwaway container**~~ — CLOSED 2026-11-08 (Sprint 01 T-05): see commit "T-05: Spike: resvg-py in an HA 2026.11 throwaway container"
 - → Sprint 01 T-07 (B-006 · Spike: text metrics, Pillow vs resvg)
 - → Sprint 01 T-06 (B-007 · Fonts: bundle and load)
 - → Sprint 01 T-10 (B-008 · Pipeline: SVG → panel PNG)
