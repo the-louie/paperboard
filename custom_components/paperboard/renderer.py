@@ -25,6 +25,7 @@ from .fmt import to_float
 from .fonts import FontRegistry
 from .layouts import Layout, Snapshot
 from .pipeline import PanelProfile, PipelineError, render
+from .role_watch import bound_entities
 from .runtime import ScreenRuntime, battery_percent
 from .text import Measurer
 
@@ -38,7 +39,7 @@ class ScreenRenderer:
     """Keeps one screen's frame current."""
 
     def __init__(self, hass: HomeAssistant, screen: ScreenRuntime, layout: Layout,
-                 profile: PanelProfile, fonts: FontRegistry) -> None:
+                 profile: PanelProfile, fonts: FontRegistry, hub: Any = None) -> None:
         self.hass, self.screen, self.layout, self.profile = hass, screen, layout, profile
         self.fonts = fonts
         self._measurer = Measurer(fonts)
@@ -50,7 +51,11 @@ class ScreenRenderer:
         self._debouncer = Debouncer(hass, _LOGGER, cooldown=DEBOUNCE_SECONDS, immediate=False,
                                     function=self.async_render)
         self._unsubs: list[Any] = []
-        self.entities = layout.resolve(hass.states.async_entity_ids())
+        self.hub = hub
+        roles = hub.roles if hub is not None else {}
+        bound = [eid for _role, eid in bound_entities(roles)]
+        self.entities = tuple(dict.fromkeys((*layout.resolve(hass.states.async_entity_ids()),
+                                             *bound)))
 
     @callback
     def async_start(self) -> None:
@@ -88,12 +93,15 @@ class ScreenRenderer:
         return Snapshot(now=dt_util.now(), width=self.profile.width, height=self.profile.height,
                         screen_name=self.screen.name, states=states, stale_since=stale,
                         battery=battery_percent(volts) if volts is not None else None,
-                        lang="sv" if self.hass.config.language.startswith("sv") else "en")
+                        lang="sv" if self.hass.config.language.startswith("sv") else "en",
+                        roles=dict(self.hub.roles) if self.hub is not None else {},
+                        forecasts={k: list(v) for k, v in self.hub.forecasts.forecasts.items()}
+                        if self.hub is not None and self.hub.forecasts is not None else {})
 
     def _hash(self, snap: Snapshot) -> str:
         bucket = int(snap.now.timestamp()) // self.layout.clock_resolution
         blob = json.dumps([bucket, snap.screen_name, snap.states, snap.stale_since,
-                           snap.battery], sort_keys=True, default=str)
+                           snap.battery, snap.forecasts], sort_keys=True, default=str)
         return hashlib.sha256(blob.encode()).hexdigest()
 
     async def async_render(self) -> None:

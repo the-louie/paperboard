@@ -27,6 +27,13 @@ class Snapshot:
     stale_since: str | None = None  # "HH:MM" of the frame still shown after a failed render
     battery: int | None = None  # the screen's own battery %, from its last check-in
     lang: str = "sv"
+    roles: dict[str, Any] = field(default_factory=dict)  # role -> entity id / list of ids
+    forecasts: dict[str, list[dict[str, Any]]] = field(default_factory=dict)  # hourly/daily
+
+    def role_state(self, role: str) -> dict[str, Any] | None:
+        """State dict of the entity bound to a single role, or None."""
+        entity_id = self.roles.get(role)
+        return self.states.get(entity_id) if isinstance(entity_id, str) else None
 
 
 @dataclass(frozen=True)

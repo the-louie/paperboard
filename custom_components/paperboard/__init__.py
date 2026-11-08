@@ -23,6 +23,7 @@ from .const import (
     PROFILES,
     SUBENTRY_SCREEN,
 )
+from .data import ForecastCache
 from .devices import DeviceStore
 from .fonts import load_fonts
 from .layout_watch import LayoutWatcher
@@ -59,6 +60,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     hub = HubRuntime(devices=store, base_url=entry.options.get(CONF_BASE_URL, ""),
                      layouts=watcher, roles=dict(entry.options.get(CONF_ROLES, {})))
     entry.async_on_unload(RoleWatcher(hass, hub.roles).async_start())
+    hub.forecasts = ForecastCache(hass, hub.roles.get("weather"))
+    entry.async_on_unload(hub.forecasts.async_start())
     registry = dr.async_get(hass)
     wanted: set[str] = set()
     for subentry in list(entry.subentries.values()):
@@ -99,7 +102,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
         width, height, depth, limit = PROFILES.get(data.get(CONF_PROFILE, DEFAULT_PROFILE),
                                                    PROFILES[DEFAULT_PROFILE])
         renderer = ScreenRenderer(hass, screen, get_layout(data.get(CONF_LAYOUT, "")),
-                                  PanelProfile(width, height, depth, limit), fonts)
+                                  PanelProfile(width, height, depth, limit), fonts, hub)
         hub.renderers[subentry_id] = renderer
         renderer.async_start()
         entry.async_on_unload(renderer.async_stop)

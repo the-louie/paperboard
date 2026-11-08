@@ -75,6 +75,7 @@ class HubRuntime:
     base_url: str = ""
     layouts: Any = None  # LayoutWatcher
     roles: dict[str, Any] = field(default_factory=dict)  # role -> entity id (or list)
+    forecasts: Any = None  # data.ForecastCache
     pairing_screen: str | None = None
     last_rejected: dict[str, str] | None = None
     pairing_until: float = 0.0

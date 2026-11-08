@@ -72,7 +72,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-031 · Type scale and style tokens**~~ — CLOSED 2026-11-08 (Sprint 02 T-03): see commit "T-03: Type scale and style tokens"
 - ~~**B-032 · Roles: binding in config/options flow**~~ — CLOSED 2026-11-08 (Sprint 02 T-06): see commit "T-06: Roles: binding in config/options flow"
 - ~~**B-033 · Repairs for missing entities**~~ — CLOSED 2026-11-08 (Sprint 02 T-07): see commit "T-07: Repairs for missing entities"
-- → Sprint 02 T-08 (B-034 · Data: weather forecasts)
+- ~~**B-034 · Data: weather forecasts**~~ — CLOSED 2026-11-08 (Sprint 02 T-08): see commit "T-08: Data: weather forecasts"
 - → Sprint 02 T-09 (B-035 · Research: price sources)
 - → Sprint 02 T-10 (B-036 · Price adapters)
 - → Sprint 02 T-11 (B-037 · Research: solar forecast source)
