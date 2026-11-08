@@ -129,7 +129,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 - ~~**B-073 · Security review of the device endpoints**~~ — CLOSED 2026-11-08 (Sprint 01 T-28): see commit "T-28: Security review of the device endpoints"
 - ~~**B-074 · Performance budget**~~ — CLOSED 2026-11-08 (Sprint 01 T-29): see commit "T-29: Performance budget"
-- → Sprint 03 T-16 (B-075 · Localisation of widget texts)
+- ~~**B-075 · Localisation of widget texts**~~ — CLOSED 2026-11-08 (Sprint 03 T-16): see commit "T-16: Localisation of widget texts"
 - ~~**B-076 · Fixture capture script**~~ — CLOSED 2026-11-08 (Sprint 01 T-12): see commit "T-12: Fixture capture script"
 - [ ] **B-077 · Device liveness → owner alert** · 1h · prio P2 · needs: B-022, B-025 · src: O4 in <the maintainer's HA repo>
       Add the problem sensor to the owner's AppDaemon watchdog or notification path (that

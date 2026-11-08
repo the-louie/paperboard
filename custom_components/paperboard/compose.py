@@ -55,6 +55,8 @@ def _draw(fn: WidgetFn, rect: Rect, snap: Snapshot, measure: Measurer, theme: Th
 def render_spec(spec: LayoutSpec, snap: Snapshot, measure: Measurer, theme: Theme,
                 notes: list[str] | None = None) -> str:
     notes = notes if notes is not None else []
+    if spec.lang in ("sv", "en") and snap.lang != spec.lang:
+        snap = replace(snap, lang=spec.lang)  # a layout may pin its language
     g = spec.grid
     # Layouts are designed on spec.canvas (800x480); bigger panels scale geometry and type.
     scale = min(snap.width / spec.canvas[0], snap.height / spec.canvas[1])
