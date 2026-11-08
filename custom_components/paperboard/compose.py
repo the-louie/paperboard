@@ -96,16 +96,21 @@ def render_spec(spec: LayoutSpec, snap: Snapshot, measure: Measurer, theme: Them
         if frame in ("box", "rounded"):
             svg.rect(box.x + 1, box.y + 1, box.w - 2, box.h - 2, "#fff", stroke="#000",
                      stroke_width=2, rx=12 if frame == "rounded" else 0)
-        elif frame == "inverted":
-            svg.rect(box.x, box.y, box.w, box.h, "#000", rx=12)
+        elif frame in ("inverted", "panel"):
+            svg.rect(box.x, box.y, box.w, box.h, "#000", rx=12 if frame == "inverted" else 0)
         rect = _inner(box, padding)
-        share = rect.h / len(widgets)
-        for i, w in enumerate(widgets):
-            sub = Rect(rect.x, rect.y + i * share, rect.w, share) if len(widgets) > 1 else rect
+        fixed = sum(w.get("height", 0) for w in widgets)
+        flexible = [w for w in widgets if not w.get("height")]
+        share = (rect.h - fixed) / len(flexible) if flexible else 0
+        y = rect.y
+        for w in widgets:
+            h = w.get("height") or share
+            sub = Rect(rect.x, y, rect.w, h) if len(widgets) > 1 else rect
+            y += h
             frag = _draw(REGISTRY[w["type"]], sub, snap, measure, theme, w["options"], notes,
                          w["type"])
             if frag:
-                if frame == "inverted":
+                if frame in ("inverted", "panel"):
                     frag = invert_colors(frag)
                 svg.raw(frag)
                 svg.adopt_patterns(frag)

@@ -147,5 +147,5 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - → Sprint 03 T-15 (B-083 · Scale YAML layouts to larger panels)
 - ~~**B-084 · Area frames: rounded boxes and an inverted hero**~~ — CLOSED 2026-11-08 (Sprint 03 T-03): see commit "T-03: Area frames: rounded boxes and an inverted hero"
 - ~~**B-085 · Header variants: masthead and title bar**~~ — CLOSED 2026-11-08 (Sprint 03 T-04): see commit "T-04: Header variants: masthead and title bar"
-- → Sprint 03 T-05 (B-086 · Inverted now panel (Tavlan))
+- ~~**B-086 · Inverted now panel (Tavlan)**~~ — CLOSED 2026-11-08 (Sprint 03 T-05): see commit "T-05: Inverted now panel (Tavlan)"
 

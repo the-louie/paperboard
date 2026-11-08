@@ -21,7 +21,7 @@ BUNDLED_DIR = Path(__file__).parent / "layouts_yaml"
 WIDGET_TYPES = ("header", "now", "timeline", "hourly_table", "daily", "energy", "energy_flow",
                 "rooms", "stat", "sun_moon", "agenda", "text", "footer")
 COLLAPSE = ("left", "right", "up", "down", "none")
-FRAMES = ("none", "box", "rounded", "inverted")
+FRAMES = ("none", "box", "rounded", "inverted", "panel")
 
 
 def _track(value: Any) -> int | str:
@@ -37,6 +37,7 @@ WIDGET = vol.Schema({
     vol.Required("area"): str,
     vol.Optional("options", default={}): dict,
     vol.Optional("collapse"): vol.In(COLLAPSE),
+    vol.Optional("height"): vol.All(int, vol.Range(min=10)),  # px share when stacked
 })
 LAYOUT = vol.Schema({
     vol.Required("name"): vol.All(str, vol.Match(r"^[a-z0-9_]+$")),
