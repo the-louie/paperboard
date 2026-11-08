@@ -122,9 +122,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-074 · Performance budget**~~ — CLOSED 2026-11-08 (Sprint 01 T-29): see commit "T-29: Performance budget"
 - ~~**B-075 · Localisation of widget texts**~~ — CLOSED 2026-11-08 (Sprint 03 T-16): see commit "T-16: Localisation of widget texts"
 - ~~**B-076 · Fixture capture script**~~ — CLOSED 2026-11-08 (Sprint 01 T-12): see commit "T-12: Fixture capture script"
-- [ ] **B-077 · Device liveness → owner alert** · 1h · prio P2 · needs: B-022, B-025 · src: O4 in <the maintainer's HA repo>
-      Add the problem sensor to the owner's AppDaemon watchdog or notification path (that
-      change is made in the `<the maintainer's HA repo>` repo).
+- ~~**B-077 · Device liveness → owner alert**~~ — CLOSED 2026-11-08: the AppDaemon watchdog got an `expect_off` option. `binary_sensor.hallen_uteblivet_anrop` turning on sends a phone alert on the watchdog channel, with the same quiet hours. Deployed on ha-host at 17:58.
 - ~~**B-078 · Spike: a Lovelace preview card (optional)**~~ — CLOSED 2026-11-08 (Sprint 03 T-19): see commit "T-19: Spike: a Lovelace preview card (optional)"
 - ~~**B-079 · Unit-format helpers**~~ — CLOSED 2026-11-08 (Sprint 01 T-09): see commit "T-09: Unit-format helpers"
 - ~~**B-080 · Text measurement and wrap utility**~~ — CLOSED 2026-11-08 (Sprint 01 T-08): see commit "T-08: Text measurement and wrap utility"
