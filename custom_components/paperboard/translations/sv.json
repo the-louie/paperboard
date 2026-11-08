@@ -1,0 +1,32 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Paperboard",
+        "description": "Konfigurera paperboard. Skärmar (e-ink-enheter) läggs till efteråt.",
+        "data": {
+          "base_url": "Bas-URL som enheterna når Home Assistant på",
+          "refresh_rate": "Standardintervall för uppdatering"
+        },
+        "data_description": {
+          "base_url": "Använd LAN-adressen, t.ex. http://192.168.1.10:8123. Lämna tomt för Home Assistants interna URL.",
+          "refresh_rate": "Sekunder mellan enheternas anrop."
+        }
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Paperboard är redan konfigurerat. Lägg till skärmar i den befintliga posten."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Paperboard",
+        "data": {
+          "base_url": "Bas-URL som enheterna når Home Assistant på",
+          "refresh_rate": "Standardintervall för uppdatering"
+        }
+      }
+    }
+  }
+}
