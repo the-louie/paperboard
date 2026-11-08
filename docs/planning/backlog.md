@@ -143,3 +143,19 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       restart. Warm renders are not logged. Find out whether this is cold resvg/font setup or
       HA's busy start-up executor. Then warm up at setup, or skip the budget warning on the
       first render. Goal: no warning per restart (O3).
+- [ ] **B-089 · Device button steps through layouts** · 4h · prio P2 · src: owner 2026-11-08 ("i want the programmable button to step through the set of dashboards")
+      TRMNL firmware (usetrmnl/firmware main, `src/button.cpp`, `lib/trmnl/src/logging_parsers.cpp`)
+      reads one button. On `xiao_epaper_display` that is GPIO5; the other three are Reset, Boot
+      and one the firmware ignores.
+      - A short press wakes the panel at once and sends `Update-Source: button` (`EXT0` on S3
+        boards).
+      - A double click, or a 1–5 s hold, adds the header `special_function: true`.
+      - A 5–15 s hold forgets Wi-Fi; 15 s or more forgets the pairing.
+
+      Design:
+      - **Short press:** advance a per-screen index through a `cycle:` list in the schedule file
+        (default: every bundled layout) and hold that layout for `hold_minutes` (default 30).
+        Then the schedule resumes.
+      - **Double click:** back to the schedule at once.
+      - **Not yet decided:** whether a held layout survives a schedule boundary.
+      - **Tests:** the emulated device with both headers; the empty-house gate is unchanged.
