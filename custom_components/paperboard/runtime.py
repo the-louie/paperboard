@@ -2,15 +2,30 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import time
 from collections import deque
 from dataclasses import dataclass, field
+from itertools import pairwise
 from typing import Any
 
 from .devices import DeviceStore
 from .pipeline import Frame, encode_bmp_1bit
 
 PAIRING_SECONDS = 300
+# Rough LiPo state of charge from voltage; curve from the owner's trmnl-service (MIT).
+_CURVE = [(4.20, 100), (4.10, 90), (4.00, 80), (3.90, 60), (3.80, 40), (3.70, 20), (3.60, 10),
+          (3.50, 5), (3.30, 0)]
+
+
+def battery_percent(volts: float) -> int:
+    if volts >= _CURVE[0][0]:
+        return 100
+    for (v_hi, p_hi), (v_lo, p_lo) in pairwise(_CURVE):
+        if volts >= v_lo:
+            return round(p_lo + (p_hi - p_lo) * (volts - v_lo) / (v_hi - v_lo))
+    return 0
+
 LOG_ENTRIES = 50
 
 
@@ -22,6 +37,7 @@ class ScreenRuntime:
     name: str
     image_token: str
     frame: Frame | None = None
+    frame_time: dt.datetime | None = None  # when the current frame was rendered (UTC)
     refresh_rate: int = 900
     stale: bool = False  # True while the last render failed and an older frame is served
     last_error: str | None = None
@@ -43,6 +59,7 @@ class ScreenRuntime:
         """Store a new good frame; True when the image actually changed."""
         changed = self.frame is None or frame.sha != self.frame.sha
         self.frame, self.stale, self.last_error = frame, False, None
+        self.frame_time = dt.datetime.now(dt.UTC)
         return changed
 
     def render_failed(self, error: str) -> None:

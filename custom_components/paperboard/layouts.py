@@ -24,7 +24,9 @@ class Snapshot:
     height: int
     screen_name: str
     states: dict[str, dict[str, Any]] = field(default_factory=dict)
-    stale_since: str | None = None
+    stale_since: str | None = None  # "HH:MM" of the frame still shown after a failed render
+    battery: int | None = None  # the screen's own battery %, from its last check-in
+    lang: str = "sv"
 
 
 @dataclass(frozen=True)
@@ -32,6 +34,12 @@ class Layout:
     build: Callable[[Snapshot, Measurer], str]
     entities: tuple[str, ...] = ()  # entity ids whose changes trigger a render
     clock_resolution: int = 300  # seconds; how often the visible clock may change the image
+    # Optional: pick entities from all entity ids at start (zero-config layouts).
+    discover: Callable[[list[str]], tuple[str, ...]] | None = None
+
+    def resolve(self, entity_ids: list[str]) -> tuple[str, ...]:
+        found = self.discover(entity_ids) if self.discover else ()
+        return tuple(dict.fromkeys((*self.entities, *found)))
 
 
 def build_status(snap: Snapshot, measure: Measurer) -> str:
@@ -42,7 +50,27 @@ def build_status(snap: Snapshot, measure: Measurer) -> str:
     return str(svg)
 
 
-LAYOUTS: dict[str, Layout] = {"status": Layout(build=build_status)}
+def _first_weather(entity_ids: list[str]) -> tuple[str, ...]:
+    weather = sorted(e for e in entity_ids if e.startswith("weather."))
+    return tuple(weather[:1])
+
+
+def build_now(snap: Snapshot, measure: Measurer) -> str:
+    """Zero-config layout: outdoor now block and status footer (phase 1 demo)."""
+    from .widgets import Rect, footer, now_block  # widgets imports Snapshot from here
+
+    svg = Svg(snap.width, snap.height)
+    if not now_block(svg, Rect(24, 24, 300, snap.height - 80), snap, measure, snap.lang):
+        svg.text(24, 60, snap.screen_name, TextStyle("TRMNL21", 700, 21))
+    footer(svg, Rect(16, snap.height - 26, snap.width - 32, 26), snap, measure, snap.lang,
+           left=snap.screen_name)
+    return str(svg)
+
+
+LAYOUTS: dict[str, Layout] = {
+    "status": Layout(build=build_status),
+    "now": Layout(build=build_now, discover=_first_weather),
+}
 
 
 def get_layout(name: str) -> Layout:

@@ -5,7 +5,6 @@ from __future__ import annotations
 import datetime as dt
 from collections.abc import Callable
 from dataclasses import dataclass
-from itertools import pairwise
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -28,20 +27,7 @@ from . import PaperboardConfigEntry
 from .const import SIGNAL_CHECKIN, SIGNAL_FRAME
 from .entity import ScreenEntity
 from .fmt import to_float
-from .runtime import HubRuntime, ScreenRuntime
-
-# Rough LiPo state of charge from voltage; curve from the owner's trmnl-service (MIT).
-_CURVE = [(4.20, 100), (4.10, 90), (4.00, 80), (3.90, 60), (3.80, 40), (3.70, 20), (3.60, 10),
-          (3.50, 5), (3.30, 0)]
-
-
-def battery_percent(volts: float) -> int:
-    if volts >= _CURVE[0][0]:
-        return 100
-    for (v_hi, p_hi), (v_lo, p_lo) in pairwise(_CURVE):
-        if volts >= v_lo:
-            return round(p_lo + (p_hi - p_lo) * (volts - v_lo) / (v_hi - v_lo))
-    return 0
+from .runtime import HubRuntime, ScreenRuntime, battery_percent
 
 
 def _volts(s: ScreenRuntime) -> float | None:

@@ -20,10 +20,11 @@ from homeassistant.helpers.event import async_track_state_change_event, async_tr
 from homeassistant.util import dt as dt_util
 
 from .const import SIGNAL_FRAME
+from .fmt import to_float
 from .fonts import FontRegistry
 from .layouts import Layout, Snapshot
 from .pipeline import PanelProfile, PipelineError, render
-from .runtime import ScreenRuntime
+from .runtime import ScreenRuntime, battery_percent
 from .text import Measurer
 
 _LOGGER = logging.getLogger(__name__)
@@ -44,12 +45,13 @@ class ScreenRenderer:
         self._debouncer = Debouncer(hass, _LOGGER, cooldown=DEBOUNCE_SECONDS, immediate=False,
                                     function=self.async_render)
         self._unsubs: list[Any] = []
+        self.entities = layout.resolve(hass.states.async_entity_ids())
 
     @callback
     def async_start(self) -> None:
-        if self.layout.entities:
+        if self.entities:
             self._unsubs.append(async_track_state_change_event(
-                self.hass, list(self.layout.entities), self._state_changed))
+                self.hass, list(self.entities), self._state_changed))
         self._unsubs.append(async_track_time_interval(self.hass, self._tick, TICK))
         self.hass.async_create_background_task(self.async_render(), "paperboard initial render")
 
@@ -70,16 +72,23 @@ class ScreenRenderer:
     def snapshot(self) -> Snapshot:
         """Collected in the event loop: only plain data crosses into the executor."""
         states: dict[str, dict[str, Any]] = {}
-        for entity_id in self.layout.entities:
+        for entity_id in self.entities:
             if (st := self.hass.states.get(entity_id)) is not None:
                 states[entity_id] = {"state": st.state, "attributes": dict(st.attributes),
                                      "last_changed": st.last_changed.isoformat()}
+        stale = None
+        if self.screen.stale and self.screen.frame_time is not None:
+            stale = dt_util.as_local(self.screen.frame_time).strftime("%H:%M")
+        volts = to_float(self.screen.telemetry.get("Battery-Voltage"))
         return Snapshot(now=dt_util.now(), width=self.profile.width, height=self.profile.height,
-                        screen_name=self.screen.name, states=states)
+                        screen_name=self.screen.name, states=states, stale_since=stale,
+                        battery=battery_percent(volts) if volts is not None else None,
+                        lang="sv" if self.hass.config.language.startswith("sv") else "en")
 
     def _hash(self, snap: Snapshot) -> str:
         bucket = int(snap.now.timestamp()) // self.layout.clock_resolution
-        blob = json.dumps([bucket, snap.screen_name, snap.states], sort_keys=True, default=str)
+        blob = json.dumps([bucket, snap.screen_name, snap.states, snap.stale_since,
+                           snap.battery], sort_keys=True, default=str)
         return hashlib.sha256(blob.encode()).hexdigest()
 
     async def async_render(self) -> None:

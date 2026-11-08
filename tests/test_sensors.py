@@ -3,7 +3,7 @@
 import pytest
 from homeassistant.core import HomeAssistant
 
-from custom_components.paperboard.sensor import battery_percent
+from custom_components.paperboard.runtime import battery_percent
 from scripts.fake_trmnl import FakeTrmnl
 
 
