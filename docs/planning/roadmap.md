@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-18 (`todo` — Image view plus last-good cache).
+**Current ticket:** Sprint 01 T-18 (`in-progress` — Image view plus last-good cache).
 **Last completed:** Sprint 01 T-17 (commit `feaffea`).
 
 ## Sprints
