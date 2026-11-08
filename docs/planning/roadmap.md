@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-07 (`todo` — Repairs for missing entities).
+**Current ticket:** Sprint 02 T-07 (`in-progress` — Repairs for missing entities).
 **Last completed:** Sprint 02 T-06 (commit `32c21ff`).
 
 ## Sprints
