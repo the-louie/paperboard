@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-20 (`in-progress` — Research: aarch64 verification).
-**Last completed:** Sprint 03 T-19 (commit `7226cd6`).
+**Current ticket:** Sprint 03 T-21 (`todo` — CI workflow).
+**Last completed:** Sprint 03 T-20 (commit `34f0de9`).
 
 ## Sprints
 | Sprint | Goal | Status |
