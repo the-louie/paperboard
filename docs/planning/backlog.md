@@ -56,12 +56,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-023 · Widgets: "now" block and status footer**~~ — CLOSED 2026-11-08 (Sprint 01 T-26): see commit "T-26: Widgets: "now" block and status footer"
 - ~~**B-024 · Diagnostics and redaction**~~ — CLOSED 2026-11-08 (Sprint 01 T-27): see commit "T-27: Diagnostics and redaction"
 - ~~**B-025 · decision: deploy to production HA (ha-host)**~~ — CLOSED 2026-11-08: owner said "deploy paperboard". Copied to ha-host, HA restarted (146 s and 153 s), hub entry `01M6XZTM…`, roles bound, screen "Hallen" on schedule `/config/paperboard/hallen.yaml`. The live render found 3 bugs, fixed in 84d907f and e3c630c.
-- [ ] **B-026 · decision: owner points the OG at HA** · 1h · prio P1 · needs: B-025 · src: V phase 1
-      Done on the device or in the firmware portal (LAN URL, not Nabu Casa). byos-host's
-      `trmnl-byos` stays as the fallback. Claude verifies the check-ins and telemetry.
-
-## Phase 2 — Layout engine and the hard widgets (goal: mockup 01 live on real price, solar and weather data)
-
+- ~~**B-026 · decision: owner points the OG at HA**~~ — CLOSED 2026-11-08: paired 17:51 CET after a second pairing window. The first window closed before the panel rebooted. First check-in: battery 4.20 V, RSSI −58 dBm, fw 1.8.10. byos-host byos was last called 17:34.
 - ~~**B-027 · Research: schema library for layouts**~~ — CLOSED 2026-11-08 (Sprint 02 T-01): see commit "T-01: Research: schema library for layouts"
 - ~~**B-028 · Design: layout YAML schema**~~ — CLOSED 2026-11-08 (Sprint 02 T-02): see commit "T-02: Design: layout YAML schema"
 - ~~**B-029 · Layout loader and validation**~~ — CLOSED 2026-11-08 (Sprint 02 T-05): see commit "T-05: Layout loader and validation"
