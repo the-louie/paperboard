@@ -1,7 +1,7 @@
 # Sprint 03 — All designs, the schedule, and release readiness
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-23 (`in-progress` — README and documentation)
-**Last completed:** T-22 (`done` — commit `e39187c`)
+**Current ticket:** —
+**Last completed:** T-23 (`done` — commit `233fed1`)
 **Budget:** 59h estimated (band 80–120h). **Below the band on purpose: this is all the
 schedulable work left.** The remaining rows are owner decisions (deploy, device switch,
 schedule choice, decommission, release) and two rows that depend on them.
@@ -42,7 +42,7 @@ night sleep, and the repo ready for a public HACS release (docs, CI, brand, aarc
 | T-20 | Research: aarch64 verification | 2 | — | B-070 | done | Landed in 34f0de9 |
 | T-21 | CI workflow | 3 | — | B-069 | done | Landed in ce23593 |
 | T-22 | Brand assets | 1 | — | B-068 | done | Landed in e39187c |
-| T-23 | README and documentation | 5 | T-08, T-09, T-10, T-11, T-12, T-13, T-06 | B-067 | in-progress | spec: backlog row B-067 |
+| T-23 | README and documentation | 5 | T-08, T-09, T-10, T-11, T-12, T-13, T-06 | B-067 | done | Landed in 233fed1 |
 
 ## Scope changes
 
