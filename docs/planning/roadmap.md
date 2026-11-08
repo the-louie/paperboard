@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-01 (`in-progress` — Repo scaffold).
-**Last completed:** —
+**Current ticket:** Sprint 01 T-02 (`todo` — Research: HA test harness on Python 3.14).
+**Last completed:** Sprint 01 T-01 (commit `052e587`).
 
 ## Sprints
 | Sprint | Goal | Status |

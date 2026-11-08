@@ -1,7 +1,7 @@
 # Sprint 01 — Skeleton and device server: the stack proven, HA serves a TRMNL image
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-01 (`in-progress` — Repo scaffold)
-**Last completed:** —
+**Current ticket:** T-02 (`todo` — Research: HA test harness on Python 3.14)
+**Last completed:** T-01 (`done` — commit `052e587`)
 **Budget:** 81h estimated (band 80–120h)
 
 ## Goal
@@ -15,7 +15,7 @@ Prove the resvg + Pillow stack and build the integration skeleton, so that a pap
 ## Tickets
 | ID | Title | Est h | Deps | From | Status | Notes |
 |---|---|---|---|---|---|---|
-| T-01 | Repo scaffold | 3 | — | B-001 | in-progress | spec: backlog row B-001 (git show 13b3751:docs/planning/backlog.md) |
+| T-01 | Repo scaffold | 3 | — | B-001 | done | Landed in 052e587 |
 | T-02 | Research: HA test harness on Python 3.14 | 2 | T-01 | B-002 | todo | spec: backlog row B-002 (git show 13b3751:docs/planning/backlog.md) |
 | T-03 | Research: route collision and auth under /api | 2 | — | B-003 | todo | spec: backlog row B-003 (git show 13b3751:docs/planning/backlog.md) |
 | T-04 | Research: the owner's TRMNL OG facts | 1 | — | B-004 | todo | spec: backlog row B-004 (git show 13b3751:docs/planning/backlog.md) |
