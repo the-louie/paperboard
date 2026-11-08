@@ -10,4 +10,22 @@ try:
 except ImportError:  # HA before the probatio migration
     import voluptuous as vol  # type: ignore[no-redef]
 
-__all__ = ["vol"]
+
+
+def format_errors(err: Exception) -> list[str]:
+    """Readable error paths for a layout file: 'widgets[1].area: expected str'.
+
+    probatio reports every error, voluptuous only the first; both carry .path.
+    """
+    errors = getattr(err, "errors", None) or [err]
+    out = []
+    for e in errors:
+        path = ""
+        for part in getattr(e, "path", []) or []:
+            path += f"[{part}]" if isinstance(part, int) else (f".{part}" if path else str(part))
+        msg = str(getattr(e, "msg", e))
+        out.append(f"{path}: {msg}" if path else msg)
+    return out
+
+
+__all__ = ["format_errors", "vol"]
