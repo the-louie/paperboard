@@ -1,5 +1,5 @@
 # Sprint 02 — Layout engine and the hard widgets: mockup 01 from YAML on real data
-**Status:** in progress (opened 2026-11-08)
+**Status:** done (closed 2026-11-08)
 **Current ticket:** —
 **Last completed:** T-26 (`done` — commit `43d2193`)
 **Budget:** 86h estimated (band 80–120h)
@@ -46,5 +46,56 @@ with warning inversion, the hourly table, energy flow, rooms, and sun/moon.
 | T-26 | 2-bit and 4-bit render paths | 4 | T-25 | B-065 | done | Landed in 43d2193 |
 
 ## Scope changes
+- None pulled in. Discovered work went to the backlog: B-083 (scale YAML layouts for large panels). T-23 grew to include the layout composer and widget registry (~4 h against an estimate of 2 h), because the gate needs something to render with; T-24 would otherwise have built it.
 
 ## Retro
+**Shipped (26/26 tickets, 181 tests, ruff clean):**
+- **Layout engine:**
+  - YAML spec plus loader (probatio/voluptuous, path-precise errors).
+  - Repairs issue per broken file; the last good layout is kept.
+  - Grid engine with reflow and merged rules.
+  - Type scale (pixel fonts kept at native sizes), 1/2/4-bit style tokens.
+  - Composer with an isolated widget registry (12 types).
+- **Roles:**
+  - Options-flow menu with 15 single roles and 2 list roles, all optional.
+  - Repairs issue for a bound entity that disappears, after a 2-minute startup grace.
+- **Data:**
+  - Weather forecasts through `weather.get_forecasts`.
+  - Prices: HACS nordpool, core nordpool service, ENTSO-e and float lists.
+  - Solar forecast through the energy-platform contract of the bound sensor's integration.
+  - Sun times from HA's astral helper.
+- **Widgets:**
+  - Shared TimeAxis.
+  - Price chart: filled cheapest window, bracket, "tomorrow due" note.
+  - Solar chart: hatched estimate, "förväntat idag / kvar".
+  - Night shading.
+  - Daily forecast with inverted warning days.
+  - Hourly table.
+  - Energy rows, stat, rooms.
+  - Energy flow with figures beside the nodes.
+  - Sun and moon, header, now, footer.
+- **Profiles:** 58 TRMNL models plus the owner's XIAO alias; "auto" follows the device.
+- **Gate:** every widget × {empty, garbage} × {1, 2-bit}, and every bundled layout, with zero
+  exceptions. It caught 4 real crashes on garbage data the day it was added.
+- **Demo:** `tidslinjen.yaml` on the owner's data through roles. Goldens at 1/2/4-bit; the
+  1-bit frame is ~7 kB. Copies are in `<the maintainer's file share>`.
+- **End to end in HA:** a screen on the bundled layout renders live through roles.
+
+**Not shipped:** nothing.
+
+**Estimate accuracy:** 86 h estimated, all 26 closed. T-23 ran ~2 h over (composer), absorbed
+by T-24 needing less. The research tickets (T-01, T-09, T-11) came in at estimate.
+
+**Findings worth keeping:**
+1. **Solar forecast:** the owner's Energy-dashboard forecast link is broken (B-081 / H-54).
+   The demo's hourly solar curve is test data until the owner relinks it; the total is real.
+2. **Options-flow tests:** they must wait for the scheduled reload, or they flake on teardown
+   (fixed twice, now the pattern).
+3. **Device model string:** the owner's device reports `xiao_epaper_display`, which is not in
+   TRMNL's registry. An alias and the size fallback cover it.
+
+**What to change:**
+- Sprint 03 builds the remaining layouts (02, 03, 05, 06, 07, 08), the calendar agenda
+  (headers need calendar data for flags in production), text slots and the schedule.
+- Production deploy (B-025) still waits on the owner.
+
