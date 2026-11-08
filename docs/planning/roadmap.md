@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-21 (`in-progress` — Widget: energy flow).
-**Last completed:** Sprint 02 T-20 (commit `4d5298c`).
+**Current ticket:** Sprint 02 T-22 (`todo` — Widget: sun and moon).
+**Last completed:** Sprint 02 T-21 (commit `be03364`).
 
 ## Sprints
 | Sprint | Goal | Status |
