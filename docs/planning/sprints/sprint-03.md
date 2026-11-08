@@ -1,5 +1,5 @@
 # Sprint 03 — All designs, the schedule, and release readiness
-**Status:** in progress (opened 2026-11-08)
+**Status:** done (closed 2026-11-08)
 **Current ticket:** —
 **Last completed:** T-23 (`done` — commit `233fed1`)
 **Budget:** 59h estimated (band 80–120h). **Below the band on purpose: this is all the
@@ -45,5 +45,41 @@ night sleep, and the repo ready for a public HACS release (docs, CI, brand, aarc
 | T-23 | README and documentation | 5 | T-08, T-09, T-10, T-11, T-12, T-13, T-06 | B-067 | done | Landed in 233fed1 |
 
 ## Scope changes
+- **T-15** closed its grid/type half; widget-internal offset scaling was returned as **B-087** (P3).
+- **New widget types inside layout tickets** (each needed by its design): `hourly_strip` and `tomorrow` (T-09); `date`, `week` and `now_grid` (T-12); flag role `grid_export_positive` (T-13); `grid.paddings` (T-11).
 
 ## Retro
+**Shipped (23/23 tickets, 232 tests, ruff clean):**
+- **Six more designs as YAML layouts on the owner's data** (Tidningen, Bento, Tavlan, TRMNL,
+  Almanackan, Energi), each with the owner's changes. With Sprint 02's Tidslinjen that is all
+  seven approved designs; 04 was rejected except its bar style, which lives on in the price
+  chart.
+- **Layout system:** calendar agenda and events, text slots (HA templates, automatic headline),
+  frames/gaps/margins, header variants, the black panel, time-of-day schedules with
+  wake-after-switch.
+- **Product:** refresh policy, scaling to big panels, localisation tables, rotate-image-link
+  button.
+- **Release prep:** generic-client docs, aarch64 static check, CI workflow (x86 + ARM, hassfest,
+  HACS), brand assets, README.
+
+**Bugs found by tests:** a hub reload within 1 s of pairing lost the device key (fixed with a
+flush on unload, T-17). The header ran into the tomorrow badge in narrow columns (fixed, T-10).
+
+**Not shipped:** nothing. B-087 (widget offsets on big panels) is returned to the backlog.
+
+**Estimate accuracy:** 59 h estimated for 23 tickets. The layout tickets (2 h each) ran over
+because each needed new widgets (~+6 h total). The doc and research tickets ran under.
+
+**What is left (backlog):**
+- B-087, P3, schedulable: widget offsets on big panels; the owner has no big panel.
+- Owner decisions:
+  - B-025: deploy to production HA;
+  - B-026: point the device at HA;
+  - B-062: pick the schedule;
+  - B-063: decommission byos-host's byos;
+  - B-071: release and the HACS PR;
+  - B-081: relink the solar forecast.
+- Rows blocked by those decisions:
+  - B-077: watchdog alert, needs the deploy;
+  - B-072: upstream offer, needs the release.
+
