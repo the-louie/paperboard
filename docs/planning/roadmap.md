@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-14 (`in-progress` — Layout 04 Instrument (bar-chart parts only)).
-**Last completed:** Sprint 03 T-13 (commit `159b76e`).
+**Current ticket:** Sprint 03 T-15 (`todo` — Scale YAML layouts to larger panels).
+**Last completed:** Sprint 03 T-14 (commit `6bb7858`).
 
 ## Sprints
 | Sprint | Goal | Status |
