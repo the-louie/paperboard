@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-13 (`todo` — Layout 08 Energi).
+**Current ticket:** Sprint 03 T-13 (`in-progress` — Layout 08 Energi).
 **Last completed:** Sprint 03 T-12 (commit `50146dc`).
 
 ## Sprints
