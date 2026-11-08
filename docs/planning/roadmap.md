@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-12 (`todo` — Layout 07 Almanackan).
+**Current ticket:** Sprint 03 T-12 (`in-progress` — Layout 07 Almanackan).
 **Last completed:** Sprint 03 T-11 (commit `0faf462`).
 
 ## Sprints
