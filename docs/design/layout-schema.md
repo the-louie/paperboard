@@ -75,7 +75,7 @@ widgets:
 
 | Type | Roles read | Key options |
 |---|---|---|
-| `header` | `calendars[]` (holiday names), `weather` (tomorrow 07) | `show_week`, `show_flag`, `badge: tomorrow_07 \| none` |
+| `header` | `calendars[]` (holiday names), `weather` (tomorrow 07) | `style: line \| masthead \| titlebar`, `title`, `show_week`, `show_flag`, `badge: tomorrow_07 \| none` |
 | `now` | `weather`, `outdoor_temp`, `indoor_temp`, `outdoor_humidity`, `wind`, `rain_today` | `rows: [indoor, feels_like, humidity, wind, dew_point, pressure, rain_today]` |
 | `timeline` | `price`, `solar_forecast`, `weather` (hourly temperature) | `hours: 24`, `series: [solar_forecast, price, temperature]` (stacked in this order, one shared x-axis), `cheapest_hours: 2`, `night: dots \| none` |
 | `hourly_table` | `weather`, `price` | `hours: 10`, `columns: [icon, temp, rain, wind, price]` |
@@ -84,10 +84,15 @@ widgets:
 | `energy_flow` | `solar_power`, `grid_power`, `battery_soc`, `battery_power`, `house_power` | figures beside the nodes (owner rule) |
 | `rooms` | `rooms[]` | `columns: 1..3` |
 | `stat` | any one role or `rooms[n]` | `label`, `unit`, `decimals`, `size: s..hero` |
-| `sun_moon` | `sun` | — |
+| `sun_moon` | — (HA's own sun times) | `show: both \| sun \| moon` |
 | `agenda` | `calendars[]` | `days: 7` |
 | `text` | — | `template` (HA Jinja, text slots only), `size` |
 | `footer` | the screen's own telemetry | `left: rooms \| name \| none` |
+| `hourly_strip` | `weather` (hourly) | `hours: 12`, `title` |
+| `tomorrow` | `weather` (hourly) | `hour: 7` |
+| `date` | `calendars[]` (flag) | `show_flag` |
+| `week` | `weather` (daily), `calendars[]` | `days: 6` |
+| `now_grid` | as `now` | `rows` (order kept; 07 puts `indoor` last) |
 
 ### Type scale (Sprint 02 T-03 implements it)
 
@@ -191,3 +196,15 @@ The owner rejected the gauges, but liked the **filled/outlined bar chart**. No 0
 The bar style lives on in `price_chart`, in every layout with a price: the cheapest window is
 drawn filled, every other hour outlined, with a bracket and mean price over the window. It is
 covered by the `price_chart_*` goldens and by the timeline in 01, 02, 03, 06 and 08.
+
+## Grid extras (Sprint 03)
+
+| Key | Meaning |
+|---|---|
+| `grid.gap` | px between tracks (tiles). With a gap, no rules are drawn. |
+| `grid.margin` | px inset of the whole grid from the panel edge. |
+| `grid.frames` | per area: `box`, `rounded` (rx 12), `inverted` (black rounded tile; its widgets are drawn white), `panel` (black, square), or `none`. |
+| `grid.paddings` | per-area `[vertical, horizontal]` padding override (e.g. `[0, 0]` for title bars). |
+| `widgets[].height` | fixed px share when several widgets stack in one area. The rest share what is left. |
+
+All px values are designed at the layout's `canvas` (800×480) and scale with the panel.
