@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-28 (`in-progress` — Security review of the device endpoints).
-**Last completed:** Sprint 01 T-27 (commit `04d2e22`).
+**Current ticket:** Sprint 01 T-29 (`todo` — Performance budget).
+**Last completed:** Sprint 01 T-28 (commit `f5fd2d4`).
 
 ## Sprints
 | Sprint | Goal | Status |
