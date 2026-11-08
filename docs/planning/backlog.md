@@ -262,7 +262,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - → Sprint 01 T-29 (B-074 · Performance budget)
 - [ ] **B-075 · Localisation of widget texts** · 3h · prio P3 · needs: B-051 · src: M (Swedish), HACS audience
       Weekday and month names, units, decimal separator per HA language (sv, en).
-- → Sprint 01 T-12 (B-076 · Fixture capture script)
+- ~~**B-076 · Fixture capture script**~~ — CLOSED 2026-11-08 (Sprint 01 T-12): see commit "T-12: Fixture capture script"
 - [ ] **B-077 · Device liveness → owner alert** · 1h · prio P2 · needs: B-022, B-025 · src: O4 in <the maintainer's HA repo>
       Add the problem sensor to the owner's AppDaemon watchdog or notification path (that
       change is made in the `<the maintainer's HA repo>` repo).
