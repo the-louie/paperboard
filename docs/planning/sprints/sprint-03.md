@@ -1,6 +1,6 @@
 # Sprint 03 — All designs, the schedule, and release readiness
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-02 (`todo` — Widget: headline/prose text slot)
+**Current ticket:** T-02 (`in-progress` — Widget: headline/prose text slot)
 **Last completed:** T-01 (`done` — commit `414ce0f`)
 **Budget:** 59h estimated (band 80–120h). **Below the band on purpose: this is all the
 schedulable work left.** The remaining rows are owner decisions (deploy, device switch,
@@ -21,7 +21,7 @@ night sleep, and the repo ready for a public HACS release (docs, CI, brand, aarc
 | ID | Title | Est h | Deps | From | Status | Notes |
 |---|---|---|---|---|---|---|
 | T-01 | Widget: calendar agenda | 4 | — | B-049 | done | Landed in 414ce0f |
-| T-02 | Widget: headline/prose text slot | 3 | — | B-052 | todo | spec: backlog row B-052 |
+| T-02 | Widget: headline/prose text slot | 3 | — | B-052 | in-progress | spec: backlog row B-052 |
 | T-03 | Area frames: rounded boxes and an inverted hero | 3 | — | B-084 | todo | spec: backlog row B-084 |
 | T-04 | Header variants: masthead and title bar | 2 | — | B-085 | todo | spec: backlog row B-085 |
 | T-05 | Inverted now panel (Tavlan) | 2 | T-03 | B-086 | todo | spec: backlog row B-086 |
