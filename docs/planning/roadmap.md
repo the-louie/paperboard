@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-23 (`in-progress` — Render scheduler).
-**Last completed:** Sprint 01 T-22 (commit `cde6d5e`).
+**Current ticket:** Sprint 01 T-24 (`todo` — Telemetry sensors).
+**Last completed:** Sprint 01 T-23 (commit `9a5f85b`).
 
 ## Sprints
 | Sprint | Goal | Status |
