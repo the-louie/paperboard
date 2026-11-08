@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-05 (`todo` — Layout loader and validation).
+**Current ticket:** Sprint 02 T-05 (`in-progress` — Layout loader and validation).
 **Last completed:** Sprint 02 T-04 (commit `e3ca498`).
 
 ## Sprints
