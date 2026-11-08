@@ -63,3 +63,64 @@ deliberately not recorded here.
 | Image served today | png1, 3–5 kB | 18× under the 90 kB OG limit. |
 | Byte limit | **not yet confirmed** | The XIAO ESP32-S3 has PSRAM, which would make it the 750 kB class. Verify against the firmware's board table in B-064; until then, keep the 90 kB OG limit. |
 | `Access-Token` | sent (`d506…`) | trmnl-service runs with `api_key_required: false`, so it is not checked today. |
+
+## Pairing (T-14, 2026-11-08)
+
+### What the firmware does
+
+Sources: research notes (firmware `5246feb`, 1.8.19) and the owner's working trmnl-service
+(`<the maintainer's earlier TRMNL server>`), which runs the owner's device today.
+
+- **Setup:** `GET <base>/api/setup` is sent **only while the device has no API key**. It sends
+  `ID` (MAC), `FW-Version`, `Model`, `Width`, `Height` and `RSSI`, and **no Access-Token**.
+- **Setup response:** the JSON `status` must be **200**, or setup fails and the device retries.
+  On 200 it stores `api_key` and `friendly_id`, then fetches `image_url`.
+  - Older firmware insists on a **1-bit BMP** setup image of exactly 48 062 bytes (800×480).
+    trmnl-service serves a BMP from setup for every firmware version.
+- **`/api/display` with JSON `status: 500`:** the firmware drops its key, polls again soon and
+  **re-runs setup**. trmnl-service relies on this for bad tokens (comment at `server.py:286`).
+  - The hosted TRMNL returns 500 + `reset_firmware: true` instead. That is a full reset;
+    **never send `reset_firmware`**.
+- **JSON `status: 202`:** "not registered", fast-poll, no re-setup.
+- **Base URL:** the firmware appends `/api/...` literally to its base URL, so a base URL with a
+  path prefix works. That is the escape hatch if core ever takes these paths.
+
+### paperboard's flow
+
+1. **Pairing window:** the owner adds a Screen (config subentry) and presses
+   `button.<screen>_pair`, which opens a **5-minute** window for that screen. One window per
+   hub at a time; a second press restarts it.
+2. **Setup in the window:** while the window is open, the first `/api/setup` with an `ID` gets:
+   - a new `api_key = secrets.token_urlsafe(32)`, stored in the subentry data together with the
+     MAC;
+   - `friendly_id` = the first 6 hex characters of sha256(MAC), uppercase, as trmnl-service
+     does;
+   - `image_url` pointing at a **BMP** variant of the current frame;
+   - `{"status": 200, "message": "Paired with <screen name>"}`.
+
+   The window then closes.
+3. **Setup outside the window:** `{"status": 404, "message": "Pairing is closed. Press
+   Pair on the screen in Home Assistant."}` with HTTP 200. The firmware treats it as a failed
+   setup and retries later, so a device can be paired *after* it starts polling. A known MAC
+   calling setup again (after a factory reset) also needs the window. Re-issuing its key
+   without the window would hand it to anyone who spoofs the MAC.
+4. **`/api/display` with a missing, unknown or wrong `Access-Token` for that `ID`:** HTTP 200
+   `{"status": 500, "message": "unknown device, re-running setup"}`, **without**
+   `reset_firmware`. The device then re-runs setup, which works only inside a window. This is
+   also the migration path from trmnl-service, whose MAC-derived key paperboard does not know.
+   - It is returned, never raised, so HA's ip_ban is untouched (T-03).
+   - Each such event updates a diagnostic "last rejected device" with MAC, time and IP. A
+     Repairs issue is raised when an unknown MAC polls more than 10 times in an hour.
+5. **Re-pair:** pressing Pair on a screen that already has a device replaces the binding at
+   the next setup. The old key stops working at once.
+
+The device was rejected with JSON status 500 rather than HTTP 403. T-03's
+"return 403" rule still applies to the **image** URL. On `/api/display`, the JSON status is
+what drives the firmware, so the HTTP status stays 200 there, as trmnl-service and the hosted
+service do.
+
+### Open: verify on the real device in B-026
+
+- Does switching the base URL in the captive portal clear the stored key? If not, path 4
+  covers it.
+- That 1.8.10 accepts a PNG setup image (if so, BMP is only kept for old firmware).
