@@ -93,3 +93,73 @@ def axis_labels(svg: Svg, axis: TimeAxis, y: float, theme: Theme, lang: str,
 
 def now_marker(svg: Svg, axis: TimeAxis, y0: float, y1: float) -> None:
     svg.line(axis.x0 + 1, y0, axis.x0 + 1, y1, 2, dash="3 3")
+
+
+SOLAR_CAPTION = {"sv": "förväntat idag {total}", "en": "expected today {total}"}
+SOLAR_LEFT = {"sv": " · kvar {left}", "en": " · {left} to go"}
+
+
+def solar_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
+                axis: TimeAxis, label: str = "SOL") -> bool:
+    """Expected production per hour as hatched bars (an estimate, not a measurement)."""
+    hours = snap.solar.wh_at() if snap.solar else {}
+    shown = {t: wh for t, wh in hours.items() if axis.contains(t) and wh > 0}
+    if not shown:
+        return False
+    _label(svg, r, label, "kWh", theme)
+    top, bottom = r.y + 18, r.y + r.h
+    peak = max(max(shown.values()), 200.0)  # flat days do not blow up to full height
+    for t, wh in shown.items():
+        x0, x1 = axis.x(t), axis.x(t + dt.timedelta(hours=1))
+        h = (bottom - top) * wh / peak
+        svg.rect(x0 + 1, bottom - h, x1 - x0 - 2, h, theme.estimate, stroke=theme.ink,
+                 stroke_width=1)
+    total = snap.solar.today_kwh if snap.solar else None
+    if total is not None:
+        caption = SOLAR_CAPTION.get(snap.lang, SOLAR_CAPTION["en"]).format(
+            total=fmt.with_unit(total, "kWh", 1, snap.lang))
+        today = snap.now.date()
+        left_wh = sum(wh for t, wh in hours.items() if t >= snap.now and t.astimezone(
+            snap.now.tzinfo).date() == today)
+        if hours:
+            caption += SOLAR_LEFT.get(snap.lang, SOLAR_LEFT["en"]).format(
+                left=fmt.number(left_wh / 1000, 1, snap.lang))
+        style = theme.text("xs", bold=True)
+        w = measure.width(caption, style)
+        svg.rect(axis.x1 - w - 6, r.y, w + 6, 15, theme.paper)
+        svg.text(axis.x1 - 2, r.y + 11, caption, style, "end")
+    svg.line(axis.x0, bottom, axis.x1, bottom, 1)
+    return True
+
+
+def nights(snap: Snapshot) -> list[tuple[dt.datetime, dt.datetime]]:
+    """Night intervals near now from the sun entity's next_setting/next_rising (UTC ISO)."""
+    sun = snap.role_state("sun") or snap.states.get("sun.sun")
+    attrs = (sun or {}).get("attributes", {})
+    try:
+        setting = dt.datetime.fromisoformat(str(attrs["next_setting"]))
+        rising = dt.datetime.fromisoformat(str(attrs["next_rising"]))
+    except (KeyError, ValueError):
+        return []
+    day = dt.timedelta(days=1)
+    if setting < rising:  # daytime now
+        return [(setting, rising), (setting + day, rising + day)]
+    return [(snap.now - day, rising), (setting, rising + day)]  # night now
+
+
+def night_shading(svg: Svg, snap: Snapshot, theme: Theme, axis: TimeAxis, top: float,
+                  bottom: float, lang: str) -> None:
+    """Dotted tint behind the stack where the sun is down, with set/rise times."""
+    style = theme.text("xs")
+    tz = snap.now.tzinfo
+    for x0, x1 in axis.spans(nights(snap)):
+        svg.rect(x0, top, x1 - x0, bottom - top, theme.tint)
+    for a, b in nights(snap):
+        if axis.contains(a):
+            text = f"{'sol ned' if lang == 'sv' else 'sunset'} {a.astimezone(tz):%H:%M}"
+            svg.rect(axis.x(a) + 1, top + 1, 74, 14, theme.paper)
+            svg.text(axis.x(a) + 4, top + 12, text, style)
+        if axis.contains(b):
+            text = f"{'upp' if lang == 'sv' else 'sunrise'} {b.astimezone(tz):%H:%M}"
+            svg.rect(axis.x(b) - 72, top + 1, 70, 14, theme.paper)
+            svg.text(axis.x(b) - 3, top + 12, text, style, "end")
