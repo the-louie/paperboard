@@ -21,7 +21,7 @@ from .const import (
 )
 from .devices import DeviceStore
 from .runtime import HubRuntime, ScreenRuntime
-from .views import DisplayView, ImageView, SetupView
+from .views import DisplayView, ImageView, LogView, SetupView
 
 PLATFORMS = [Platform.BUTTON]
 
@@ -37,6 +37,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
         hass.http.register_view(ImageView(hass))
         hass.http.register_view(SetupView(hass))
         hass.http.register_view(DisplayView(hass))
+        hass.http.register_view(LogView(hass))
         hass.data[_VIEWS_REGISTERED] = True
 
     store = DeviceStore(hass, entry.entry_id)

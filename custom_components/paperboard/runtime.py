@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import time
+from collections import deque
 from dataclasses import dataclass, field
 
 from .devices import DeviceStore
 from .pipeline import Frame, encode_bmp_1bit
 
 PAIRING_SECONDS = 300
+LOG_ENTRIES = 50
 
 
 @dataclass
@@ -24,6 +26,7 @@ class ScreenRuntime:
     last_error: str | None = None
     telemetry: dict[str, str] = field(default_factory=dict)  # last /api/display headers
     last_checkin: float | None = None  # time.time() of the last authenticated poll
+    logs: deque[dict] = field(default_factory=lambda: deque(maxlen=LOG_ENTRIES))
 
     _bmp: tuple[str, bytes] | None = None
 

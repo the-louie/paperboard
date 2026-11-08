@@ -117,6 +117,17 @@ TELEMETRY_HEADERS = ("Battery-Voltage", "RSSI", "FW-Version", "Model", "Width", 
                      "Update-Source")
 
 
+def _authenticated_screen(hub: HubRuntime | None, request: web.Request) -> ScreenRuntime | None:
+    """The screen whose paired device matches the ID + Access-Token headers."""
+    mac = request.headers.get("ID", "").strip().upper()
+    token = request.headers.get("Access-Token", "")
+    screen_id = hub.devices.screen_for_mac(mac) if hub and mac else None
+    device = hub.devices.devices.get(screen_id) if hub and screen_id else None
+    if device is None or not hmac.compare_digest(token.encode(), device.api_key.encode()):
+        return None
+    return hub.screens.get(screen_id)
+
+
 class DisplayView(HomeAssistantView):
     """GET /api/display: authenticated poll -> current image and refresh rate."""
 
@@ -129,13 +140,9 @@ class DisplayView(HomeAssistantView):
 
     async def get(self, request: web.Request) -> web.Response:
         hub = _hub(self.hass)
-        mac = request.headers.get("ID", "").strip().upper()
-        token = request.headers.get("Access-Token", "")
-        screen_id = hub.devices.screen_for_mac(mac) if hub and mac else None
-        device = hub.devices.devices.get(screen_id) if hub and screen_id else None
-        screen = hub.screens.get(screen_id) if hub and screen_id else None
-        if (hub is None or device is None or screen is None
-                or not hmac.compare_digest(token.encode(), device.api_key.encode())):
+        screen = _authenticated_screen(hub, request)
+        if hub is None or screen is None:
+            mac = request.headers.get("ID", "").strip().upper()
             if hub is not None:
                 hub.last_rejected = {"mac": mac or "?", "ip": request.remote or "?",
                                      "at": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
@@ -156,3 +163,36 @@ class DisplayView(HomeAssistantView):
                       "refresh_rate": screen.refresh_rate,
                       "update_firmware": False, "reset_firmware": False,
                       "special_function": "none"})
+
+
+MAX_LOG_BODY = 64 * 1024
+LOG_FIELDS = ("created_at", "message", "level", "source_path", "source_line", "wifi_signal",
+              "battery_voltage", "firmware_version", "wake_reason", "special_function",
+              "free_heap_size", "refresh_rate", "sleep_duration", "retry")
+
+
+class LogView(HomeAssistantView):
+    """POST /api/log: keep the device's recent log lines for diagnostics."""
+
+    url = "/api/log"
+    name = "api:paperboard:log"
+    requires_auth = False
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        self.hass = hass
+
+    async def post(self, request: web.Request) -> web.Response:
+        screen = _authenticated_screen(_hub(self.hass), request)
+        if screen is None:
+            return web.Response(status=HTTPStatus.FORBIDDEN)
+        if (request.content_length or 0) > MAX_LOG_BODY:
+            return web.Response(status=HTTPStatus.REQUEST_ENTITY_TOO_LARGE)
+        try:
+            payload = json.loads(await request.read())
+            entries = payload.get("logs", []) if isinstance(payload, dict) else []
+        except ValueError:
+            return web.Response(status=HTTPStatus.BAD_REQUEST)
+        for entry in entries[:50]:
+            if isinstance(entry, dict):
+                screen.logs.append({k: entry[k] for k in LOG_FIELDS if k in entry})
+        return web.Response(status=HTTPStatus.NO_CONTENT)
