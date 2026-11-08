@@ -75,7 +75,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-034 · Data: weather forecasts**~~ — CLOSED 2026-11-08 (Sprint 02 T-08): see commit "T-08: Data: weather forecasts"
 - ~~**B-035 · Research: price sources**~~ — CLOSED 2026-11-08 (Sprint 02 T-09): see commit "T-09: Research: price sources"
 - ~~**B-036 · Price adapters**~~ — CLOSED 2026-11-08 (Sprint 02 T-10): see commit "T-10: Price adapters"
-- → Sprint 02 T-11 (B-037 · Research: solar forecast source)
+- ~~**B-037 · Research: solar forecast source**~~ — CLOSED 2026-11-08 (Sprint 02 T-11): see commit "T-11: Research: solar forecast source"
 - → Sprint 02 T-12 (B-038 · Solar forecast adapter)
 - → Sprint 02 T-13 (B-039 · TimeAxis object)
 - → Sprint 02 T-15 (B-040 · Widget: price chart)
