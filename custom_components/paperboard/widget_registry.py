@@ -66,25 +66,30 @@ def _header(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
     big, rest = t.text("m", bold=True), t.text("m")
     base = r.y + r.h / 2 + 7
     svg.text(r.x, base, title, big)
-    extra = []
-    if o.get("show_week", True):
-        extra.append(f"{'v.' if lang == 'sv' else 'wk'} {snap.now.isocalendar().week}")
-    if o.get("show_flag", True) and (flag := _flag(snap)):
-        extra.append(flag)
-    if extra:
-        svg.text(r.x + m.width(title + " ", big), base, " · ".join(extra), rest)
+    right_edge = r.x + r.w
     if o.get("badge", "tomorrow_07") == "tomorrow_07":
         target = (snap.now + dt.timedelta(days=1)).replace(hour=7, minute=0, second=0,
                                                            microsecond=0)
         item = _hourly_at(snap, target)
         if item is not None:
             value = fmt.with_unit(item.get("temperature"), "°", 1, lang)
-            vstyle = t.text("s", bold=True)
+            vstyle, lstyle = t.text("s", bold=True), t.text("s")
+            label = "Imorgon kl 07" if lang == "sv" else "Tomorrow 07:00"
             bw = m.width(value, vstyle) + 14
             svg.rect(r.x + r.w - bw, r.y + r.h / 2 - 12, bw, 24, t.ink, rx=3)
             svg.text(r.x + r.w - bw / 2, base - 1, value, vstyle, "middle", t.paper)
-            svg.text(r.x + r.w - bw - 8, base - 1,
-                     "Imorgon kl 07" if lang == "sv" else "Tomorrow 07:00", t.text("s"), "end")
+            svg.text(r.x + r.w - bw - 8, base - 1, label, lstyle, "end")
+            right_edge = r.x + r.w - bw - 16 - m.width(label, lstyle)
+    extra = []
+    if o.get("show_week", True):
+        extra.append(f"{'v.' if lang == 'sv' else 'wk'} {snap.now.isocalendar().week}")
+    if o.get("show_flag", True) and (flag := _flag(snap)):
+        extra.append(flag)
+    x = r.x + m.width(title + " ", big)
+    while extra and x + m.width(" · ".join(extra), rest) > right_edge - 8:
+        extra.pop()  # drop the holiday flag first, then the week number
+    if extra:
+        svg.text(x, base, " · ".join(extra), rest)
     return True
 
 

@@ -1,0 +1,29 @@
+# 05 Tavlan - the morning board (owner: "perfect for 07-08 to plan the kids' clothing for
+# school"), with the owner's change from 2026-11-08: expected solar today instead of
+# "Huset nu · idag".
+name: tavlan
+title: Tavlan
+clock_resolution: 300
+grid:
+  columns: [290, fr]
+  rows: [40, fr, 102, 24]
+  rules: 0
+  padding: [6, 16]
+  areas:
+    - now  head
+    - now  table
+    - now  days
+    - now  foot
+  frames: {now: panel}
+widgets:
+  - type: now
+    area: now
+    height: 300
+    options: {rows: [indoor, feels_like, humidity, wind, rain_today]}
+  - type: energy
+    area: now
+    options: {rows: [price_now, solar_expected_today, battery]}
+  - {type: header, area: head, options: {show_week: true, show_flag: true, badge: tomorrow_07}}
+  - {type: hourly_table, area: table, options: {hours: 10}}
+  - {type: daily, area: days, options: {days: 5}}
+  - {type: footer, area: foot, options: {left: none}}
