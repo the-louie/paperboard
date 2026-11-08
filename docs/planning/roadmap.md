@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-11 (`todo` — Golden-image test harness).
+**Current ticket:** Sprint 01 T-11 (`in-progress` — Golden-image test harness).
 **Last completed:** Sprint 01 T-10 (commit `5098412`).
 
 ## Sprints
