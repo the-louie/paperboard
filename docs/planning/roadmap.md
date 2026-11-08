@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-25 (`in-progress` — Missed-check-in problem sensor).
-**Last completed:** Sprint 01 T-24 (commit `4c7780c`).
+**Current ticket:** Sprint 01 T-26 (`todo` — Widgets: "now" block and status footer).
+**Last completed:** Sprint 01 T-25 (commit `ac4b6a4`).
 
 ## Sprints
 | Sprint | Goal | Status |
