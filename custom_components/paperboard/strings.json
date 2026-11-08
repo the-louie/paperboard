@@ -169,6 +169,9 @@
     "button": {
       "pair": {
         "name": "Pair device"
+      },
+      "rotate_token": {
+        "name": "Rotate image link"
       }
     },
     "image": {

@@ -143,7 +143,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       ("Hemma"). The owner relinks it in Settings → Energy → Solar panels →
       Forecast. Without this, the HA energy dashboard has no forecast, and B-037/B-038 have no
       hourly data to test against. Mirrored as H-54 in `<the maintainer's HA repo>`.
-- → Sprint 03 T-17 (B-082 · Rotate-image-token button per screen)
+- ~~**B-082 · Rotate-image-token button per screen**~~ — CLOSED 2026-11-08 (Sprint 03 T-17): see commit "T-17: Rotate-image-token button per screen"
 - ~~**B-083 · Scale YAML layouts to larger panels**~~ — CLOSED 2026-11-08 (Sprint 03 T-15): see commit "T-15: Scale YAML layouts to larger panels"
 - ~~**B-084 · Area frames: rounded boxes and an inverted hero**~~ — CLOSED 2026-11-08 (Sprint 03 T-03): see commit "T-03: Area frames: rounded boxes and an inverted hero"
 - ~~**B-085 · Header variants: masthead and title bar**~~ — CLOSED 2026-11-08 (Sprint 03 T-04): see commit "T-04: Header variants: masthead and title bar"

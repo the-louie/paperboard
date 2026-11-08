@@ -58,6 +58,11 @@ class DeviceStore:
         if self.devices.pop(screen_id, None):
             self._store.async_delay_save(self._data, 1)
 
+    async def async_flush(self) -> None:
+        """Write now. Called on unload: a reload must never lose a pairing made just before it
+        (the delayed save would otherwise still be pending when the new store loads)."""
+        await self._store.async_save(self._data())
+
     def screen_for_mac(self, mac: str) -> str | None:
         return next((sid for sid, d in self.devices.items() if d.mac == mac.upper()), None)
 
