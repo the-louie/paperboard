@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-22 (`todo` — Brand assets).
+**Current ticket:** Sprint 03 T-22 (`in-progress` — Brand assets).
 **Last completed:** Sprint 03 T-21 (commit `ce23593`).
 
 ## Sprints
