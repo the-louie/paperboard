@@ -28,3 +28,5 @@ DEFAULT_PROFILE = "800x480_1bit"
 
 # Dispatcher signal fired on every authenticated check-in; format with the screen id.
 SIGNAL_CHECKIN = "paperboard_checkin_{}"
+# Fired when a screen gets a new (different) frame; format with the screen id.
+SIGNAL_FRAME = "paperboard_frame_{}"

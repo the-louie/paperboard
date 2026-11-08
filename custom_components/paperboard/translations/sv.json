@@ -82,6 +82,11 @@
       "pair": {
         "name": "Para enhet"
       }
+    },
+    "image": {
+      "frame": {
+        "name": "Skärmbild"
+      }
     }
   }
 }

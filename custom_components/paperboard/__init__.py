@@ -23,7 +23,7 @@ from .devices import DeviceStore
 from .runtime import HubRuntime, ScreenRuntime
 from .views import DisplayView, ImageView, LogView, SetupView
 
-PLATFORMS = [Platform.BUTTON]
+PLATFORMS = [Platform.BUTTON, Platform.IMAGE]
 
 type PaperboardConfigEntry = ConfigEntry[HubRuntime]
 

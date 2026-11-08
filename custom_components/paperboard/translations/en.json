@@ -82,6 +82,11 @@
       "pair": {
         "name": "Pair device"
       }
+    },
+    "image": {
+      "frame": {
+        "name": "Screen image"
+      }
     }
   }
 }
