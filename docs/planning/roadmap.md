@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-12 (`in-progress` — Solar forecast adapter).
-**Last completed:** Sprint 02 T-11 (commit `7764679`).
+**Current ticket:** Sprint 02 T-13 (`todo` — TimeAxis object).
+**Last completed:** Sprint 02 T-12 (commit `64c999f`).
 
 ## Sprints
 | Sprint | Goal | Status |
