@@ -33,6 +33,7 @@ class Snapshot:
     solar: Any = None  # data.SolarSnapshot or None
     sun: dict[str, str] | None = None  # widgets_sky.sun_times() result
     events: dict[str, list[dict[str, Any]]] = field(default_factory=dict)  # calendar -> events
+    texts: dict[str, str] = field(default_factory=dict)  # template source -> rendered text
 
     def role_state(self, role: str) -> dict[str, Any] | None:
         """State dict of the entity bound to a single role, or None."""
@@ -47,6 +48,8 @@ class Layout:
     clock_resolution: int = 300  # seconds; how often the visible clock may change the image
     # Optional: pick entities from all entity ids at start (zero-config layouts).
     discover: Callable[[list[str]], tuple[str, ...]] | None = None
+    # HA Jinja templates used by text slots; rendered in the event loop per snapshot.
+    templates: tuple[str, ...] = ()
 
     def resolve(self, entity_ids: list[str]) -> tuple[str, ...]:
         found = self.discover(entity_ids) if self.discover else ()

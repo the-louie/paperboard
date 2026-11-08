@@ -106,7 +106,9 @@ def as_layout(spec: LayoutSpec, theme_for: Callable[[], Theme] | None = None) ->
         theme = theme_for() if theme_for else Theme()
         return render_spec(spec, snap, measure, theme)
 
-    return Layout(build=build, clock_resolution=spec.clock_resolution)
+    templates = tuple(w["options"]["template"] for w in spec.widgets
+                      if w["type"] == "text" and isinstance(w["options"].get("template"), str))
+    return Layout(build=build, clock_resolution=spec.clock_resolution, templates=templates)
 
 
 def axis_for(snap: Snapshot, r: Rect, hours: int, gutter: float = 42) -> TimeAxis:

@@ -20,6 +20,7 @@ from .widgets_agenda import agenda
 from .widgets_flow import energy_flow
 from .widgets_series import axis_labels, night_shading, now_marker, price_chart, solar_chart
 from .widgets_sky import sun_moon
+from .widgets_text import text_slot
 from .widgets_values import energy, kv_list, role_value, room_name, rooms, stat
 from .widgets_weather import _weather_attrs, daily, hourly_table
 
@@ -261,3 +262,10 @@ def _footer(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
 @widget("agenda")
 def _agenda(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
     return agenda(svg, r, snap, m, t, int(o.get("days", 7)), bool(o.get("title", True)))
+
+
+@widget("text")
+def _text(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
+    return text_slot(svg, r, snap, m, t, o.get("template"), o.get("auto"),
+                     str(o.get("size", "m")), bool(o.get("bold", True)),
+                     int(o.get("max_lines", 3)))

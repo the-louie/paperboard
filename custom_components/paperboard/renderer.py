@@ -15,9 +15,11 @@ import time
 from typing import Any
 
 from homeassistant.core import Event, EventStateChangedData, HomeAssistant, callback
+from homeassistant.exceptions import TemplateError
 from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.dispatcher import async_dispatcher_connect, async_dispatcher_send
 from homeassistant.helpers.event import async_track_state_change_event, async_track_time_interval
+from homeassistant.helpers.template import Template
 from homeassistant.util import dt as dt_util
 
 from .const import SIGNAL_CHECKIN, SIGNAL_FRAME
@@ -128,7 +130,18 @@ class ScreenRenderer:
                         if self.hub is not None and self.hub.solar is not None else None,
                         sun=sun_times(self.hass, dt_util.now().date()),
                         events={k: list(v) for k, v in self.hub.calendars.events.items()}
-                        if self.hub is not None and self.hub.calendars is not None else {})
+                        if self.hub is not None and self.hub.calendars is not None else {},
+                        texts=self._render_templates())
+
+    def _render_templates(self) -> dict[str, str]:
+        """HA Jinja for text slots, in the loop; a broken template shows its error briefly."""
+        out = {}
+        for source in self.layout.templates:
+            try:
+                out[source] = str(Template(source, self.hass).async_render(parse_result=False))
+            except TemplateError as err:
+                out[source] = f"⚠ {str(err)[:80]}"
+        return out
 
     def _hash(self, snap: Snapshot) -> str:
         bucket = int(snap.now.timestamp()) // self.layout.clock_resolution
@@ -136,7 +149,7 @@ class ScreenRenderer:
                            snap.battery, snap.forecasts,
                            snap.prices.points if snap.prices else None,
                            (snap.solar.hours, snap.solar.today_kwh) if snap.solar else None,
-                           snap.events],
+                           snap.events, snap.texts],
                           sort_keys=True, default=str)
         return hashlib.sha256(blob.encode()).hexdigest()
 
