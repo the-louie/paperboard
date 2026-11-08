@@ -1,0 +1,33 @@
+# 02 Tidningen - newspaper layout, with the owner's changes from 2026-11-08:
+# "Sol idag förväntat" under ENERGI; in the forecast row wind/rain only appear for strong wind
+# or heavy rain, and that day's cell is inverted (daily widget thresholds).
+name: tidningen
+title: Tidningen
+grid:
+  columns: [1.25fr, fr, fr]
+  rows: [56, fr, 104]
+  rules: 1
+  padding: [6, 14]
+  areas:
+    - mast    mast  mast
+    - weather el    home
+    - days    days  days
+widgets:
+  - {type: header, area: mast, options: {style: masthead, show_week: true, show_flag: true}}
+  - type: now
+    area: weather
+    height: 196
+    options: {rows: [indoor, wind, humidity]}
+  - {type: text, area: weather, options: {auto: headline, size: m, max_lines: 2}}
+  - type: timeline
+    area: el
+    height: 170
+    options: {hours: 24, series: [price], cheapest_hours: 2, night: none, tick_every: 6}
+  - type: energy
+    area: el
+    options: {rows: [price_now], title: false}
+  - {type: rooms, area: home, height: 150, options: {title: HEMMET, columns: 1}}
+  - type: energy
+    area: home
+    options: {rows: [solar_expected_today, solar_now, house_now, battery]}
+  - {type: daily, area: days, options: {days: 6, warn_gust_ms: 14, warn_rain_mm: 10}}

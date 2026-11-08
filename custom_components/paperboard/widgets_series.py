@@ -70,11 +70,12 @@ def price_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
         svg.rect((bx0 + bx1) / 2 - tw / 2 - 2, by - 15, tw + 4, 13, theme.paper)
         svg.text((bx0 + bx1) / 2, by - 4, text, theme.text("xs", bold=True), "middle")
     last_end = max(p.end for p in hourly)
-    if last_end < axis.end and series.tomorrow_expected_at:
-        line1, line2 = TOMORROW_NOTE.get(snap.lang, TOMORROW_NOTE["en"])
+    line1, line2 = TOMORROW_NOTE.get(snap.lang, TOMORROW_NOTE["en"])
+    w = max(measure.width(line1, theme.text("xs")),
+            measure.width(line2.format(at=series.tomorrow_expected_at or ""), theme.text("xs")))
+    free = axis.x1 - axis.x(last_end)
+    if last_end < axis.end and series.tomorrow_expected_at and free >= w + 10:
         nx = axis.x1 - 2
-        w = max(measure.width(line1, theme.text("xs")),
-                measure.width(line2.format(at=series.tomorrow_expected_at), theme.text("xs")))
         svg.rect(nx - w - 4, top - 2, w + 6, 30, theme.paper)
         svg.text(nx, top + 10, line1, theme.text("xs"), "end")
         svg.text(nx, top + 24, line2.format(at=series.tomorrow_expected_at), theme.text("xs"),

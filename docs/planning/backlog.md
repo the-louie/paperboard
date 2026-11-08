@@ -94,7 +94,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-050 · Widget: sun and moon**~~ — CLOSED 2026-11-08 (Sprint 02 T-22): see commit "T-22: Widget: sun and moon"
 - ~~**B-051 · Widget: stat / key-value**~~ — CLOSED 2026-11-08 (Sprint 02 T-19): see commit "T-19: Widget: stat / key-value"
 - ~~**B-052 · Widget: headline/prose text slot**~~ — CLOSED 2026-11-08 (Sprint 03 T-02): see commit "T-02: Widget: headline/prose text slot"
-- → Sprint 03 T-08 (B-053 · Layout 02 Tidningen)
+- ~~**B-053 · Layout 02 Tidningen**~~ — CLOSED 2026-11-08 (Sprint 03 T-08): see commit "T-08: Layout 02 Tidningen"
 - → Sprint 03 T-09 (B-054 · Layout 03 Bento)
 - → Sprint 03 T-10 (B-055 · Layout 05 Tavlan)
 - → Sprint 03 T-11 (B-056 · Layout 06 TRMNL)
