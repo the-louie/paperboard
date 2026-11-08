@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-02 (`in-progress` — Research: HA test harness on Python 3.14).
-**Last completed:** Sprint 01 T-01 (commit `052e587`).
+**Current ticket:** Sprint 01 T-03 (`todo` — Research: route collision and auth under /api).
+**Last completed:** Sprint 01 T-02 (commit `64e61b8`).
 
 ## Sprints
 | Sprint | Goal | Status |
