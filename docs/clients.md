@@ -18,3 +18,20 @@ screen.
 
 **Behaviour while a render is failing:** the last good image is served, with the
 `X-Paperboard-Stale: 1` header. Before the very first frame: 503 with `Retry-After: 60`.
+
+## Previewing in Home Assistant (Sprint 03 T-19)
+
+No custom Lovelace card is needed (spike outcome). The built-in **picture-entity** card shows
+the screen exactly as the panel gets it. It refreshes when the frame changes, because the image
+entity bumps `image_last_updated`.
+
+```yaml
+type: picture-entity
+entity: image.hallen_screen_image
+show_state: false
+show_name: false
+```
+
+To switch layouts, open the screen's **Reconfigure** dialog. A dropdown of bundled layouts is a
+later nicety. A WYSIWYG editor (as in hass-eink-dashboard) is deliberately out of scope:
+layouts are files, so they can be versioned and shared between homes.

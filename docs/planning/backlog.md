@@ -134,7 +134,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - [ ] **B-077 · Device liveness → owner alert** · 1h · prio P2 · needs: B-022, B-025 · src: O4 in <the maintainer's HA repo>
       Add the problem sensor to the owner's AppDaemon watchdog or notification path (that
       change is made in the `<the maintainer's HA repo>` repo).
-- → Sprint 03 T-19 (B-078 · Spike: a Lovelace preview card (optional))
+- ~~**B-078 · Spike: a Lovelace preview card (optional)**~~ — CLOSED 2026-11-08 (Sprint 03 T-19): see commit "T-19: Spike: a Lovelace preview card (optional)"
 - ~~**B-079 · Unit-format helpers**~~ — CLOSED 2026-11-08 (Sprint 01 T-09): see commit "T-09: Unit-format helpers"
 - ~~**B-080 · Text measurement and wrap utility**~~ — CLOSED 2026-11-08 (Sprint 01 T-08): see commit "T-08: Text measurement and wrap utility"
 - [ ] **B-081 · decision: relink the solar forecast in the owner's Energy settings** · 1h · prio P1 · src: Sprint 01 T-13
