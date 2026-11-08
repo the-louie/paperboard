@@ -1,7 +1,7 @@
 # Sprint 03 — All designs, the schedule, and release readiness
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-22 (`in-progress` — Brand assets)
-**Last completed:** T-21 (`done` — commit `ce23593`)
+**Current ticket:** T-23 (`todo` — README and documentation)
+**Last completed:** T-22 (`done` — commit `e39187c`)
 **Budget:** 59h estimated (band 80–120h). **Below the band on purpose: this is all the
 schedulable work left.** The remaining rows are owner decisions (deploy, device switch,
 schedule choice, decommission, release) and two rows that depend on them.
@@ -41,7 +41,7 @@ night sleep, and the repo ready for a public HACS release (docs, CI, brand, aarc
 | T-19 | Spike: a Lovelace preview card (optional) | 3 | — | B-078 | done | Landed in 7226cd6 |
 | T-20 | Research: aarch64 verification | 2 | — | B-070 | done | Landed in 34f0de9 |
 | T-21 | CI workflow | 3 | — | B-069 | done | Landed in ce23593 |
-| T-22 | Brand assets | 1 | — | B-068 | in-progress | spec: backlog row B-068 |
+| T-22 | Brand assets | 1 | — | B-068 | done | Landed in e39187c |
 | T-23 | README and documentation | 5 | T-08, T-09, T-10, T-11, T-12, T-13, T-06 | B-067 | todo | spec: backlog row B-067 |
 
 ## Scope changes
