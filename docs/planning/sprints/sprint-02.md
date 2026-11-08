@@ -1,7 +1,7 @@
 # Sprint 02 — Layout engine and the hard widgets: mockup 01 from YAML on real data
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-18 (`in-progress` — Widget: hourly table (Tavlan))
-**Last completed:** T-17 (`done` — commit `f050b1a`)
+**Current ticket:** T-19 (`todo` — Widget: stat / key-value)
+**Last completed:** T-18 (`done` — commit `45fc46d`)
 **Budget:** 86h estimated (band 80–120h)
 
 ## Goal
@@ -35,7 +35,7 @@ with warning inversion, the hourly table, energy flow, rooms, and sun/moon.
 | T-15 | Widget: price chart | 4 | T-10, T-13 | B-040 | done | Landed in 60e1bf4 |
 | T-16 | Widget: solar forecast chart | 3 | T-12, T-13 | B-041 | done | Landed in 634eb68 |
 | T-17 | Widget: daily forecast with warning inversion | 4 | T-08, T-14 | B-043 | done | Landed in f050b1a |
-| T-18 | Widget: hourly table (Tavlan) | 4 | T-08, T-10, T-14 | B-042 | in-progress | spec: backlog row B-042 (`git show 13b3751:docs/planning/backlog.md`) |
+| T-18 | Widget: hourly table (Tavlan) | 4 | T-08, T-10, T-14 | B-042 | done | Landed in 45fc46d |
 | T-19 | Widget: stat / key-value | 3 | T-03 | B-051 | todo | spec: backlog row B-051 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-20 | Widget: room list | 2 | T-03 | B-048 | todo | spec: backlog row B-048 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-21 | Widget: energy flow | 5 | T-03, T-06 | B-047 | todo | spec: backlog row B-047 (`git show 13b3751:docs/planning/backlog.md`) |
