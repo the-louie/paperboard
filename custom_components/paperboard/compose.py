@@ -60,6 +60,7 @@ def render_spec(spec: LayoutSpec, snap: Snapshot, measure: Measurer, theme: Them
                       snap.height - 2 * margin, g.get("gap", 0))
     padding = g.get("padding", [8, 16])
     frames: dict[str, str] = g.get("frames", {})
+    paddings: dict[str, list[int]] = g.get("paddings", {})
 
     def outer(area: str) -> Rect:
         r = grid.rect(area)
@@ -72,7 +73,7 @@ def render_spec(spec: LayoutSpec, snap: Snapshot, measure: Measurer, theme: Them
     empty: list[str] = []
     for area in grid.names():
         widgets = by_area.get(area, [])
-        rect = _inner(outer(area), padding)
+        rect = _inner(outer(area), paddings.get(area, padding))
         if not widgets or all(
             _draw(REGISTRY[w["type"]], rect, snap, measure, theme, w["options"], notes,
                   w["type"]) is None for w in widgets if w["type"] in REGISTRY):
@@ -98,7 +99,7 @@ def render_spec(spec: LayoutSpec, snap: Snapshot, measure: Measurer, theme: Them
                      stroke_width=2, rx=12 if frame == "rounded" else 0)
         elif frame in ("inverted", "panel"):
             svg.rect(box.x, box.y, box.w, box.h, "#000", rx=12 if frame == "inverted" else 0)
-        rect = _inner(box, padding)
+        rect = _inner(box, paddings.get(area, padding))
         fixed = sum(w.get("height", 0) for w in widgets)
         flexible = [w for w in widgets if not w.get("height")]
         share = (rect.h - fixed) / len(flexible) if flexible else 0

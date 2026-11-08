@@ -55,6 +55,8 @@ LAYOUT = vol.Schema({
         vol.Optional("gap", default=0): vol.All(int, vol.Range(min=0, max=40)),
         vol.Optional("margin", default=0): vol.All(int, vol.Range(min=0, max=40)),
         vol.Optional("frames", default={}): {str: vol.In(FRAMES)},
+        vol.Optional("paddings", default={}): {str: vol.All([vol.All(int, vol.Range(min=0))],
+                                                            vol.Length(min=2, max=2))},
     },
     vol.Required("widgets"): vol.All([WIDGET], vol.Length(min=1)),
     vol.Optional("clock_resolution", default=300): vol.All(int, vol.Range(min=60)),
@@ -111,6 +113,7 @@ def parse(text: str, source: str) -> LayoutSpec:  # or a ScheduleSpec for schedu
     bad = [f"widgets[{i}].area: unknown area {w['area']!r}"
            for i, w in enumerate(data["widgets"]) if w["area"] not in names]
     bad += [f"grid.frames.{a}: unknown area" for a in g["frames"] if a not in names]
+    bad += [f"grid.paddings.{a}: unknown area" for a in g["paddings"] if a not in names]
     if bad:
         raise ValueError("\n".join(bad))
     return LayoutSpec(name=data["name"], title=data.get("title", data["name"]),

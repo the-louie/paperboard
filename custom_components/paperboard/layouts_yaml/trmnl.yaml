@@ -1,0 +1,34 @@
+# 06 TRMNL - TRMNL's own visual language (views with a black title bar), with the owner's
+# change from 2026-11-08: expected solar today instead of "Sol idag".
+name: trmnl
+title: TRMNL
+grid:
+  columns: [fr, fr]
+  rows: [fr, 30, fr, 30]
+  gap: 6
+  margin: 8
+  padding: [8, 12]
+  areas:
+    - weather  el
+    - weather  el_bar
+    - weather  home
+    - w_bar    home_bar
+  frames: {weather: rounded, el: rounded, home: rounded}
+  paddings: {w_bar: [0, 0], el_bar: [0, 0], home_bar: [0, 0]}
+widgets:
+  - type: now
+    area: weather
+    height: 228
+    options: {rows: [indoor, humidity, wind, rain_today]}
+  - {type: hourly_strip, area: weather, height: 86, options: {hours: 8}}
+  - {type: daily, area: weather, options: {days: 5}}
+  - {type: header, area: w_bar, options: {style: titlebar, title: Vädret}}
+  - type: timeline
+    area: el
+    height: 110
+    options: {hours: 24, series: [price], cheapest_hours: 2, night: none, tick_every: 6}
+  - {type: energy, area: el, options: {rows: [price_now, solar_expected_today, battery], title: false}}
+  - {type: header, area: el_bar, options: {style: titlebar, title: Elen & solen, show_week: false, show_flag: false}}
+  - {type: rooms, area: home, height: 92, options: {columns: 2}}
+  - {type: agenda, area: home, options: {days: 3, title: false}}
+  - {type: header, area: home_bar, options: {style: titlebar, title: Hemmet, show_week: false, show_flag: false}}
