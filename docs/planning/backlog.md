@@ -112,7 +112,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 - ~~**B-064 · Panel profiles from the TRMNL model table**~~ — CLOSED 2026-11-08 (Sprint 02 T-25): see commit "T-25: Panel profiles from the TRMNL model table"
 - ~~**B-065 · 2-bit and 4-bit render paths**~~ — CLOSED 2026-11-08 (Sprint 02 T-26): see commit "T-26: 2-bit and 4-bit render paths"
-- → Sprint 03 T-18 (B-066 · Generic image clients)
+- ~~**B-066 · Generic image clients**~~ — CLOSED 2026-11-08 (Sprint 03 T-18): see commit "T-18: Generic image clients"
 
 ## Phase 5 — Publish (goal: a public HACS install another home can configure with no code)
 

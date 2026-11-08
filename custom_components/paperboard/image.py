@@ -41,6 +41,13 @@ class ScreenImage(ScreenEntity, ImageEntity):
         self._attr_image_last_updated = dt_util.utcnow()
         self.async_write_ha_state()
 
+    @property
+    def extra_state_attributes(self) -> dict[str, str]:
+        """Paths for generic image clients (ESPHome online_image, Kindle, Alias, BYOS servers).
+        Prefix with the HA base URL; the token in the path is the only credential."""
+        base = f"/api/paperboard/image/{self.screen.subentry_id}/{self.screen.image_token}"
+        return {"png_path": f"{base}/latest.png", "bmp_path": f"{base}/latest.bmp"}
+
     async def async_image(self) -> bytes | None:
         """Cheap: returns cached bytes (the render happens elsewhere, off the loop)."""
         return self.screen.frame.png if self.screen.frame else None
