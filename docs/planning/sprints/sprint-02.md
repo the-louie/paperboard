@@ -1,7 +1,7 @@
 # Sprint 02 — Layout engine and the hard widgets: mockup 01 from YAML on real data
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-25 (`in-progress` — Panel profiles from the TRMNL model table)
-**Last completed:** T-24 (`done` — commit `a7209a7`)
+**Current ticket:** T-26 (`todo` — 2-bit and 4-bit render paths)
+**Last completed:** T-25 (`done` — commit `60c4770`)
 **Budget:** 86h estimated (band 80–120h)
 
 ## Goal
@@ -42,7 +42,7 @@ with warning inversion, the hourly table, energy flow, rooms, and sun/moon.
 | T-22 | Widget: sun and moon | 2 | T-03 | B-050 | done | Landed in e17c280 |
 | T-23 | "Empty house" gate | 2 | T-04, T-15 | B-045 | done | Landed in 65b5261 |
 | T-24 | Layout 01 Tidslinjen with the owner's changes | 3 | T-05, T-06, T-15, T-16, T-17 | B-046 | done | Landed in a7209a7 |
-| T-25 | Panel profiles from the TRMNL model table | 4 | — | B-064 | in-progress | spec: backlog row B-064 (`git show 13b3751:docs/planning/backlog.md`) |
+| T-25 | Panel profiles from the TRMNL model table | 4 | — | B-064 | done | Landed in 60c4770 |
 | T-26 | 2-bit and 4-bit render paths | 4 | T-25 | B-065 | todo | spec: backlog row B-065 (`git show 13b3751:docs/planning/backlog.md`) |
 
 ## Scope changes

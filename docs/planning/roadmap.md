@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-25 (`in-progress` — Panel profiles from the TRMNL model table).
-**Last completed:** Sprint 02 T-24 (commit `a7209a7`).
+**Current ticket:** Sprint 02 T-26 (`todo` — 2-bit and 4-bit render paths).
+**Last completed:** Sprint 02 T-25 (commit `60c4770`).
 
 ## Sprints
 | Sprint | Goal | Status |
