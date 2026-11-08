@@ -1,6 +1,6 @@
 # Sprint 01 — Skeleton and device server: the stack proven, HA serves a TRMNL image
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-25 (`todo` — Missed-check-in problem sensor)
+**Current ticket:** T-25 (`in-progress` — Missed-check-in problem sensor)
 **Last completed:** T-24 (`done` — commit `4c7780c`)
 **Budget:** 81h estimated (band 80–120h)
 
@@ -39,7 +39,7 @@ Prove the resvg + Pillow stack and build the integration skeleton, so that a pap
 | T-22 | ImageEntity per screen | 2 | T-18, T-16 | B-019 | done | Landed in cde6d5e |
 | T-23 | Render scheduler | 5 | T-10, T-16 | B-020 | done | Landed in 9a5f85b |
 | T-24 | Telemetry sensors | 3 | T-20 | B-021 | done | Landed in 4c7780c |
-| T-25 | Missed-check-in problem sensor | 2 | T-24 | B-022 | todo | spec: backlog row B-022 (git show 13b3751:docs/planning/backlog.md) |
+| T-25 | Missed-check-in problem sensor | 2 | T-24 | B-022 | in-progress | spec: backlog row B-022 (git show 13b3751:docs/planning/backlog.md) |
 | T-26 | Widgets: "now" block and status footer | 4 | T-13 | B-023 | todo | spec: backlog row B-023 (git show 13b3751:docs/planning/backlog.md) |
 | T-27 | Diagnostics and redaction | 2 | T-19 | B-024 | todo | spec: backlog row B-024 (git show 13b3751:docs/planning/backlog.md) |
 | T-28 | Security review of the device endpoints | 2 | T-20, T-18 | B-073 | todo | spec: backlog row B-073 (git show 13b3751:docs/planning/backlog.md) |
