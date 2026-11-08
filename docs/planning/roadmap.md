@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-03 (`todo` — Research: route collision and auth under /api).
+**Current ticket:** Sprint 01 T-03 (`in-progress` — Research: route collision and auth under /api).
 **Last completed:** Sprint 01 T-02 (commit `64e61b8`).
 
 ## Sprints

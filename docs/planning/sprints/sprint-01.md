@@ -1,6 +1,6 @@
 # Sprint 01 — Skeleton and device server: the stack proven, HA serves a TRMNL image
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-03 (`todo` — Research: route collision and auth under /api)
+**Current ticket:** T-03 (`in-progress` — Research: route collision and auth under /api)
 **Last completed:** T-02 (`done` — commit `64e61b8`)
 **Budget:** 81h estimated (band 80–120h)
 
@@ -17,7 +17,7 @@ Prove the resvg + Pillow stack and build the integration skeleton, so that a pap
 |---|---|---|---|---|---|---|
 | T-01 | Repo scaffold | 3 | — | B-001 | done | Landed in 052e587 |
 | T-02 | Research: HA test harness on Python 3.14 | 2 | T-01 | B-002 | done | Landed in 64e61b8 |
-| T-03 | Research: route collision and auth under /api | 2 | — | B-003 | todo | spec: backlog row B-003 (git show 13b3751:docs/planning/backlog.md) |
+| T-03 | Research: route collision and auth under /api | 2 | — | B-003 | in-progress | spec: backlog row B-003 (git show 13b3751:docs/planning/backlog.md) |
 | T-04 | Research: the owner's TRMNL OG facts | 1 | — | B-004 | todo | spec: backlog row B-004 (git show 13b3751:docs/planning/backlog.md) |
 | T-05 | Spike: resvg-py in an HA 2026.11 throwaway container | 3 | T-01 | B-005 | todo | spec: backlog row B-005 (git show 13b3751:docs/planning/backlog.md) |
 | T-06 | Fonts: bundle and load | 2 | T-01 | B-007 | todo | spec: backlog row B-007 (git show 13b3751:docs/planning/backlog.md) |
