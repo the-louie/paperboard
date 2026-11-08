@@ -1,6 +1,6 @@
 # Sprint 03 — All designs, the schedule, and release readiness
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-08 (`todo` — Layout 02 Tidningen)
+**Current ticket:** T-08 (`in-progress` — Layout 02 Tidningen)
 **Last completed:** T-07 (`done` — commit `d04f65b`)
 **Budget:** 59h estimated (band 80–120h). **Below the band on purpose: this is all the
 schedulable work left.** The remaining rows are owner decisions (deploy, device switch,
@@ -27,7 +27,7 @@ night sleep, and the repo ready for a public HACS release (docs, CI, brand, aarc
 | T-05 | Inverted now panel (Tavlan) | 2 | T-03 | B-086 | done | Landed in d6c6566 |
 | T-06 | Schedule: time-of-day layouts | 4 | — | B-060 | done | Landed in 5990438 |
 | T-07 | Night sleep and refresh policy | 2 | T-06 | B-061 | done | Landed in d04f65b |
-| T-08 | Layout 02 Tidningen | 2 | T-02, T-04 | B-053 | todo | spec: backlog row B-053 |
+| T-08 | Layout 02 Tidningen | 2 | T-02, T-04 | B-053 | in-progress | spec: backlog row B-053 |
 | T-09 | Layout 03 Bento | 2 | T-03 | B-054 | todo | spec: backlog row B-054 |
 | T-10 | Layout 05 Tavlan | 2 | T-05 | B-055 | todo | spec: backlog row B-055 |
 | T-11 | Layout 06 TRMNL | 2 | T-03, T-04 | B-056 | todo | spec: backlog row B-056 |
