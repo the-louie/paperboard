@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-21 (`todo` — View: /api/log).
+**Current ticket:** Sprint 01 T-21 (`in-progress` — View: /api/log).
 **Last completed:** Sprint 01 T-20 (commit `1e4621c`).
 
 ## Sprints
