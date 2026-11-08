@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-04 (`in-progress` — Research: the owner's TRMNL OG facts).
-**Last completed:** Sprint 01 T-03 (commit `f625b35`).
+**Current ticket:** Sprint 01 T-05 (`todo` — Spike: resvg-py in an HA 2026.11 throwaway container).
+**Last completed:** Sprint 01 T-04 (commit `f5c7d66`).
 
 ## Sprints
 | Sprint | Goal | Status |
