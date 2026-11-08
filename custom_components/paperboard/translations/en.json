@@ -54,7 +54,8 @@
           "sun": "Sun",
           "rooms": "Room temperatures",
           "calendars": "Calendars",
-          "feels_like": "Feels-like temperature"
+          "feels_like": "Feels-like temperature",
+          "grid_export_positive": "Grid meter reports export as positive (e.g. Huawei)"
         }
       }
     }

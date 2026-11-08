@@ -41,6 +41,8 @@ def energy_flow(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
     lab = LABELS.get(lang, LABELS["en"])
     sun = kilowatts(*role_value(snap, "solar_power")) if snap.roles.get("solar_power") else None
     grid = kilowatts(*role_value(snap, "grid_power")) if snap.roles.get("grid_power") else None
+    if grid is not None and snap.roles.get("grid_export_positive"):
+        grid = -grid  # this meter reports export as positive; the flow uses import positive
     house = kilowatts(*role_value(snap, "house_power")) if snap.roles.get("house_power") else None
     bat_soc = role_value(snap, "battery_soc")[0] if snap.roles.get("battery_soc") else None
     bat_kw = kilowatts(*role_value(snap, "battery_power")) \

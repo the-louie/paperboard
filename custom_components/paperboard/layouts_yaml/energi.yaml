@@ -1,0 +1,24 @@
+# 08 Energi - energy first, with the owner's changes from 2026-11-08: the weather section is
+# replaced by an expected-solar graph stacked with the price graph on one x-axis, and the flow
+# diagram's figures sit beside the circles (grid above, solar right, battery above).
+name: energi
+title: Energi
+grid:
+  columns: [300, fr]
+  rows: [40, fr, 26]
+  rules: 2
+  padding: [6, 14]
+  areas:
+    - header header
+    - flow   chart
+    - footer footer
+widgets:
+  - {type: header, area: header, options: {show_week: true, show_flag: true, badge: tomorrow_07}}
+  - {type: energy_flow, area: flow, height: 236}
+  - type: energy
+    area: flow
+    options: {rows: [price_now, solar_expected_today, house_today, battery], title: false}
+  - type: timeline
+    area: chart
+    options: {hours: 24, series: [price, solar_forecast], cheapest_hours: 2, night: dots}
+  - {type: footer, area: footer, options: {left: rooms}}

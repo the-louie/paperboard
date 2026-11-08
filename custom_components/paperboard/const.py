@@ -49,6 +49,9 @@ ROLE_FILTERS: dict[str, dict] = {
     "battery_power": {"domain": "sensor", "device_class": "power"},
     "sun": {"domain": "sun"},
 }
+# Sign conventions differ per meter (Huawei: export positive, import negative). Default: import
+# positive, as HA's Energy dashboard expects.
+FLAG_ROLES = ("grid_export_positive",)
 LIST_ROLES: dict[str, dict] = {
     "rooms": {"domain": "sensor", "device_class": "temperature"},
     "calendars": {"domain": "calendar"},

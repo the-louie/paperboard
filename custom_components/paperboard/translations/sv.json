@@ -54,7 +54,8 @@
           "sun": "Sol",
           "rooms": "Rumstemperaturer",
           "calendars": "Kalendrar",
-          "feels_like": "Känns som-temperatur"
+          "feels_like": "Känns som-temperatur",
+          "grid_export_positive": "Nätmätaren visar export som positivt (t.ex. Huawei)"
         }
       }
     }

@@ -23,7 +23,7 @@ def bound_entities(roles: dict[str, Any]) -> list[tuple[str, str]]:
     for role, value in roles.items():
         if isinstance(value, list):
             out += [(f"{role}[{i}]", eid) for i, eid in enumerate(value)]
-        elif value:
+        elif isinstance(value, str) and value:
             out.append((role, value))
     return out
 

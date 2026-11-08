@@ -16,6 +16,7 @@ from homeassistant.config_entries import (
 from homeassistant.core import callback
 from homeassistant.helpers.network import NoURLAvailableError, get_url
 from homeassistant.helpers.selector import (
+    BooleanSelector,
     EntitySelector,
     EntitySelectorConfig,
     NumberSelector,
@@ -41,6 +42,7 @@ from .const import (
     DEFAULT_PROFILE,
     DEFAULT_REFRESH_RATE,
     DOMAIN,
+    FLAG_ROLES,
     LIST_ROLES,
     MAX_REFRESH_RATE,
     MIN_REFRESH_RATE,
@@ -106,6 +108,8 @@ def _roles_schema(current: dict[str, Any]) -> vol.Schema:
     for role, flt in LIST_ROLES.items():
         key = vol.Optional(role, description={"suggested_value": current.get(role, [])})
         fields[key] = EntitySelector(EntitySelectorConfig(**flt, multiple=True))
+    for flag in FLAG_ROLES:
+        fields[vol.Optional(flag, default=bool(current.get(flag, False)))] = BooleanSelector()
     return vol.Schema(fields)
 
 
@@ -118,6 +122,9 @@ def _clean_roles(user_input: dict[str, Any]) -> dict[str, Any]:
     for role in LIST_ROLES:
         if user_input.get(role):
             out[role] = list(user_input[role])
+    for flag in FLAG_ROLES:
+        if user_input.get(flag):
+            out[flag] = True
     return out
 
 

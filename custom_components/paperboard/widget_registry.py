@@ -211,7 +211,7 @@ def _timeline(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
     present = [s for s in series if drawable.get(s)]
     if not present:
         return False
-    # Equal shares, solar a little shorter than price (estimate vs. money).
+    # Solar a little shorter than price (estimate vs. money), in whichever order is listed.
     weights = {"solar_forecast": 0.42, "price": 0.58}
     total = sum(weights[s] for s in present)
     top, avail = r.y, r.h - label_h
