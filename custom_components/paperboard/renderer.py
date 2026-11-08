@@ -36,7 +36,11 @@ from .widgets_sky import sun_times
 
 _LOGGER = logging.getLogger(__name__)
 TICK = dt.timedelta(seconds=60)
-SLOW_RENDER_MS = 500  # budget per frame (T-29); slower renders are logged once
+# Budget per frame. 500 ms while resvg ran in HA's process (T-29). Since B-088 it runs in a
+# worker process and no longer stalls the event loop, so the budget only guards freshness.
+# ha-host measured 0.24-0.40 s per layout; the first render after a start (worker spawn,
+# cold caches) is never judged.
+SLOW_RENDER_MS = 2000
 DEBOUNCE_SECONDS = 5.0
 # Device button (B-089): a short press steps through these, each held for HOLD_MINUTES.
 DEFAULT_CYCLE = ("tidslinjen", "tavlan", "almanackan", "energi", "tidningen", "bento", "trmnl")
@@ -239,7 +243,7 @@ class ScreenRenderer:
         self.renders += 1
         self.last_render_ms = (time.perf_counter() - started) * 1000
         self.max_render_ms = max(self.max_render_ms, self.last_render_ms)
-        if self.last_render_ms > SLOW_RENDER_MS and not self._warned_slow:
+        if self.renders > 1 and self.last_render_ms > SLOW_RENDER_MS and not self._warned_slow:
             self._warned_slow = True
             _LOGGER.warning("Rendering %s took %.0f ms (budget %d ms)", self.screen.name,
                             self.last_render_ms, SLOW_RENDER_MS)

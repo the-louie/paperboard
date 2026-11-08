@@ -8,6 +8,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.setup import async_setup_component
 from pytest_homeassistant.common import MockConfigEntry
 
+from custom_components.paperboard import pipeline
 from custom_components.paperboard.const import (
     CONF_IMAGE_TOKEN,
     CONF_LAYOUT,
@@ -17,6 +18,14 @@ from custom_components.paperboard.const import (
     DOMAIN,
     SUBENTRY_SCREEN,
 )
+
+
+@pytest.fixture(autouse=True)
+def _in_process_render(monkeypatch):
+    """resvg in-process in tests: a worker process would trip HA's lingering-thread check.
+    The worker itself is tested in test_raster_worker.py."""
+    monkeypatch.setattr(pipeline, "USE_WORKER", False)
+
 
 # Mechanics tests use the minimal "status" layout; real layouts have their own tests.
 SCREEN_DATA = {CONF_NAME: "Hallen", CONF_PROFILE: "800x480_1bit", CONF_LAYOUT: "status",

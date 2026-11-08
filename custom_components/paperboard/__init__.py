@@ -10,7 +10,10 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
-from . import widget_registry  # noqa: F401 - registers the layout widget types
+from . import (
+    pipeline,
+    widget_registry,  # noqa: F401 - registers the layout widget types
+)
 from .compose import as_layout, scheduled_layout
 from .const import (
     CONF_BASE_URL,
@@ -35,6 +38,7 @@ from .layouts import Layout, get_layout
 from .pipeline import PanelProfile
 from .profiles import names as profile_names
 from .profiles import resolve as resolve_profile
+from .raster_worker import WORKER
 from .renderer import DEFAULT_CYCLE, ScreenRenderer
 from .role_watch import RoleWatcher
 from .runtime import HubRuntime, ScreenRuntime
@@ -47,6 +51,8 @@ type PaperboardConfigEntry = ConfigEntry[HubRuntime]
 
 _VIEWS_REGISTERED = f"{DOMAIN}_views_registered"
 
+
+WARMUP_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"/>'
 
 async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -> bool:
     """Set up the hub: runtime state, views, and one device per screen subentry."""
@@ -61,6 +67,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     # Warm the model-registry cache off the loop: resolve() is called from the loop later.
     await hass.async_add_executor_job(profile_names)
     fonts = await hass.async_add_executor_job(load_fonts)
+    if pipeline.USE_WORKER:  # start the render process now, not on the first frame (B-088)
+        hass.async_create_background_task(
+            hass.async_add_executor_job(WORKER.render, WARMUP_SVG, str(fonts.font_dir)),
+            "paperboard render worker warm-up")
     watcher = LayoutWatcher(hass)
     await watcher.async_load()
     entry.async_on_unload(watcher.async_start())
@@ -161,4 +171,5 @@ async def _async_reload(hass: HomeAssistant, entry: ConfigEntry) -> None:
 async def async_unload_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -> bool:
     unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     await entry.runtime_data.devices.async_flush()
+    WORKER.shutdown()  # a reload starts a fresh worker on its first render
     return unloaded

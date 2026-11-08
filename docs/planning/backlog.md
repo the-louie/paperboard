@@ -141,9 +141,11 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       overlaps the numeral and rows sit too tight (golden `tidslinjen_trmnl_x`). Route every
       widget offset through `theme.px()` and line heights through the type scale; verify with
       the TRMNL X golden of every layout.
-- [ ] **B-088 · First render after an HA start is 2–3.5 s** · 2h · prio P3 · src: B-025 live deploy
-      ha-host logged "Rendering Hallen took 2069 ms" and "3478 ms" (budget 500 ms), once per
-      restart. Warm renders are not logged. Find out whether this is cold resvg/font setup or
-      HA's busy start-up executor. Then warm up at setup, or skip the budget warning on the
-      first render. Goal: no warning per restart (O3).
+- ~~**B-088 · First render after an HA start is 2–3.5 s**~~ — CLOSED 2026-11-08. Cause: resvg-py 0.5.0 **holds the GIL** for the whole render. Every render therefore froze HA's event loop (ha-host: 35 renders in 28 min, the slowest 5.1 s; HA logged Frigate "Updating state took" warnings at 18:04 and 18:10). Font loading is not the cost (0 ms); ha-host renders about 10× slower than dev-host and is loaded (load 3.7 on 4 cores, AppDaemon at 44 % CPU). Fix: resvg runs in one spawned worker process (`raster_worker.py`), started at setup. Main-thread stall on ha-host went from 560 ms to 22 ms per render (`scripts/check_worker_stall.py`). The budget is now 2,000 ms and the first render is not judged.
 - ~~**B-089 · Device button steps through layouts**~~ — CLOSED 2026-11-08: a short press steps through all 7 layouts with a 30-minute hold; a double click resumes the schedule. Optional `cycle:`/`hold_minutes:` keys in the schedule file. Owner: "go, all 7, 30 minutes is fine".
+- [ ] **B-090 · Upstream: resvg-py releases the GIL** · 1h · prio P3 · src: B-088
+      Draft an issue or PR for resvg-py (`py.allow_threads` around the render), with the
+      measurement from `scripts/check_worker_stall.py`. The owner posts it. If upstream does it,
+      the worker process can go.
+- [ ] **B-091 · Research: AppDaemon at 44 % CPU on ha-host** · 1h · prio P2 · src: B-088 (2026-11-08 18:30, `docker stats`)
+      Move to `<the maintainer's HA repo>` HASS-BACKLOG if confirmed: it is not paperboard's.

@@ -15,8 +15,13 @@ import zlib
 from dataclasses import dataclass
 from pathlib import Path
 
-import resvg_py
 from PIL import Image
+
+from .raster_worker import WORKER, svg_to_png
+
+# B-088: resvg runs in a worker process so it never holds the GIL in HA's process.
+# Tests switch this off (conftest) to keep pytest-homeassistant's thread checks clean.
+USE_WORKER = True
 
 CRISP_ATTRS = 'shape-rendering="crispEdges" text-rendering="optimizeSpeed"'
 GRAY4 = (0, 85, 170, 255)
@@ -60,8 +65,8 @@ def _ensure_crisp(svg: str) -> str:
 def rasterize(svg: str, profile: PanelProfile, font_dir: Path) -> Image.Image:
     """resvg -> 8-bit grayscale image of exactly the panel size."""
     try:
-        data = bytes(resvg_py.svg_to_bytes(svg_string=_ensure_crisp(svg),
-                                           font_dirs=[str(font_dir)], skip_system_fonts=True))
+        data = WORKER.render(_ensure_crisp(svg), str(font_dir)) if USE_WORKER else \
+            svg_to_png(_ensure_crisp(svg), str(font_dir))
     except Exception as err:  # resvg raises plain exceptions on parse errors
         raise PipelineError(f"resvg failed: {err}") from err
     img = Image.open(io.BytesIO(data))
