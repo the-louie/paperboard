@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-09 (`todo` — Layout 03 Bento).
+**Current ticket:** Sprint 03 T-09 (`in-progress` — Layout 03 Bento).
 **Last completed:** Sprint 03 T-08 (commit `6e69fe3`).
 
 ## Sprints
