@@ -137,12 +137,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-078 · Spike: a Lovelace preview card (optional)**~~ — CLOSED 2026-11-08 (Sprint 03 T-19): see commit "T-19: Spike: a Lovelace preview card (optional)"
 - ~~**B-079 · Unit-format helpers**~~ — CLOSED 2026-11-08 (Sprint 01 T-09): see commit "T-09: Unit-format helpers"
 - ~~**B-080 · Text measurement and wrap utility**~~ — CLOSED 2026-11-08 (Sprint 01 T-08): see commit "T-08: Text measurement and wrap utility"
-- [ ] **B-081 · decision: relink the solar forecast in the owner's Energy settings** · 1h · prio P1 · src: Sprint 01 T-13
-      The `energy/solar_forecast` websocket returns `{}`. The energy prefs point at config entry
-      `dfa24fc0…`, which no longer exists, while the loaded forecast_solar entry is `01KSDE…`
-      ("Hemma"). The owner relinks it in Settings → Energy → Solar panels →
-      Forecast. Without this, the HA energy dashboard has no forecast, and B-037/B-038 have no
-      hourly data to test against. Mirrored as H-54 in `<the maintainer's HA repo>`.
+- ~~**B-081 · decision: relink the solar forecast in the owner's Energy settings**~~ — CLOSED 2026-11-08 at the owner's request. Open-Meteo Solar Forecast was installed and linked in the Energy prefs; `energy/solar_forecast` now returns hourly data. For the "expected solar today" role, bind `sensor.hemma_energy_production_today`. Details: H-54 in `<the maintainer's HA repo>`.
 - ~~**B-082 · Rotate-image-token button per screen**~~ — CLOSED 2026-11-08 (Sprint 03 T-17): see commit "T-17: Rotate-image-token button per screen"
 - ~~**B-083 · Scale YAML layouts to larger panels**~~ — CLOSED 2026-11-08 (Sprint 03 T-15): see commit "T-15: Scale YAML layouts to larger panels"
 - ~~**B-084 · Area frames: rounded boxes and an inverted hero**~~ — CLOSED 2026-11-08 (Sprint 03 T-03): see commit "T-03: Area frames: rounded boxes and an inverted hero"
