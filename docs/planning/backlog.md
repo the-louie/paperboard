@@ -28,7 +28,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 ## Phase 0 — Spike: prove the rendering stack (goal: one mockup rendered in-process, ready for go/no-go)
 
-- → Sprint 01 T-01 (B-001 · Repo scaffold)
+- ~~**B-001 · Repo scaffold**~~ — CLOSED 2026-11-08 (Sprint 01 T-01): see commit "T-01: Repo scaffold"
 - → Sprint 01 T-02 (B-002 · Research: HA test harness on Python 3.14)
 - → Sprint 01 T-03 (B-003 · Research: route collision and auth under /api)
 - → Sprint 01 T-04 (B-004 · Research: the owner's TRMNL OG facts)
