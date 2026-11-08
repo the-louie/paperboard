@@ -1,6 +1,6 @@
 # Sprint 02 — Layout engine and the hard widgets: mockup 01 from YAML on real data
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-01 (`todo` — Research: schema library for layouts)
+**Current ticket:** T-01 (`in-progress` — Research: schema library for layouts)
 **Last completed:** —
 **Budget:** 86h estimated (band 80–120h)
 
@@ -18,7 +18,7 @@ with warning inversion, the hourly table, energy flow, rooms, and sun/moon.
 ## Tickets
 | ID | Title | Est h | Deps | From | Status | Notes |
 |---|---|---|---|---|---|---|
-| T-01 | Research: schema library for layouts | 2 | — | B-027 | todo | spec: backlog row B-027 (`git show 13b3751:docs/planning/backlog.md`) |
+| T-01 | Research: schema library for layouts | 2 | — | B-027 | in-progress | spec: backlog row B-027 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-02 | Design: layout YAML schema | 4 | T-01 | B-028 | todo | spec: backlog row B-028 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-03 | Type scale and style tokens | 3 | T-02 | B-031 | todo | spec: backlog row B-031 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-04 | Grid engine with reflow | 5 | T-02 | B-030 | todo | spec: backlog row B-030 (`git show 13b3751:docs/planning/backlog.md`) |
