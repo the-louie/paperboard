@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-14 (`todo` — Layout 04 Instrument (bar-chart parts only)).
+**Current ticket:** Sprint 03 T-14 (`in-progress` — Layout 04 Instrument (bar-chart parts only)).
 **Last completed:** Sprint 03 T-13 (commit `159b76e`).
 
 ## Sprints
