@@ -34,7 +34,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-004 · Research: the owner's TRMNL OG facts**~~ — CLOSED 2026-11-08 (Sprint 01 T-04): see commit "T-04: Research: the owner's TRMNL OG facts"
 - ~~**B-005 · Spike: resvg-py in an HA 2026.11 throwaway container**~~ — CLOSED 2026-11-08 (Sprint 01 T-05): see commit "T-05: Spike: resvg-py in an HA 2026.11 throwaway container"
 - → Sprint 01 T-07 (B-006 · Spike: text metrics, Pillow vs resvg)
-- → Sprint 01 T-06 (B-007 · Fonts: bundle and load)
+- ~~**B-007 · Fonts: bundle and load**~~ — CLOSED 2026-11-08 (Sprint 01 T-06): see commit "T-06: Fonts: bundle and load"
 - → Sprint 01 T-10 (B-008 · Pipeline: SVG → panel PNG)
 - → Sprint 01 T-11 (B-009 · Golden-image test harness)
 - → Sprint 01 T-13 (B-010 · Static render of mockup 01 (go/no-go))
