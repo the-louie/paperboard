@@ -46,7 +46,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-013 · Config subentry: Screen**~~ — CLOSED 2026-11-08 (Sprint 01 T-16): see commit "T-16: Config subentry: Screen"
 - → Sprint 01 T-19 (B-014 · View: /api/setup with a pairing window)
 - → Sprint 01 T-20 (B-015 · View: /api/display)
-- → Sprint 01 T-17 (B-016 · Emulated TRMNL client)
+- ~~**B-016 · Emulated TRMNL client**~~ — CLOSED 2026-11-08 (Sprint 01 T-17): see commit "T-17: Emulated TRMNL client"
 - → Sprint 01 T-21 (B-017 · View: /api/log)
 - → Sprint 01 T-18 (B-018 · Image view plus last-good cache)
 - → Sprint 01 T-22 (B-019 · ImageEntity per screen)
