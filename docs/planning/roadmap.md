@@ -1,15 +1,16 @@
 # Roadmap — paperboard
 
 ## Current position
-**Active sprint:** none (Sprint 01 closed 2026-11-08). Sprint 02 is next.
-**Current ticket:** Sprint 01 —.
+**Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
+**Current ticket:** Sprint 02 T-01 (`todo` — Research: schema library for layouts).
 **Last completed:** Sprint 01 T-29 (commit `01612e5`).
 
 ## Sprints
 | Sprint | Goal | Status |
 |---|---|---|
 | 01 | Skeleton and device server: the stack proven (phase 0), and HA serving a TRMNL-compatible image with telemetry to the emulated client (phase 1 code) | done |
-| 02 | Layout engine and the hard widgets: mockup 01 on real price, solar and weather data (phase 2) | goal only |
+| 02 | Layout engine and the hard widgets: mockup 01 from YAML on real data, empty-house gate, 2-bit | in progress |
+| 03 | All 8 designs as layouts, time-of-day schedule, calendar and text slots (phase 3) | goal only |
 
 ## Go/no-go (Sprint 01 T-13, 2026-11-08)
 **GO.** Mockup 01 with the owner's changes was hand-built from the 2026-11-08 fixture and
