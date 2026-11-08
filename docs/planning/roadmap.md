@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-09 (`todo` — Unit-format helpers).
+**Current ticket:** Sprint 01 T-09 (`in-progress` — Unit-format helpers).
 **Last completed:** Sprint 01 T-08 (commit `65929c1`).
 
 ## Sprints

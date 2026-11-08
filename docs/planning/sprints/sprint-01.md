@@ -1,6 +1,6 @@
 # Sprint 01 — Skeleton and device server: the stack proven, HA serves a TRMNL image
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-09 (`todo` — Unit-format helpers)
+**Current ticket:** T-09 (`in-progress` — Unit-format helpers)
 **Last completed:** T-08 (`done` — commit `65929c1`)
 **Budget:** 81h estimated (band 80–120h)
 
@@ -23,7 +23,7 @@ Prove the resvg + Pillow stack and build the integration skeleton, so that a pap
 | T-06 | Fonts: bundle and load | 2 | T-01 | B-007 | done | Landed in da23d2e |
 | T-07 | Spike: text metrics, Pillow vs resvg | 3 | T-06 | B-006 | done | Landed in 25119f4 |
 | T-08 | Text measurement and wrap utility | 3 | T-07 | B-080 | done | Landed in 65929c1 |
-| T-09 | Unit-format helpers | 2 | T-01 | B-079 | todo | spec: backlog row B-079 (git show 13b3751:docs/planning/backlog.md) |
+| T-09 | Unit-format helpers | 2 | T-01 | B-079 | in-progress | spec: backlog row B-079 (git show 13b3751:docs/planning/backlog.md) |
 | T-10 | Pipeline: SVG → panel PNG | 4 | T-05, T-06 | B-008 | todo | spec: backlog row B-008 (git show 13b3751:docs/planning/backlog.md) |
 | T-11 | Golden-image test harness | 3 | T-10 | B-009 | todo | spec: backlog row B-009 (git show 13b3751:docs/planning/backlog.md) |
 | T-12 | Fixture capture script | 2 | T-11 | B-076 | todo | spec: backlog row B-076 (git show 13b3751:docs/planning/backlog.md) |
