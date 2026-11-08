@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-19 (`todo` — Spike: a Lovelace preview card (optional)).
+**Current ticket:** Sprint 03 T-19 (`in-progress` — Spike: a Lovelace preview card (optional)).
 **Last completed:** Sprint 03 T-18 (commit `da20435`).
 
 ## Sprints
