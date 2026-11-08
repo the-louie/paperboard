@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-10 (`todo` — Pipeline: SVG → panel PNG).
+**Current ticket:** Sprint 01 T-10 (`in-progress` — Pipeline: SVG → panel PNG).
 **Last completed:** Sprint 01 T-09 (commit `a2e9296`).
 
 ## Sprints
