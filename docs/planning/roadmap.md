@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-17 (`todo` — Rotate-image-token button per screen).
+**Current ticket:** Sprint 03 T-17 (`in-progress` — Rotate-image-token button per screen).
 **Last completed:** Sprint 03 T-16 (commit `e6e3e35`).
 
 ## Sprints
