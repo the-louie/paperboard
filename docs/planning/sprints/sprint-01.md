@@ -1,5 +1,5 @@
 # Sprint 01 — Skeleton and device server: the stack proven, HA serves a TRMNL image
-**Status:** in progress (opened 2026-11-08)
+**Status:** done (closed 2026-11-08)
 **Current ticket:** —
 **Last completed:** T-29 (`done` — commit `01612e5`)
 **Budget:** 81h estimated (band 80–120h)
@@ -46,5 +46,53 @@ Prove the resvg + Pillow stack and build the integration skeleton, so that a pap
 | T-29 | Performance budget | 2 | T-23, T-26 | B-074 | done | Landed in 01612e5 |
 
 ## Scope changes
+- None. Discovered work went to the backlog: B-081 (owner: relink the solar forecast), B-082 (rotate-image-token button).
 
 ## Retro
+**Shipped (29/29 tickets, 78 tests, ruff clean):**
+- **Phase 0 (stack proven, GO):**
+  - resvg-py 0.5.0: 36 ms per dense frame, 0 % grey.
+  - Pillow advance widths match resvg exactly for the TRMNL fonts and within 0.8 px for Inter.
+  - Bundled OFL fonts.
+  - SVG→1/2-bit PNG pipeline with the byte limit.
+  - Golden harness.
+  - Fixture capture.
+  - Mockup 01 prototype rendered at 6.3 kB.
+- **Phase 1 code (device server):**
+  - Hub entry plus screen subentries.
+  - Pairing window with a LAN-only pair button; keys in a Store.
+  - `/api/setup`, `/api/display`, `/api/log`.
+  - Token image URL (ETag, HEAD, BMP).
+  - ImageEntity.
+  - Debounced off-loop render scheduler, last good frame kept on error.
+  - 6 telemetry sensors plus a missed-check-in problem sensor.
+  - "now" and footer widgets, zero-config.
+  - Diagnostics with redaction.
+  - Security review.
+  - Performance budget.
+- **Demo:** the emulated device pairs, polls, downloads a 1-bit PNG and logs, all in the test
+  harness. The sensors follow its check-ins.
+
+**Not shipped:** nothing.
+
+**Estimate accuracy:** 81 h estimated for 29 tickets, all closed. No ticket needed splitting.
+Research tickets were the least predictable: T-03 and T-16 each surfaced a design-relevant HA
+behaviour.
+
+**Design changes made during the sprint (recorded where they live):**
+1. **Options and reload (T-16):** plain OptionsFlow plus one update listener instead of
+   `OptionsFlowWithReload`. The two cannot coexist, and only a listener sees a deleted
+   subentry. Recorded in CLAUDE.md.
+2. **Device keys (T-19):** stored in a Store, not the subentry. Writing the subentry would
+   reload the hub mid-pairing.
+3. **Schemas (T-15):** probatio when present, voluptuous as the fallback (`schema.py`).
+4. **Device is not an OG (T-04):** the owner's device is a Seeed XIAO 7.5" panel on firmware
+   1.8.10. B-064 (panel profiles) is raised to P2.
+5. **Pairing (T-28):** LAN-only, refused through Nabu Casa.
+
+**What to change:**
+- Pull B-081 (owner relinks the solar forecast) forward: phase 2's solar widget needs real
+  hourly data.
+- Production deploy (B-025) and the device switch (B-026) wait on the owner. Sprint 02 can
+  start without them.
+

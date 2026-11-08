@@ -228,7 +228,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 ## Phase 4 — Other panels (goal: a second panel type from the same layouts)
 
-- [ ] **B-064 · Panel profiles from the TRMNL model table** · 4h · prio P3 · src: N trmnl_protocol (61 models, scale_factor)
+- [ ] **B-064 · Panel profiles from the TRMNL model table** · 4h · prio P2 (raised in Sprint 01 retro: the owner's device is a Seeed XIAO, T-04) · src: N trmnl_protocol (61 models, scale_factor)
       Resolution, bit depth, rotation, byte limit and scale_factor; the profile is chosen from
       the `Model` header automatically, with a manual override.
 - [ ] **B-065 · 2-bit and 4-bit render paths** · 4h · prio P3 · needs: B-064 · src: R §engines
