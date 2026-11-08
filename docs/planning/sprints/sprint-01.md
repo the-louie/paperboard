@@ -1,7 +1,7 @@
 # Sprint 01 — Skeleton and device server: the stack proven, HA serves a TRMNL image
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-06 (`in-progress` — Fonts: bundle and load)
-**Last completed:** T-05 (`done` — commit `21df590`)
+**Current ticket:** T-07 (`todo` — Spike: text metrics, Pillow vs resvg)
+**Last completed:** T-06 (`done` — commit `da23d2e`)
 **Budget:** 81h estimated (band 80–120h)
 
 ## Goal
@@ -20,7 +20,7 @@ Prove the resvg + Pillow stack and build the integration skeleton, so that a pap
 | T-03 | Research: route collision and auth under /api | 2 | — | B-003 | done | Landed in f625b35 |
 | T-04 | Research: the owner's TRMNL OG facts | 1 | — | B-004 | done | Landed in f5c7d66 |
 | T-05 | Spike: resvg-py in an HA 2026.11 throwaway container | 3 | T-01 | B-005 | done | Landed in 21df590 |
-| T-06 | Fonts: bundle and load | 2 | T-01 | B-007 | in-progress | spec: backlog row B-007 (git show 13b3751:docs/planning/backlog.md) |
+| T-06 | Fonts: bundle and load | 2 | T-01 | B-007 | done | Landed in da23d2e |
 | T-07 | Spike: text metrics, Pillow vs resvg | 3 | T-06 | B-006 | todo | spec: backlog row B-006 (git show 13b3751:docs/planning/backlog.md) |
 | T-08 | Text measurement and wrap utility | 3 | T-07 | B-080 | todo | spec: backlog row B-080 (git show 13b3751:docs/planning/backlog.md) |
 | T-09 | Unit-format helpers | 2 | T-01 | B-079 | todo | spec: backlog row B-079 (git show 13b3751:docs/planning/backlog.md) |
