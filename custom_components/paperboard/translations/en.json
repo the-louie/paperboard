@@ -87,6 +87,26 @@
       "frame": {
         "name": "Screen image"
       }
+    },
+    "sensor": {
+      "battery": {
+        "name": "Battery"
+      },
+      "battery_voltage": {
+        "name": "Battery voltage"
+      },
+      "rssi": {
+        "name": "Wi-Fi signal"
+      },
+      "firmware": {
+        "name": "Firmware"
+      },
+      "last_checkin": {
+        "name": "Last check-in"
+      },
+      "render_error": {
+        "name": "Render error"
+      }
     }
   }
 }

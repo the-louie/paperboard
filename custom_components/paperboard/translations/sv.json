@@ -87,6 +87,26 @@
       "frame": {
         "name": "Skärmbild"
       }
+    },
+    "sensor": {
+      "battery": {
+        "name": "Batteri"
+      },
+      "battery_voltage": {
+        "name": "Batterispänning"
+      },
+      "rssi": {
+        "name": "Wi-Fi-signal"
+      },
+      "firmware": {
+        "name": "Firmware"
+      },
+      "last_checkin": {
+        "name": "Senaste anrop"
+      },
+      "render_error": {
+        "name": "Renderingsfel"
+      }
     }
   }
 }

@@ -91,16 +91,19 @@ class ScreenRenderer:
             frame = await self.hass.async_add_executor_job(self._draw, snap)
         except PipelineError as err:
             self.screen.render_failed(str(err))
+            async_dispatcher_send(self.hass, SIGNAL_FRAME.format(self.screen.subentry_id))
             _LOGGER.warning("Render of %s failed, keeping the last image: %s",
                             self.screen.name, err)
             return
         except Exception as err:  # a layout bug must not take the screen down
             self.screen.render_failed(f"{type(err).__name__}: {err}")
+            async_dispatcher_send(self.hass, SIGNAL_FRAME.format(self.screen.subentry_id))
             _LOGGER.exception("Layout error on %s, keeping the last image", self.screen.name)
             return
         self._last_hash = digest
         self.renders += 1
-        if self.screen.set_frame(frame):
+        had_error = self.screen.last_error is not None
+        if self.screen.set_frame(frame) or had_error:
             async_dispatcher_send(self.hass, SIGNAL_FRAME.format(self.screen.subentry_id))
 
     def _draw(self, snap: Snapshot):  # runs in the executor
