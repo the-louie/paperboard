@@ -55,10 +55,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-022 · Missed-check-in problem sensor**~~ — CLOSED 2026-11-08 (Sprint 01 T-25): see commit "T-25: Missed-check-in problem sensor"
 - ~~**B-023 · Widgets: "now" block and status footer**~~ — CLOSED 2026-11-08 (Sprint 01 T-26): see commit "T-26: Widgets: "now" block and status footer"
 - ~~**B-024 · Diagnostics and redaction**~~ — CLOSED 2026-11-08 (Sprint 01 T-27): see commit "T-27: Diagnostics and redaction"
-- [ ] **B-025 · decision: deploy to production HA (ha-host)** · 2h · prio P1 · needs: B-015, B-018, B-020, B-021, B-023 · src: CLAUDE.md working rules
-      Copying to `/docker/hass/homeassistant/custom_components/` and restarting HA needs the
-      owner's OK. Claude prepares the exact commands and a rollback, then verifies with the
-      emulated client against production.
+- ~~**B-025 · decision: deploy to production HA (ha-host)**~~ — CLOSED 2026-11-08: owner said "deploy paperboard". Copied to ha-host, HA restarted (146 s and 153 s), hub entry `01M6XZTM…`, roles bound, screen "Hallen" on schedule `/config/paperboard/hallen.yaml`. The live render found 3 bugs, fixed in 84d907f and e3c630c.
 - [ ] **B-026 · decision: owner points the OG at HA** · 1h · prio P1 · needs: B-025 · src: V phase 1
       Done on the device or in the firmware portal (LAN URL, not Nabu Casa). byos-host's
       `trmnl-byos` stays as the fallback. Claude verifies the check-ins and telemetry.
@@ -103,8 +100,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-059 · Layout 04 Instrument (bar-chart parts only)**~~ — CLOSED 2026-11-08 (Sprint 03 T-14): see commit "T-14: Layout 04 Instrument (bar-chart parts only)"
 - ~~**B-060 · Schedule: time-of-day layouts**~~ — CLOSED 2026-11-08 (Sprint 03 T-06): see commit "T-06: Schedule: time-of-day layouts"
 - ~~**B-061 · Night sleep and refresh policy**~~ — CLOSED 2026-11-08 (Sprint 03 T-07): see commit "T-07: Night sleep and refresh policy"
-- [ ] **B-062 · decision: which layout when** · 1h · prio P2 · needs: B-060 · src: V
-      The owner picks the schedule.
+- ~~**B-062 · decision: which layout when**~~ — CLOSED 2026-11-08: owner accepted: Tavlan 06:30–08:00 on weekdays, Tidslinjen otherwise, 23:00–06:00 waking hourly (`hallen.yaml` on ha-host).
 - [ ] **B-063 · decision: decommission byos-host trmnl-byos and the screenshot cron** · 1h · prio P3 · needs: B-026, B-062 · src: V phase 3
       After one stable week. Claude prepares the steps, and the owner OKs them.
 
@@ -149,4 +145,8 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       overlaps the numeral and rows sit too tight (golden `tidslinjen_trmnl_x`). Route every
       widget offset through `theme.px()` and line heights through the type scale; verify with
       the TRMNL X golden of every layout.
-
+- [ ] **B-088 · First render after an HA start is 2–3.5 s** · 2h · prio P3 · src: B-025 live deploy
+      ha-host logged "Rendering Hallen took 2069 ms" and "3478 ms" (budget 500 ms), once per
+      restart. Warm renders are not logged. Find out whether this is cold resvg/font setup or
+      HA's busy start-up executor. Then warm up at setup, or skip the budget warning on the
+      first render. Goal: no warning per restart (O3).
