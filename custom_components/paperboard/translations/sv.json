@@ -28,5 +28,53 @@
         }
       }
     }
+  },
+  "config_subentries": {
+    "screen": {
+      "initiate_flow": {
+        "user": "Lägg till skärm"
+      },
+      "entry_type": "Skärm",
+      "step": {
+        "user": {
+          "title": "Skärm",
+          "data": {
+            "name": "Namn",
+            "profile": "Panel",
+            "layout": "Layout",
+            "refresh_rate": "Uppdateringsintervall"
+          },
+          "data_description": {
+            "layout": "Namnet på en layoutfil i /config/paperboard/ eller en medföljande layout."
+          }
+        },
+        "reconfigure": {
+          "title": "Skärm",
+          "data": {
+            "name": "Namn",
+            "profile": "Panel",
+            "layout": "Layout",
+            "refresh_rate": "Uppdateringsintervall"
+          },
+          "data_description": {
+            "layout": "Namnet på en layoutfil i /config/paperboard/ eller en medföljande layout."
+          }
+        }
+      },
+      "error": {
+        "name_required": "Ett namn krävs."
+      },
+      "abort": {
+        "reconfigure_successful": "Skärmen uppdaterad."
+      }
+    }
+  },
+  "selector": {
+    "profile": {
+      "options": {
+        "800x480_1bit": "800×480, 1-bit (TRMNL OG, Seeed XIAO 7,5\")",
+        "800x480_2bit": "800×480, 2-bit grått (firmware ≥ 1.6)"
+      }
+    }
   }
 }

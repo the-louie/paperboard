@@ -28,5 +28,53 @@
         }
       }
     }
+  },
+  "config_subentries": {
+    "screen": {
+      "initiate_flow": {
+        "user": "Add screen"
+      },
+      "entry_type": "Screen",
+      "step": {
+        "user": {
+          "title": "Screen",
+          "data": {
+            "name": "Name",
+            "profile": "Panel",
+            "layout": "Layout",
+            "refresh_rate": "Refresh interval"
+          },
+          "data_description": {
+            "layout": "Name of a layout file in /config/paperboard/ or a bundled layout."
+          }
+        },
+        "reconfigure": {
+          "title": "Screen",
+          "data": {
+            "name": "Name",
+            "profile": "Panel",
+            "layout": "Layout",
+            "refresh_rate": "Refresh interval"
+          },
+          "data_description": {
+            "layout": "Name of a layout file in /config/paperboard/ or a bundled layout."
+          }
+        }
+      },
+      "error": {
+        "name_required": "A name is required."
+      },
+      "abort": {
+        "reconfigure_successful": "Screen updated."
+      }
+    }
+  },
+  "selector": {
+    "profile": {
+      "options": {
+        "800x480_1bit": "800×480, 1-bit (TRMNL OG, Seeed XIAO 7.5\")",
+        "800x480_2bit": "800×480, 2-bit grey (firmware ≥ 1.6)"
+      }
+    }
   }
 }
