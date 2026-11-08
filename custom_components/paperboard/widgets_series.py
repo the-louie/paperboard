@@ -160,8 +160,12 @@ def night_shading(svg: Svg, snap: Snapshot, theme: Theme, axis: TimeAxis, top: f
     for a, b in nights(snap):
         if axis.contains(a):
             text = f"{'sol ned' if lang == 'sv' else 'sunset'} {a.astimezone(tz):%H:%M}"
-            svg.rect(axis.x(a) + 1, top + 1, 74, 14, theme.paper)
-            svg.text(axis.x(a) + 4, top + 12, text, style)
+            if axis.x(a) + 76 <= axis.x1:
+                svg.rect(axis.x(a) + 1, top + 1, 74, 14, theme.paper)
+                svg.text(axis.x(a) + 4, top + 12, text, style)
+            else:  # too close to the right edge: label on the day side, as for sunrise
+                svg.rect(axis.x(a) - 76, top + 1, 74, 14, theme.paper)
+                svg.text(axis.x(a) - 3, top + 12, text, style, "end")
         if axis.contains(b):
             text = f"{'upp' if lang == 'sv' else 'sunrise'} {b.astimezone(tz):%H:%M}"
             svg.rect(axis.x(b) - 72, top + 1, 70, 14, theme.paper)

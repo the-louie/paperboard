@@ -94,8 +94,13 @@ class PriceProvider:
             if entry is not None and entry.platform == "nordpool" and entry.config_entry_id:
                 self._core_entry = entry.config_entry_id
 
+    def _has_attr_prices(self) -> bool:
+        """HACS nordpool shares core's platform name but carries its prices in attributes."""
+        state = self.hass.states.get(self.entity) if self.entity else None
+        return state is not None and "raw_today" in state.attributes
+
     def series(self) -> PriceSeries:
-        if self._core_entry:
+        if self._core_entry and not self._has_attr_prices():
             return self._service_series or PriceSeries()
         state = self.hass.states.get(self.entity) if self.entity else None
         if state is None:
@@ -104,7 +109,7 @@ class PriceProvider:
                           dt_util.now())
 
     async def async_refresh(self) -> None:
-        if not self._core_entry:
+        if not self._core_entry or self._has_attr_prices():
             return
         today = dt_util.now().date()
         merged: dict[str, list[dict[str, Any]]] = {}

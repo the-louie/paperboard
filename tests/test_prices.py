@@ -91,3 +91,23 @@ async def test_core_nordpool_provider(hass) -> None:
     series = provider.series()
     assert len(calls) == 2 and len(series.points) == 2
     assert series.points[0].value == 2.0 and series.unit == "SEK/kWh"
+
+
+async def test_hacs_nordpool_with_config_entry_reads_attributes(hass) -> None:
+    """The owner's HACS nordpool: platform "nordpool" with a config entry, prices in
+    raw_today. Found live on 2026-11-08: it was taken for core and drew no price bars."""
+    from homeassistant.helpers import entity_registry as er
+    from pytest_homeassistant.common import MockConfigEntry
+
+    from custom_components.paperboard.data import PriceProvider
+
+    np_entry = MockConfigEntry(domain="nordpool", data={})
+    np_entry.add_to_hass(hass)
+    er.async_get(hass).async_get_or_create("sensor", "nordpool", "hacs_se3",
+                                           config_entry=np_entry,
+                                           suggested_object_id="hacs_se3")
+    owner = _owner_state()
+    hass.states.async_set("sensor.hacs_se3", owner["state"], owner["attributes"])
+    provider = PriceProvider(hass, "sensor.hacs_se3")
+    await provider.async_refresh()  # no core service registered: must not be needed
+    assert len(provider.series().points) == 96
