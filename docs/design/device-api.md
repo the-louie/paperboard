@@ -101,9 +101,14 @@ Sources: research notes (firmware `5246feb`, 1.8.19) and the owner's working trm
    The window then closes.
 3. **Setup outside the window:** `{"status": 404, "message": "Pairing is closed. Press
    Pair on the screen in Home Assistant."}` with HTTP 200. The firmware treats it as a failed
-   setup and retries later, so a device can be paired *after* it starts polling. A known MAC
-   calling setup again (after a factory reset) also needs the window. Re-issuing its key
-   without the window would hand it to anyone who spoofs the MAC.
+   setup and retries later, so a device can be paired *after* it starts polling.
+4. **Known MAC, no window (B-094, owner 2026-11-08):** a MAC already bound to a screen that
+   calls setup again (factory reset, lost key) is re-paired to that same screen without the
+   window, LAN-only. It gets a **new** key; the old key stops working. The owner chose this
+   after a button reset wiped the hall panel: re-pairing must not need a button press in HA.
+   Trade-off: a LAN device spoofing a paired MAC gets a key for that screen's image and
+   kicks the real panel off (it then re-pairs, and the two take turns). Accepted: it needs
+   LAN access plus the MAC, and yields only the dashboard image.
 4. **`/api/display` with a missing, unknown or wrong `Access-Token` for that `ID`:** HTTP 200
    `{"status": 500, "message": "unknown device, re-running setup"}`, **without**
    `reset_firmware`. The device then re-runs setup, which works only inside a window. This is
@@ -161,3 +166,4 @@ service do.
   - A hostile LAN device inside an open pairing window: it can take the pairing, and the
     owner sees the wrong friendly ID on the panel. The window is 5 minutes, single use, and
     opened by an admin action.
+  - A hostile LAN device spoofing an already-paired MAC: see setup case 4 (B-094).

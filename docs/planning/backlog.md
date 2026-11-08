@@ -164,6 +164,11 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       A unit test cannot catch this: the `hass` test fixture never runs HA's process exit.
       Also during the outage the old code answered `/api/display` with 500, which unpairs the
       panel; 8fc7be2 now answers 202.
+- [x] **B-094 · A known panel re-pairs without the window** · 1h · prio P1 · src: owner 2026-11-08 19:40 · done 2026-11-08
+      Owner: "when i tried to reset (reboot) it factory reset, i do not like this process".
+      `/api/setup` from a MAC the hub already paired, outside a window, re-binds it to its
+      own screen with a fresh key (LAN-only). Trade-off in device-api.md setup case 4.
+      Tests: test_setup_view.py (2 new).
 - [ ] **B-093 · Remember the last check-in across restarts** · 2h · prio P1 · src: live 2026-11-08 19:14
       `last_checkin` lives only in memory. After a restart it is None, and
       `binary_sensor.<screen>_missed_checkin` stays **off** forever if the device never comes
