@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-11 (`todo` — Layout 06 TRMNL).
+**Current ticket:** Sprint 03 T-11 (`in-progress` — Layout 06 TRMNL).
 **Last completed:** Sprint 03 T-10 (commit `2ecfa56`).
 
 ## Sprints
