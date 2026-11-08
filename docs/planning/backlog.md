@@ -3,6 +3,9 @@
 Next ID: **B-088**
 
 **Sources:**
+      Measured 18:05 on ha-host: a **warm** render takes **1,149 ms** (the max was 3,674 ms
+      just after a restart), against ~80 ms on dev-host. That matters more now: a button
+      press waits for one render before the panel gets its answer (B-089).
 - R = `docs/research/HACS e-ink dashboard renderer.md` (deep research 2026-11-08), § = section.
 - N = research notes in `<the maintainer's HA repo> e-ink dashboard renderer/`.
 - V = vault page `servers/trmnl-dashboard/trmnl-dashboard.md` (owner feedback per mockup, design rules).
