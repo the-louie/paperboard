@@ -78,7 +78,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-037 · Research: solar forecast source**~~ — CLOSED 2026-11-08 (Sprint 02 T-11): see commit "T-11: Research: solar forecast source"
 - ~~**B-038 · Solar forecast adapter**~~ — CLOSED 2026-11-08 (Sprint 02 T-12): see commit "T-12: Solar forecast adapter"
 - ~~**B-039 · TimeAxis object**~~ — CLOSED 2026-11-08 (Sprint 02 T-13): see commit "T-13: TimeAxis object"
-- → Sprint 02 T-15 (B-040 · Widget: price chart)
+- ~~**B-040 · Widget: price chart**~~ — CLOSED 2026-11-08 (Sprint 02 T-15): see commit "T-15: Widget: price chart"
 - → Sprint 02 T-16 (B-041 · Widget: solar forecast chart)
 - → Sprint 02 T-18 (B-042 · Widget: hourly table (Tavlan))
 - → Sprint 02 T-17 (B-043 · Widget: daily forecast with warning inversion)
