@@ -16,6 +16,7 @@ from .style import Theme
 from .svg import Svg
 from .text import Measurer
 from .widgets import CONDITION, LABELS, Rect, _ms
+from .widgets_agenda import agenda
 from .widgets_flow import energy_flow
 from .widgets_series import axis_labels, night_shading, now_marker, price_chart, solar_chart
 from .widgets_sky import sun_moon
@@ -255,3 +256,8 @@ def _footer(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
     if left:
         svg.text(x, base, m.truncate(left, small, r.x + r.w - rw - 12 - x), small)
     return True
+
+
+@widget("agenda")
+def _agenda(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
+    return agenda(svg, r, snap, m, t, int(o.get("days", 7)), bool(o.get("title", True)))

@@ -1,0 +1,75 @@
+"""Calendar agenda (mockup 07): events grouped per day, truncated by measured width."""
+
+from __future__ import annotations
+
+import datetime as dt
+
+from .layouts import Snapshot
+from .style import Theme
+from .svg import Svg
+from .text import Measurer
+from .widgets import Rect
+
+DAY = {"sv": ["mån", "tis", "ons", "tor", "fre", "lör", "sön"],
+       "en": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+WORDS = {"sv": {"today": "Idag", "tomorrow": "Imorgon", "none": "Inga händelser",
+                "title": "KALENDER", "all_day": "heldag"},
+         "en": {"today": "Today", "tomorrow": "Tomorrow", "none": "No events",
+                "title": "CALENDAR", "all_day": "all day"}}
+
+
+def _start(ev: dict, tz: dt.tzinfo) -> dt.datetime | None:
+    try:
+        raw = str(ev["start"])
+        if len(raw) == 10:
+            return dt.datetime.fromisoformat(raw).replace(tzinfo=tz)
+        return dt.datetime.fromisoformat(raw).astimezone(tz)
+    except (KeyError, ValueError, TypeError):
+        return None
+
+
+def agenda(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme, days: int = 7,
+           title: bool = True) -> bool:
+    cals = [c for c in (snap.roles.get("calendars") or []) if isinstance(c, str)]
+    if not cals:
+        return False
+    tz = snap.now.tzinfo
+    words = WORDS.get(snap.lang, WORDS["en"])
+    end = snap.now + dt.timedelta(days=days)
+    items = []
+    for cal in cals:
+        for ev in snap.events.get(cal, []):
+            if not isinstance(ev, dict) or (start := _start(ev, tz)) is None:
+                continue
+            if start.date() >= snap.now.date() and start < end:
+                items.append((start, bool(ev.get("all_day")), str(ev.get("summary", ""))))
+    items.sort(key=lambda i: (i[0].date(), not i[1], i[0]))
+    y = r.y
+    head, body, bold = theme.text("xs", bold=True), theme.text("s"), theme.text("s", bold=True)
+    if title:
+        svg.text(r.x, y + 12, words["title"], head)
+        y += 20
+    if not items:
+        svg.text(r.x, y + 14, words["none"], body)
+        return True
+    current = None
+    for start, all_day, summary in items:
+        day = start.date()
+        if day != current:
+            if y + 34 > r.y + r.h:
+                break
+            current = day
+            delta = (day - snap.now.date()).days
+            label = words["today"] if delta == 0 else words["tomorrow"] if delta == 1 else \
+                f"{DAY[snap.lang][day.weekday()]} {day.day}/{day.month}"
+            svg.text(r.x, y + 13, label, head)
+            svg.line(r.x, y + 16, r.x + r.w, y + 16, 1)
+            y += 20
+        if y + 18 > r.y + r.h:
+            break
+        when = words["all_day"] if all_day else f"{start:%H:%M}"
+        tw = measure.width("00:00 ", bold)
+        svg.text(r.x, y + 13, when, bold if not all_day else theme.text("xs"))
+        svg.text(r.x + tw, y + 13, measure.truncate(summary, body, r.w - tw), body)
+        y += 18
+    return True

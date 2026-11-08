@@ -225,3 +225,46 @@ class SolarProvider:
 
     async def _tick(self, _now: dt.datetime) -> None:
         await self.async_refresh()
+
+
+class CalendarCache:
+    """calendar.get_events for the bound calendars, next 7 days, plain dicts per calendar."""
+
+    def __init__(self, hass: HomeAssistant, calendars: list[str] | None) -> None:
+        self.hass = hass
+        self.calendars = [c for c in (calendars or []) if isinstance(c, str)]
+        self.events: dict[str, list[dict[str, Any]]] = {}
+
+    async def async_refresh(self) -> None:
+        if not self.calendars:
+            return
+        try:
+            resp = await self.hass.services.async_call(
+                "calendar", "get_events",
+                {"entity_id": self.calendars, "duration": {"days": 7}},
+                blocking=True, return_response=True)
+        except (HomeAssistantError, ValueError) as err:
+            _LOGGER.debug("No calendar events: %s", err)
+            return
+        out: dict[str, list[dict[str, Any]]] = {}
+        for cal, data in (resp or {}).items():
+            rows = []
+            for ev in (data or {}).get("events", []) or []:
+                start = str(ev.get("start", ""))
+                all_day = len(start) == 10  # 'YYYY-MM-DD' = all-day event
+                rows.append({"start": start, "end": str(ev.get("end", "")),
+                             "summary": str(ev.get("summary", "")), "all_day": all_day,
+                             "date": start[:10]})
+            out[cal] = rows
+        self.events = out
+
+    @callback
+    def async_start(self) -> callback:
+        if not self.calendars:
+            return lambda: None
+        unsub = async_track_time_interval(self.hass, self._tick, dt.timedelta(minutes=15))
+        self.hass.async_create_background_task(self.async_refresh(), "paperboard calendars")
+        return unsub
+
+    async def _tick(self, _now: dt.datetime) -> None:
+        await self.async_refresh()

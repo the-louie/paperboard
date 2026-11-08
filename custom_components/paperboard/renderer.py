@@ -126,14 +126,17 @@ class ScreenRenderer:
                         if self.hub is not None and self.hub.prices is not None else None,
                         solar=self.hub.solar.snapshot()
                         if self.hub is not None and self.hub.solar is not None else None,
-                        sun=sun_times(self.hass, dt_util.now().date()))
+                        sun=sun_times(self.hass, dt_util.now().date()),
+                        events={k: list(v) for k, v in self.hub.calendars.events.items()}
+                        if self.hub is not None and self.hub.calendars is not None else {})
 
     def _hash(self, snap: Snapshot) -> str:
         bucket = int(snap.now.timestamp()) // self.layout.clock_resolution
         blob = json.dumps([bucket, snap.screen_name, snap.states, snap.stale_since,
                            snap.battery, snap.forecasts,
                            snap.prices.points if snap.prices else None,
-                           (snap.solar.hours, snap.solar.today_kwh) if snap.solar else None],
+                           (snap.solar.hours, snap.solar.today_kwh) if snap.solar else None,
+                           snap.events],
                           sort_keys=True, default=str)
         return hashlib.sha256(blob.encode()).hexdigest()
 

@@ -78,6 +78,7 @@ class HubRuntime:
     forecasts: Any = None  # data.ForecastCache
     prices: Any = None  # data.PriceProvider
     solar: Any = None  # data.SolarProvider
+    calendars: Any = None  # data.CalendarCache
     pairing_screen: str | None = None
     last_rejected: dict[str, str] | None = None
     pairing_until: float = 0.0

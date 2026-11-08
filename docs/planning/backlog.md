@@ -90,7 +90,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 - ~~**B-047 · Widget: energy flow**~~ — CLOSED 2026-11-08 (Sprint 02 T-21): see commit "T-21: Widget: energy flow"
 - ~~**B-048 · Widget: room list**~~ — CLOSED 2026-11-08 (Sprint 02 T-20): see commit "T-20: Widget: room list"
-- → Sprint 03 T-01 (B-049 · Widget: calendar agenda)
+- ~~**B-049 · Widget: calendar agenda**~~ — CLOSED 2026-11-08 (Sprint 03 T-01): see commit "T-01: Widget: calendar agenda"
 - ~~**B-050 · Widget: sun and moon**~~ — CLOSED 2026-11-08 (Sprint 02 T-22): see commit "T-22: Widget: sun and moon"
 - ~~**B-051 · Widget: stat / key-value**~~ — CLOSED 2026-11-08 (Sprint 02 T-19): see commit "T-19: Widget: stat / key-value"
 - → Sprint 03 T-02 (B-052 · Widget: headline/prose text slot)

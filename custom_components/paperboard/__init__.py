@@ -27,7 +27,7 @@ from .const import (
     PROFILE_AUTO,
     SUBENTRY_SCREEN,
 )
-from .data import ForecastCache, PriceProvider, SolarProvider
+from .data import CalendarCache, ForecastCache, PriceProvider, SolarProvider
 from .devices import DeviceStore
 from .fonts import load_fonts
 from .layout_watch import SIGNAL_LAYOUTS, LayoutWatcher
@@ -78,6 +78,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     entry.async_on_unload(hub.prices.async_start())
     hub.solar = SolarProvider(hass, hub.roles.get("solar_forecast_today"))
     entry.async_on_unload(hub.solar.async_start())
+    hub.calendars = CalendarCache(hass, hub.roles.get("calendars"))
+    entry.async_on_unload(hub.calendars.async_start())
     registry = dr.async_get(hass)
     wanted: set[str] = set()
     for subentry in list(entry.subentries.values()):
