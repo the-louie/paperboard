@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-06 (`todo` — Fonts: bundle and load).
+**Current ticket:** Sprint 01 T-06 (`in-progress` — Fonts: bundle and load).
 **Last completed:** Sprint 01 T-05 (commit `21df590`).
 
 ## Sprints
