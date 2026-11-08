@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-21 (`todo` — CI workflow).
+**Current ticket:** Sprint 03 T-21 (`in-progress` — CI workflow).
 **Last completed:** Sprint 03 T-20 (commit `34f0de9`).
 
 ## Sprints
