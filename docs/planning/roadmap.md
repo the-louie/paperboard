@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-26 (`in-progress` — 2-bit and 4-bit render paths).
-**Last completed:** Sprint 02 T-25 (commit `60c4770`).
+**Current ticket:** Sprint 02 —.
+**Last completed:** Sprint 02 T-26 (commit `43d2193`).
 
 ## Sprints
 | Sprint | Goal | Status |
