@@ -1,0 +1,29 @@
+# 03 Bento - rounded tiles with a black hero, with the owner's changes from 2026-11-08:
+# no "mot igår" (more room under the big temperature), expected solar today under ENERGI.
+name: bento
+title: Bento
+grid:
+  columns: [200, fr, fr, 170]
+  rows: [116, 114, 116, fr]
+  gap: 6
+  margin: 8
+  padding: [6, 10]
+  areas:
+    - hero  hour  hour  tom
+    - hero  el    en    sky
+    - rooms rooms cal   cal
+    - days  days  days  days
+  frames: {hero: inverted, hour: rounded, tom: rounded, el: rounded, en: rounded,
+           sky: rounded, rooms: rounded, cal: rounded, days: rounded}
+widgets:
+  - {type: now, area: hero, options: {rows: [indoor, feels_like, humidity, rain_today]}}
+  - {type: hourly_strip, area: hour, options: {hours: 12}}
+  - {type: tomorrow, area: tom, options: {hour: 7}}
+  - type: timeline
+    area: el
+    options: {hours: 14, series: [price], cheapest_hours: 2, night: none, tick_every: 4}
+  - {type: energy, area: en, options: {rows: [solar_expected_today, solar_now, house_now, battery]}}
+  - {type: sun_moon, area: sky, options: {show: sun}}
+  - {type: rooms, area: rooms, options: {title: INNE, columns: 2}}
+  - {type: agenda, area: cal, options: {days: 5}}
+  - {type: daily, area: days, options: {days: 6}}

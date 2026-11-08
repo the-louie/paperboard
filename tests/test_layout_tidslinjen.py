@@ -34,7 +34,7 @@ OWNER_ROLES = {
               "sensor.hallen_temperatur", "sensor.v1_badrum_temphumid_temp",
               "sensor.v1_sovrum_a_temperatur",
               "sensor.v2_sovrum_b_temperatur"],
-    "calendars": ["calendar.holidays_in_sweden"],
+    "calendars": ["calendar.holidays_in_sweden", "calendar.family"],
 }
 
 
@@ -53,12 +53,19 @@ def owner_snapshot(**kw) -> Snapshot:
                      "attributes": {"next_setting": "2026-11-08T15:03:20+00:00",
                                     "next_rising": "2026-11-09T06:31:20+00:00"}}
     events = {"calendar.holidays_in_sweden": [
-        {"all_day": True, "date": "2026-11-08", "summary": "Father's Day"}]}
+        {"all_day": True, "date": "2026-11-08", "start": "2026-11-08", "summary": "Father's Day"}],
+        "calendar.family": [{"all_day": False, "start": "2026-11-09T10:30:00+01:00",
+                             "summary": "Jobb"},
+                            {"all_day": False, "start": "2026-11-10T09:00:00+01:00",
+                             "summary": "Jobb"}]}
     return Snapshot(now=NOW, width=800, height=480, screen_name="Hallen", states=st,
                     roles=OWNER_ROLES, battery=100,
                     forecasts=FIXTURE["weather_forecasts"]["weather.forecast_home"],
                     prices=PriceSnapshot.of(from_state(st[OWNER_ROLES["price"]], NOW)),
-                    solar=_solar_test_curve(), events=events, **kw)
+                    solar=_solar_test_curve(), events=events,
+                    sun={"rise": "2026-11-08T07:31:20+01:00", "set": "2026-11-08T16:03:20+01:00",
+                         "rise_y": "2026-11-07T07:29:00+01:00",
+                         "set_y": "2026-11-07T16:05:40+01:00"}, **kw)
 
 
 def test_tidslinjen_owner_1bit() -> None:

@@ -156,3 +156,55 @@ def hourly_table(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Th
                              row_h - 12, ink)
         svg.line(r.x, top + row_h, r.x + r.w, top + row_h, 1)
     return True
+
+
+def hourly_strip(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
+                 hours: int = 12, title: str | None = None) -> bool:
+    """Next N hours as columns: temperature, icon, hour - with a temperature line above."""
+    now_hour = snap.now.replace(minute=0, second=0, microsecond=0)
+    items = [i for i in snap.forecasts.get("hourly", [])
+             if (w := _when(i, snap)) is not None and w >= now_hour][:hours]
+    temps = [fmt.to_float(i.get("temperature")) for i in items]
+    if not items:
+        return False
+    y = r.y
+    if title:
+        svg.text(r.x, y + 12, title, theme.text("xs", bold=True))
+        y += 16
+    cw = r.w / len(items)
+    known = [t for t in temps if t is not None]
+    if len(known) >= 2:
+        lo, hi = min(known), max(known)
+        span = (hi - lo) or 1
+        pts = [(r.x + (i + 0.5) * cw, y + 4 + 18 * (1 - (t - lo) / span))
+               for i, t in enumerate(temps) if t is not None]
+        svg.path("M" + " L".join(f"{x:.1f},{yy:.1f}" for x, yy in pts), width=2.5)
+        y += 26
+    icon = 20 if r.h - (y - r.y) < 70 else 24
+    for i, item in enumerate(items):
+        cx = r.x + (i + 0.5) * cw
+        svg.text(cx, y + 14, fmt.with_unit(temps[i], "°", 0, snap.lang),
+                 theme.text("s", bold=True), "middle")
+        weather_icon(svg, item.get("condition"), cx - icon / 2, y + 19, icon)
+        svg.text(cx, y + 19 + icon + 13, f"{_when(item, snap):%H}", theme.text("xs"), "middle")
+    return True
+
+
+TOMORROW = {"sv": "IMORGON {hh}", "en": "TOMORROW {hh}"}
+
+
+def tomorrow_at(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
+                hour: int = 7) -> bool:
+    """Tomorrow at HH from the hourly forecast: the 'what do the kids wear' number."""
+    target = (snap.now + dt.timedelta(days=1)).replace(hour=hour, minute=0, second=0,
+                                                       microsecond=0)
+    item = next((i for i in snap.forecasts.get("hourly", []) if _when(i, snap) == target), None)
+    if item is None:
+        return False
+    svg.text(r.x, r.y + 12, TOMORROW.get(snap.lang, TOMORROW["en"]).format(hh=f"{hour:02d}"),
+             theme.text("xs", bold=True))
+    big = theme.numeral("xl")
+    svg.text(r.x - 2, r.y + 18 + big.size * 0.9,
+             fmt.with_unit(item.get("temperature"), "°", 1, snap.lang), big)
+    weather_icon(svg, item.get("condition"), r.x + r.w - 32, r.y + 18, 32)
+    return True

@@ -12,6 +12,15 @@ from .widgets import Rect
 
 DAY = {"sv": ["mån", "tis", "ons", "tor", "fre", "lör", "sön"],
        "en": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+HOLIDAY_SV = {"Father's Day": "Fars dag", "Mother's Day": "Mors dag",
+              "Christmas Eve": "Julafton", "Christmas Day": "Juldagen",
+              "New Year's Eve": "Nyårsafton", "New Year's Day": "Nyårsdagen",
+              "Midsummer Eve": "Midsommarafton", "Midsummer Day": "Midsommardagen",
+              "Easter Sunday": "Påskdagen", "Good Friday": "Långfredagen",
+              "National Day of Sweden": "Sveriges nationaldag",
+              "All Saints' Day": "Alla helgons dag"}
+
+
 WORDS = {"sv": {"today": "Idag", "tomorrow": "Imorgon", "none": "Inga händelser",
                 "title": "KALENDER", "all_day": "heldag"},
          "en": {"today": "Today", "tomorrow": "Tomorrow", "none": "No events",
@@ -42,7 +51,10 @@ def agenda(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme, d
             if not isinstance(ev, dict) or (start := _start(ev, tz)) is None:
                 continue
             if start.date() >= snap.now.date() and start < end:
-                items.append((start, bool(ev.get("all_day")), str(ev.get("summary", ""))))
+                summary = str(ev.get("summary", ""))
+                if snap.lang == "sv":
+                    summary = HOLIDAY_SV.get(summary, summary)
+                items.append((start, bool(ev.get("all_day")), summary))
     items.sort(key=lambda i: (i[0].date(), not i[1], i[0]))
     y = r.y
     head, body, bold = theme.text("xs", bold=True), theme.text("s"), theme.text("s", bold=True)

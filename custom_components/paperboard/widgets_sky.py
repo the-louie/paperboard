@@ -63,12 +63,17 @@ def _moon_glyph(svg: Svg, cx: float, cy: float, r: float, age: float) -> None:
     svg.path(d, fill="#000", stroke=None)
 
 
-def sun_moon(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme) -> bool:
+def sun_moon(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
+             show: str = "both") -> bool:
+    """show: both (side by side), sun or moon (narrow tiles)."""
     lang, tz = snap.lang, snap.now.tzinfo
     t = TEXT.get(lang, TEXT["en"])
     label, big, small = theme.text("xs", bold=True), theme.text("m", bold=True), theme.text("xs")
     half = r.w / 2
-    if snap.sun:
+    sun_ok = bool(snap.sun) and show in ("both", "sun")
+    if show == "sun" and not snap.sun:
+        return False
+    if sun_ok:
         rise, sset = (dt.datetime.fromisoformat(snap.sun[k]).astimezone(tz)
                       for k in ("rise", "set"))
         length = sset - rise
@@ -80,8 +85,10 @@ def sun_moon(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme)
         svg.text(r.x, r.y + 36, f"{rise:%H:%M}–{sset:%H:%M}", big)
         sign = "−" if delta < 0 else "+"
         svg.text(r.x, r.y + 54, f"{hours} h {mins:02d} min ({sign}{abs(delta)} min)", small)
+    if show == "sun":
+        return True
     age, lit = moon(snap.now)
-    mx = r.x + (half if snap.sun else 0)
+    mx = r.x + (half if sun_ok else 0)
     svg.text(mx, r.y + 12, t["moon"], label)
     _moon_glyph(svg, mx + 10, r.y + 29, 10, age)
     svg.text(mx + 26, r.y + 36, f"{round(lit * 100)} %", big)

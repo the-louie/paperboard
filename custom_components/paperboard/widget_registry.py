@@ -16,13 +16,13 @@ from .style import Theme
 from .svg import Svg
 from .text import Measurer
 from .widgets import CONDITION, LABELS, Rect, _ms
-from .widgets_agenda import agenda
+from .widgets_agenda import HOLIDAY_SV, agenda
 from .widgets_flow import energy_flow
 from .widgets_series import axis_labels, night_shading, now_marker, price_chart, solar_chart
 from .widgets_sky import sun_moon
 from .widgets_text import text_slot
 from .widgets_values import energy, kv_list, role_value, room_name, rooms, stat
-from .widgets_weather import _weather_attrs, daily, hourly_table
+from .widgets_weather import _weather_attrs, daily, hourly_strip, hourly_table, tomorrow_at
 
 WEEKDAY = {"sv": ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"],
            "en": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
@@ -30,13 +30,6 @@ MONTH = {"sv": ["januari", "februari", "mars", "april", "maj", "juni", "juli", "
                 "september", "oktober", "november", "december"],
          "en": ["January", "February", "March", "April", "May", "June", "July", "August",
                 "September", "October", "November", "December"]}
-HOLIDAY_SV = {"Father's Day": "Fars dag", "Mother's Day": "Mors dag",
-              "Christmas Eve": "Julafton", "Christmas Day": "Juldagen",
-              "New Year's Eve": "Nyårsafton", "New Year's Day": "Nyårsdagen",
-              "Midsummer Eve": "Midsommarafton", "Midsummer Day": "Midsommardagen",
-              "Easter Sunday": "Påskdagen", "Good Friday": "Långfredagen",
-              "National Day of Sweden": "Sveriges nationaldag",
-              "All Saints' Day": "Alla helgons dag"}
 
 
 def _flag(snap: Snapshot) -> str:
@@ -268,7 +261,7 @@ def _stat(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> 
 
 @widget("sun_moon")
 def _sky(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
-    return sun_moon(svg, r, snap, m, t)
+    return sun_moon(svg, r, snap, m, t, str(o.get("show", "both")))
 
 
 @widget("footer")
@@ -315,3 +308,13 @@ def _text(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> 
     return text_slot(svg, r, snap, m, t, o.get("template"), o.get("auto"),
                      str(o.get("size", "m")), bool(o.get("bold", True)),
                      int(o.get("max_lines", 3)))
+
+
+@widget("hourly_strip")
+def _strip(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
+    return hourly_strip(svg, r, snap, m, t, int(o.get("hours", 12)), o.get("title"))
+
+
+@widget("tomorrow")
+def _tomorrow(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
+    return tomorrow_at(svg, r, snap, m, t, int(o.get("hour", 7)))
