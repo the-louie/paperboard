@@ -179,12 +179,16 @@ class DisplayView(HomeAssistantView):
 
     async def get(self, request: web.Request) -> web.Response:
         hub = _hub(self.hass)
+        if hub is None:
+            # Not loaded (starting, or setup failed): never tell a paired device it is unknown,
+            # or it drops its key and needs pairing again. Ask it to come back in a minute.
+            return _json({"status": 202, "message": "Paperboard is not ready",
+                          "refresh_rate": 60})
         screen = _authenticated_screen(hub, request)
-        if hub is None or screen is None:
+        if screen is None:
             mac = request.headers.get("ID", "").strip().upper()
-            if hub is not None:
-                hub.last_rejected = {"mac": mac or "?", "ip": request.remote or "?",
-                                     "at": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
+            hub.last_rejected = {"mac": mac or "?", "ip": request.remote or "?",
+                                 "at": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
             # JSON status 500 without reset_firmware: the firmware drops its key and re-runs
             # setup (which only succeeds inside a pairing window). Never a full reset.
             return _json({"status": 500, "message": "Unknown device, re-running setup"})

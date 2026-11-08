@@ -68,9 +68,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     await hass.async_add_executor_job(profile_names)
     fonts = await hass.async_add_executor_job(load_fonts)
     if pipeline.USE_WORKER:  # start the render process now, not on the first frame (B-088)
-        hass.async_create_background_task(
-            hass.async_add_executor_job(WORKER.render, WARMUP_SVG, str(fonts.font_dir)),
-            "paperboard render worker warm-up")
+        # Fire and forget: async_add_executor_job returns a Future, not a coroutine.
+        hass.async_add_executor_job(WORKER.render, WARMUP_SVG, str(fonts.font_dir))
     watcher = LayoutWatcher(hass)
     await watcher.async_load()
     entry.async_on_unload(watcher.async_start())
