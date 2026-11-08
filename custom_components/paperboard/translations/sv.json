@@ -76,5 +76,12 @@
         "800x480_2bit": "800×480, 2-bit grått (firmware ≥ 1.6)"
       }
     }
+  },
+  "entity": {
+    "button": {
+      "pair": {
+        "name": "Para enhet"
+      }
+    }
   }
 }

@@ -110,6 +110,31 @@ def quantize_2bit(gray: Image.Image) -> list[bytes]:
     return rows
 
 
+def encode_bmp_1bit(png: bytes) -> bytes:
+    """Any frame PNG -> 1-bpp BMP3 for firmware that only takes BMP (the setup image).
+
+    Ported from the owner's trmnl-service: pixel offset 62, palette 0 = black, 1 = white,
+    bottom-up rows padded to 4 bytes; 800x480 gives exactly 48 062 bytes.
+    """
+    img = Image.open(io.BytesIO(png))
+    img.load()
+    bw = img.convert("L").point(lambda v: 255 if v >= 128 else 0).convert(
+        "1", dither=Image.Dither.NONE)
+    width, height = bw.size
+    row_bytes = (width + 7) // 8
+    stride = (row_bytes + 3) & ~3
+    packed = bw.tobytes()
+    rows = [packed[y * row_bytes : (y + 1) * row_bytes].ljust(stride, b"\x00")
+            for y in range(height)]
+    pixels = b"".join(reversed(rows))
+    palette = bytes([0, 0, 0, 0, 255, 255, 255, 0])
+    offset = 14 + 40 + len(palette)
+    file_header = struct.pack("<2sIHHI", b"BM", offset + len(pixels), 0, 0, offset)
+    info_header = struct.pack("<IiiHHIIiiII", 40, width, height, 1, 1, 0, len(pixels),
+                              2835, 2835, 2, 2)
+    return file_header + info_header + palette + pixels
+
+
 def render(svg: str, profile: PanelProfile, font_dir: Path) -> Frame:
     """The whole pipeline. Raises PipelineError; never returns a partial frame."""
     gray = rasterize(svg, profile, font_dir)

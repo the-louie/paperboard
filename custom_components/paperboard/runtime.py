@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass, field
 
-from .pipeline import Frame
+from .devices import DeviceStore
+from .pipeline import Frame, encode_bmp_1bit
+
+PAIRING_SECONDS = 300
 
 
 @dataclass
@@ -17,6 +21,16 @@ class ScreenRuntime:
     frame: Frame | None = None
     stale: bool = False  # True while the last render failed and an older frame is served
     last_error: str | None = None
+
+    _bmp: tuple[str, bytes] | None = None
+
+    def bmp(self) -> bytes | None:
+        """The current frame as a 1-bit BMP (setup image), cached per frame."""
+        if self.frame is None:
+            return None
+        if self._bmp is None or self._bmp[0] != self.frame.sha:
+            self._bmp = (self.frame.sha, encode_bmp_1bit(self.frame.png))
+        return self._bmp[1]
 
     def set_frame(self, frame: Frame) -> bool:
         """Store a new good frame; True when the image actually changed."""
@@ -31,4 +45,21 @@ class ScreenRuntime:
 
 @dataclass
 class HubRuntime:
+    devices: DeviceStore
     screens: dict[str, ScreenRuntime] = field(default_factory=dict)
+    base_url: str = ""
+    pairing_screen: str | None = None
+    pairing_until: float = 0.0
+
+    def open_pairing(self, screen_id: str, seconds: int = PAIRING_SECONDS) -> None:
+        """One window per hub; pressing again (or on another screen) restarts it."""
+        self.pairing_screen, self.pairing_until = screen_id, time.monotonic() + seconds
+
+    def pairing_target(self) -> str | None:
+        if self.pairing_screen and time.monotonic() < self.pairing_until:
+            return self.pairing_screen
+        self.pairing_screen = None
+        return None
+
+    def close_pairing(self) -> None:
+        self.pairing_screen, self.pairing_until = None, 0.0

@@ -76,5 +76,12 @@
         "800x480_2bit": "800×480, 2-bit grey (firmware ≥ 1.6)"
       }
     }
+  },
+  "entity": {
+    "button": {
+      "pair": {
+        "name": "Pair device"
+      }
+    }
   }
 }

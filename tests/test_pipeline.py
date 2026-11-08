@@ -63,3 +63,13 @@ def test_wrong_size_rejected() -> None:
 def test_garbage_rejected() -> None:
     with pytest.raises(PipelineError):
         render("<svg nonsense", PanelProfile(), FONT_DIR)
+
+
+def test_bmp_for_setup_is_48062_bytes() -> None:
+    from custom_components.paperboard.pipeline import encode_bmp_1bit
+
+    bmp = encode_bmp_1bit(render(SVG, PanelProfile(), FONT_DIR).png)
+    assert len(bmp) == 48_062
+    assert bmp[:2] == b"BM"
+    img = Image.open(io.BytesIO(bmp))
+    assert img.size == (800, 480)
