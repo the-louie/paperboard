@@ -188,6 +188,7 @@ class ScreenSubentryFlow(ConfigSubentryFlow):
             else:
                 data[CONF_IMAGE_TOKEN] = secrets.token_urlsafe(32)
                 return self.async_create_entry(title=data[CONF_NAME], data=data)
+        await self.hass.async_add_executor_job(profile_names)  # file read off the loop
         return self.async_show_form(step_id="user", errors=errors,
                                     data_schema=_screen_schema(user_input or {},
                                                                self._hub_refresh()))
@@ -202,6 +203,7 @@ class ScreenSubentryFlow(ConfigSubentryFlow):
                 return self.async_update_and_abort(self._get_entry(), subentry,
                                                    title=data[CONF_NAME],
                                                    data={**subentry.data, **data})
+        await self.hass.async_add_executor_job(profile_names)  # file read off the loop
         return self.async_show_form(step_id="reconfigure",
                                     data_schema=_screen_schema(dict(subentry.data),
                                                                self._hub_refresh()))

@@ -33,6 +33,7 @@ from .fonts import load_fonts
 from .layout_watch import SIGNAL_LAYOUTS, LayoutWatcher
 from .layouts import Layout, get_layout
 from .pipeline import PanelProfile
+from .profiles import names as profile_names
 from .profiles import resolve as resolve_profile
 from .renderer import ScreenRenderer
 from .role_watch import RoleWatcher
@@ -57,6 +58,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
         hass.http.register_view(LogView(hass))
         hass.data[_VIEWS_REGISTERED] = True
 
+    # Warm the model-registry cache off the loop: resolve() is called from the loop later.
+    await hass.async_add_executor_job(profile_names)
     fonts = await hass.async_add_executor_job(load_fonts)
     watcher = LayoutWatcher(hass)
     await watcher.async_load()
