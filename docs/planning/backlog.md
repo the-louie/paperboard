@@ -70,7 +70,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-029 · Layout loader and validation**~~ — CLOSED 2026-11-08 (Sprint 02 T-05): see commit "T-05: Layout loader and validation"
 - ~~**B-030 · Grid engine with reflow**~~ — CLOSED 2026-11-08 (Sprint 02 T-04): see commit "T-04: Grid engine with reflow"
 - ~~**B-031 · Type scale and style tokens**~~ — CLOSED 2026-11-08 (Sprint 02 T-03): see commit "T-03: Type scale and style tokens"
-- → Sprint 02 T-06 (B-032 · Roles: binding in config/options flow)
+- ~~**B-032 · Roles: binding in config/options flow**~~ — CLOSED 2026-11-08 (Sprint 02 T-06): see commit "T-06: Roles: binding in config/options flow"
 - → Sprint 02 T-07 (B-033 · Repairs for missing entities)
 - → Sprint 02 T-08 (B-034 · Data: weather forecasts)
 - → Sprint 02 T-09 (B-035 · Research: price sources)

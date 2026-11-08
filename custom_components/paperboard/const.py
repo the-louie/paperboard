@@ -30,3 +30,26 @@ DEFAULT_PROFILE = "800x480_1bit"
 SIGNAL_CHECKIN = "paperboard_checkin_{}"
 # Fired when a screen gets a new (different) frame; format with the screen id.
 SIGNAL_FRAME = "paperboard_frame_{}"
+
+CONF_ROLES = "roles"
+# Role -> entity selector filter. Every role is optional; layouts degrade without it.
+ROLE_FILTERS: dict[str, dict] = {
+    "weather": {"domain": "weather"},
+    "outdoor_temp": {"domain": "sensor", "device_class": "temperature"},
+    "indoor_temp": {"domain": "sensor", "device_class": "temperature"},
+    "outdoor_humidity": {"domain": "sensor", "device_class": "humidity"},
+    "rain_today": {"domain": "sensor"},
+    "price": {"domain": "sensor"},
+    "solar_forecast_today": {"domain": "sensor", "device_class": "energy"},
+    "solar_power": {"domain": "sensor", "device_class": "power"},
+    "grid_power": {"domain": "sensor", "device_class": "power"},
+    "house_power": {"domain": "sensor", "device_class": "power"},
+    "house_energy_today": {"domain": "sensor", "device_class": "energy"},
+    "battery_soc": {"domain": "sensor", "device_class": "battery"},
+    "battery_power": {"domain": "sensor", "device_class": "power"},
+    "sun": {"domain": "sun"},
+}
+LIST_ROLES: dict[str, dict] = {
+    "rooms": {"domain": "sensor", "device_class": "temperature"},
+    "calendars": {"domain": "calendar"},
+}

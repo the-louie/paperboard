@@ -16,6 +16,7 @@ from .const import (
     CONF_NAME,
     CONF_PROFILE,
     CONF_REFRESH_RATE,
+    CONF_ROLES,
     DEFAULT_PROFILE,
     DEFAULT_REFRESH_RATE,
     DOMAIN,
@@ -55,7 +56,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     store = DeviceStore(hass, entry.entry_id)
     await store.async_load()
     hub = HubRuntime(devices=store, base_url=entry.options.get(CONF_BASE_URL, ""),
-                     layouts=watcher)
+                     layouts=watcher, roles=dict(entry.options.get(CONF_ROLES, {})))
     registry = dr.async_get(hass)
     wanted: set[str] = set()
     for subentry in list(entry.subentries.values()):

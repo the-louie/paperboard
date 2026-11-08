@@ -16,6 +16,8 @@ from homeassistant.config_entries import (
 from homeassistant.core import callback
 from homeassistant.helpers.network import NoURLAvailableError, get_url
 from homeassistant.helpers.selector import (
+    EntitySelector,
+    EntitySelectorConfig,
     NumberSelector,
     NumberSelectorConfig,
     NumberSelectorMode,
@@ -34,13 +36,16 @@ from .const import (
     CONF_NAME,
     CONF_PROFILE,
     CONF_REFRESH_RATE,
+    CONF_ROLES,
     DEFAULT_LAYOUT,
     DEFAULT_PROFILE,
     DEFAULT_REFRESH_RATE,
     DOMAIN,
+    LIST_ROLES,
     MAX_REFRESH_RATE,
     MIN_REFRESH_RATE,
     PROFILES,
+    ROLE_FILTERS,
     SUBENTRY_SCREEN,
 )
 from .schema import vol
@@ -92,14 +97,49 @@ class PaperboardConfigFlow(ConfigFlow, domain=DOMAIN):
         return PaperboardOptionsFlow()
 
 
+def _roles_schema(current: dict[str, Any]) -> vol.Schema:
+    fields: dict[Any, Any] = {}
+    for role, flt in ROLE_FILTERS.items():
+        key = vol.Optional(role, description={"suggested_value": current.get(role)})
+        fields[key] = EntitySelector(EntitySelectorConfig(**flt))
+    for role, flt in LIST_ROLES.items():
+        key = vol.Optional(role, description={"suggested_value": current.get(role, [])})
+        fields[key] = EntitySelector(EntitySelectorConfig(**flt, multiple=True))
+    return vol.Schema(fields)
+
+
+def _clean_roles(user_input: dict[str, Any]) -> dict[str, Any]:
+    """Keep only bound roles; an unbound role is simply absent (never an error)."""
+    out: dict[str, Any] = {}
+    for role in ROLE_FILTERS:
+        if user_input.get(role):
+            out[role] = user_input[role]
+    for role in LIST_ROLES:
+        if user_input.get(role):
+            out[role] = list(user_input[role])
+    return out
+
+
 class PaperboardOptionsFlow(OptionsFlow):
-    """Edit hub defaults. The entry's update listener reloads it (see __init__.py)."""
+    """Hub defaults and the home's roles. The update listener reloads the entry."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        return self.async_show_menu(step_id="init", menu_options=["hub", "roles"])
+
+    async def async_step_hub(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         if user_input is not None:
-            return self.async_create_entry(data=_clean(user_input))
-        return self.async_show_form(step_id="init",
+            return self.async_create_entry(data={**self.config_entry.options,
+                                                 **_clean(user_input)})
+        return self.async_show_form(step_id="hub",
                                     data_schema=_schema(dict(self.config_entry.options)))
+
+    async def async_step_roles(self, user_input: dict[str, Any] | None = None
+                               ) -> ConfigFlowResult:
+        if user_input is not None:
+            return self.async_create_entry(data={**self.config_entry.options,
+                                                 CONF_ROLES: _clean_roles(user_input)})
+        current = dict(self.config_entry.options.get(CONF_ROLES, {}))
+        return self.async_show_form(step_id="roles", data_schema=_roles_schema(current))
 
 
 def _screen_schema(defaults: dict[str, Any], hub_refresh: int) -> vol.Schema:

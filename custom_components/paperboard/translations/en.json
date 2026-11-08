@@ -22,9 +22,38 @@
     "step": {
       "init": {
         "title": "Paperboard",
+        "menu_options": {
+          "hub": "Hub settings",
+          "roles": "Sensors and data (roles)"
+        }
+      },
+      "hub": {
+        "title": "Paperboard",
         "data": {
           "base_url": "Base URL devices use to reach Home Assistant",
           "refresh_rate": "Default refresh interval"
+        }
+      },
+      "roles": {
+        "title": "Roles",
+        "description": "Pick what each role means in this home. Leave a role empty if the home doesn't have it: layouts skip what is missing.",
+        "data": {
+          "weather": "Weather (forecast)",
+          "outdoor_temp": "Outdoor temperature",
+          "indoor_temp": "Second temperature (e.g. conservatory)",
+          "outdoor_humidity": "Outdoor humidity",
+          "rain_today": "Rain today",
+          "price": "Electricity price",
+          "solar_forecast_today": "Expected solar energy today",
+          "solar_power": "Solar power now",
+          "grid_power": "Grid power now",
+          "house_power": "House power now",
+          "house_energy_today": "House energy today",
+          "battery_soc": "Home battery charge",
+          "battery_power": "Home battery power",
+          "sun": "Sun",
+          "rooms": "Room temperatures",
+          "calendars": "Calendars"
         }
       }
     }

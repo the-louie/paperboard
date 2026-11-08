@@ -22,9 +22,38 @@
     "step": {
       "init": {
         "title": "Paperboard",
+        "menu_options": {
+          "hub": "Navinställningar",
+          "roles": "Sensorer och data (roller)"
+        }
+      },
+      "hub": {
+        "title": "Paperboard",
         "data": {
           "base_url": "Bas-URL som enheterna når Home Assistant på",
           "refresh_rate": "Standardintervall för uppdatering"
+        }
+      },
+      "roles": {
+        "title": "Roller",
+        "description": "Välj vad varje roll betyder i det här hemmet. Lämna en roll tom om den saknas: layouterna hoppar över det som saknas.",
+        "data": {
+          "weather": "Väder (prognos)",
+          "outdoor_temp": "Utetemperatur",
+          "indoor_temp": "Andra temperatur (t.ex. uterum)",
+          "outdoor_humidity": "Luftfuktighet ute",
+          "rain_today": "Regn idag",
+          "price": "Elpris",
+          "solar_forecast_today": "Förväntad solenergi idag",
+          "solar_power": "Solel nu",
+          "grid_power": "Nät nu",
+          "house_power": "Huset nu",
+          "house_energy_today": "Huset idag",
+          "battery_soc": "Hembatteriets laddning",
+          "battery_power": "Hembatteriets effekt",
+          "sun": "Sol",
+          "rooms": "Rumstemperaturer",
+          "calendars": "Kalendrar"
         }
       }
     }
