@@ -24,6 +24,7 @@ from .const import (
 )
 from .devices import DeviceStore
 from .fonts import load_fonts
+from .layout_watch import LayoutWatcher
 from .layouts import get_layout
 from .pipeline import PanelProfile
 from .renderer import ScreenRenderer
@@ -48,9 +49,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
         hass.data[_VIEWS_REGISTERED] = True
 
     fonts = await hass.async_add_executor_job(load_fonts)
+    watcher = LayoutWatcher(hass)
+    await watcher.async_load()
+    entry.async_on_unload(watcher.async_start())
     store = DeviceStore(hass, entry.entry_id)
     await store.async_load()
-    hub = HubRuntime(devices=store, base_url=entry.options.get(CONF_BASE_URL, ""))
+    hub = HubRuntime(devices=store, base_url=entry.options.get(CONF_BASE_URL, ""),
+                     layouts=watcher)
     registry = dr.async_get(hass)
     wanted: set[str] = set()
     for subentry in list(entry.subentries.values()):

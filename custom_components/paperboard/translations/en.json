@@ -113,5 +113,11 @@
         "name": "Missed check-in"
       }
     }
+  },
+  "issues": {
+    "layout_invalid": {
+      "title": "Paperboard layout {file} has errors",
+      "description": "The layout file {file} could not be loaded. Screens keep using the last working version of it (if there was one).\n\n{errors}"
+    }
   }
 }

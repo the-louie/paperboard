@@ -73,6 +73,7 @@ class HubRuntime:
     screens: dict[str, ScreenRuntime] = field(default_factory=dict)
     renderers: dict[str, Any] = field(default_factory=dict)  # subentry id -> ScreenRenderer
     base_url: str = ""
+    layouts: Any = None  # LayoutWatcher
     pairing_screen: str | None = None
     last_rejected: dict[str, str] | None = None
     pairing_until: float = 0.0

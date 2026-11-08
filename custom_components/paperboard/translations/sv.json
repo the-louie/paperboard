@@ -113,5 +113,11 @@
         "name": "Uteblivet anrop"
       }
     }
+  },
+  "issues": {
+    "layout_invalid": {
+      "title": "Paperboard-layouten {file} har fel",
+      "description": "Layoutfilen {file} kunde inte läsas in. Skärmarna använder den senast fungerande versionen (om det fanns någon).\n\n{errors}"
+    }
   }
 }
