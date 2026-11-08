@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-22 (`in-progress` — ImageEntity per screen).
-**Last completed:** Sprint 01 T-21 (commit `ad83f21`).
+**Current ticket:** Sprint 01 T-23 (`todo` — Render scheduler).
+**Last completed:** Sprint 01 T-22 (commit `cde6d5e`).
 
 ## Sprints
 | Sprint | Goal | Status |
