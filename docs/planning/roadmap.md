@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-11 (`in-progress` — Research: solar forecast source).
-**Last completed:** Sprint 02 T-10 (commit `ac5c7f8`).
+**Current ticket:** Sprint 02 T-12 (`todo` — Solar forecast adapter).
+**Last completed:** Sprint 02 T-11 (commit `7764679`).
 
 ## Sprints
 | Sprint | Goal | Status |
