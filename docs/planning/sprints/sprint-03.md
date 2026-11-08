@@ -1,7 +1,7 @@
 # Sprint 03 — All designs, the schedule, and release readiness
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-11 (`in-progress` — Layout 06 TRMNL)
-**Last completed:** T-10 (`done` — commit `2ecfa56`)
+**Current ticket:** T-12 (`todo` — Layout 07 Almanackan)
+**Last completed:** T-11 (`done` — commit `0faf462`)
 **Budget:** 59h estimated (band 80–120h). **Below the band on purpose: this is all the
 schedulable work left.** The remaining rows are owner decisions (deploy, device switch,
 schedule choice, decommission, release) and two rows that depend on them.
@@ -30,7 +30,7 @@ night sleep, and the repo ready for a public HACS release (docs, CI, brand, aarc
 | T-08 | Layout 02 Tidningen | 2 | T-02, T-04 | B-053 | done | Landed in 6e69fe3 |
 | T-09 | Layout 03 Bento | 2 | T-03 | B-054 | done | Landed in e97f48c |
 | T-10 | Layout 05 Tavlan | 2 | T-05 | B-055 | done | Landed in 2ecfa56 |
-| T-11 | Layout 06 TRMNL | 2 | T-03, T-04 | B-056 | in-progress | spec: backlog row B-056 |
+| T-11 | Layout 06 TRMNL | 2 | T-03, T-04 | B-056 | done | Landed in 0faf462 |
 | T-12 | Layout 07 Almanackan | 2 | T-01 | B-057 | todo | spec: backlog row B-057 |
 | T-13 | Layout 08 Energi | 2 | — | B-058 | todo | spec: backlog row B-058 |
 | T-14 | Layout 04 Instrument (bar-chart parts only) | 1 | — | B-059 | todo | spec: backlog row B-059 |
