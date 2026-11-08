@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-10 (`todo` — Price adapters).
+**Current ticket:** Sprint 02 T-10 (`in-progress` — Price adapters).
 **Last completed:** Sprint 02 T-09 (commit `c4794bf`).
 
 ## Sprints

@@ -1,6 +1,6 @@
 # Sprint 02 — Layout engine and the hard widgets: mockup 01 from YAML on real data
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-10 (`todo` — Price adapters)
+**Current ticket:** T-10 (`in-progress` — Price adapters)
 **Last completed:** T-09 (`done` — commit `c4794bf`)
 **Budget:** 86h estimated (band 80–120h)
 
@@ -27,7 +27,7 @@ with warning inversion, the hourly table, energy flow, rooms, and sun/moon.
 | T-07 | Repairs for missing entities | 3 | T-06 | B-033 | done | Landed in f0e2b6b |
 | T-08 | Data: weather forecasts | 3 | — | B-034 | done | Landed in 792ce28 |
 | T-09 | Research: price sources | 2 | — | B-035 | done | Landed in c4794bf |
-| T-10 | Price adapters | 4 | T-09 | B-036 | todo | spec: backlog row B-036 (`git show 13b3751:docs/planning/backlog.md`) |
+| T-10 | Price adapters | 4 | T-09 | B-036 | in-progress | spec: backlog row B-036 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-11 | Research: solar forecast source | 2 | — | B-037 | todo | spec: backlog row B-037 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-12 | Solar forecast adapter | 3 | T-11 | B-038 | todo | spec: backlog row B-038 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-13 | TimeAxis object | 3 | T-04 | B-039 | todo | spec: backlog row B-039 (`git show 13b3751:docs/planning/backlog.md`) |
