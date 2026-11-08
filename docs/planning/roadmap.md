@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-22 (`todo` — ImageEntity per screen).
+**Current ticket:** Sprint 01 T-22 (`in-progress` — ImageEntity per screen).
 **Last completed:** Sprint 01 T-21 (commit `ad83f21`).
 
 ## Sprints
