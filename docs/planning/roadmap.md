@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-01 (`todo` — Widget: calendar agenda).
+**Current ticket:** Sprint 03 T-01 (`in-progress` — Widget: calendar agenda).
 **Last completed:** Sprint 02 T-26 (commit `43d2193`).
 
 ## Sprints
