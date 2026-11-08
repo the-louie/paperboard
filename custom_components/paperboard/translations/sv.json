@@ -107,6 +107,11 @@
       "render_error": {
         "name": "Renderingsfel"
       }
+    },
+    "binary_sensor": {
+      "missed_checkin": {
+        "name": "Uteblivet anrop"
+      }
     }
   }
 }

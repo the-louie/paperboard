@@ -30,7 +30,7 @@ from .renderer import ScreenRenderer
 from .runtime import HubRuntime, ScreenRuntime
 from .views import DisplayView, ImageView, LogView, SetupView
 
-PLATFORMS = [Platform.BUTTON, Platform.IMAGE, Platform.SENSOR]
+PLATFORMS = [Platform.BINARY_SENSOR, Platform.BUTTON, Platform.IMAGE, Platform.SENSOR]
 
 type PaperboardConfigEntry = ConfigEntry[HubRuntime]
 

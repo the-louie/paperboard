@@ -52,7 +52,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-019 · ImageEntity per screen**~~ — CLOSED 2026-11-08 (Sprint 01 T-22): see commit "T-22: ImageEntity per screen"
 - ~~**B-020 · Render scheduler**~~ — CLOSED 2026-11-08 (Sprint 01 T-23): see commit "T-23: Render scheduler"
 - ~~**B-021 · Telemetry sensors**~~ — CLOSED 2026-11-08 (Sprint 01 T-24): see commit "T-24: Telemetry sensors"
-- → Sprint 01 T-25 (B-022 · Missed-check-in problem sensor)
+- ~~**B-022 · Missed-check-in problem sensor**~~ — CLOSED 2026-11-08 (Sprint 01 T-25): see commit "T-25: Missed-check-in problem sensor"
 - → Sprint 01 T-26 (B-023 · Widgets: "now" block and status footer)
 - → Sprint 01 T-27 (B-024 · Diagnostics and redaction)
 - [ ] **B-025 · decision: deploy to production HA (ha-host)** · 2h · prio P1 · needs: B-015, B-018, B-020, B-021, B-023 · src: CLAUDE.md working rules

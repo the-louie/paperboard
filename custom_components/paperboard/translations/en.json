@@ -107,6 +107,11 @@
       "render_error": {
         "name": "Render error"
       }
+    },
+    "binary_sensor": {
+      "missed_checkin": {
+        "name": "Missed check-in"
+      }
     }
   }
 }
