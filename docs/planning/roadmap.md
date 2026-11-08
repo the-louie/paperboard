@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-05 (`todo` — Inverted now panel (Tavlan)).
+**Current ticket:** Sprint 03 T-05 (`in-progress` — Inverted now panel (Tavlan)).
 **Last completed:** Sprint 03 T-04 (commit `73ee31f`).
 
 ## Sprints
