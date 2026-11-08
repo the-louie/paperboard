@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-04 (`todo` — Research: the owner's TRMNL OG facts).
+**Current ticket:** Sprint 01 T-04 (`in-progress` — Research: the owner's TRMNL OG facts).
 **Last completed:** Sprint 01 T-03 (commit `f625b35`).
 
 ## Sprints
