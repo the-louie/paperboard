@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-04 (`todo` — Grid engine with reflow).
+**Current ticket:** Sprint 02 T-04 (`in-progress` — Grid engine with reflow).
 **Last completed:** Sprint 02 T-03 (commit `f96414d`).
 
 ## Sprints
