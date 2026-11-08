@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-26 (`todo` — Widgets: "now" block and status footer).
+**Current ticket:** Sprint 01 T-26 (`in-progress` — Widgets: "now" block and status footer).
 **Last completed:** Sprint 01 T-25 (commit `ac4b6a4`).
 
 ## Sprints
