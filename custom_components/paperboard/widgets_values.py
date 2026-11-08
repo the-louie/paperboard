@@ -109,3 +109,42 @@ def energy(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
         y += 18
     kv_list(svg, Rect(r.x, y, r.w, r.h - (y - r.y)), shown, measure, theme)
     return True
+
+
+_NOISE = {"temperatur", "temperature", "temp", "temp-fukt", "temphumid", "th", "sensor"}
+
+
+def room_name(state: dict[str, Any] | None, entity_id: str) -> str:
+    """A short room label from the friendly name: noise words and floor prefixes removed.
+    Layouts can override with options.labels when a home's names are too odd."""
+    raw = str((state or {}).get("attributes", {}).get("friendly_name") or entity_id.split(".")[-1])
+    words = [w for w in raw.replace("_", " ").split()
+             if w.lower() not in _NOISE and not (len(w) == 2 and w[0] in "vV" and w[1].isdigit())]
+    name = " ".join(words) or raw
+    return name[:1].upper() + name[1:]
+
+
+def rooms(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
+          columns: int = 1, labels: list[str] | None = None, title: str | None = None) -> bool:
+    """Room temperatures in 1-3 columns; a missing room shows an em dash, no rooms collapses."""
+    ids = snap.roles.get("rooms") or []
+    if not isinstance(ids, list) or not ids:
+        return False
+    rows = []
+    for i, eid in enumerate(ids):
+        st = snap.states.get(eid)
+        label = labels[i] if labels and i < len(labels) and labels[i] else room_name(st, eid)
+        rows.append((label, fmt.with_unit((st or {}).get("state"), "°", 1, snap.lang)))
+    y = r.y
+    if title:
+        svg.text(r.x, r.y + 12, title, theme.text("xs", bold=True))
+        y += 18
+    columns = max(1, min(3, columns))
+    per = -(-len(rows) // columns)
+    gap = 14
+    cw = (r.w - gap * (columns - 1)) / columns
+    for c in range(columns):
+        chunk = rows[c * per:(c + 1) * per]
+        kv_list(svg, Rect(r.x + c * (cw + gap), y, cw, r.h - (y - r.y)), chunk, measure, theme,
+                row_h=19)
+    return True

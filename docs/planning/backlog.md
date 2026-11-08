@@ -89,7 +89,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 ## Phase 3 — Remaining widgets and the schedule (goal: all 8 mockups in rotation, night sleep)
 
 - → Sprint 02 T-21 (B-047 · Widget: energy flow)
-- → Sprint 02 T-20 (B-048 · Widget: room list)
+- ~~**B-048 · Widget: room list**~~ — CLOSED 2026-11-08 (Sprint 02 T-20): see commit "T-20: Widget: room list"
 - [ ] **B-049 · Widget: calendar agenda** · 4h · prio P2 · needs: B-032 · src: M 07
       `calendar.get_events` (cached), grouped per day, truncation by measured width, "No
       events" or collapse.
