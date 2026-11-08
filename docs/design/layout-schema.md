@@ -184,3 +184,10 @@ schedule:
   next window boundary. An entry's own `refresh_rate` applies inside it (e.g. sleep at night).
 - **Validation:** every named layout must exist (bundled, user YAML or built-in). Otherwise
   the schedule is rejected with a Repairs issue.
+
+## Mockup 04 Instrument (Sprint 03 T-14)
+
+The owner rejected the gauges, but liked the **filled/outlined bar chart**. No 04 layout ships.
+The bar style lives on in `price_chart`, in every layout with a price: the cheapest window is
+drawn filled, every other hour outlined, with a bracket and mean price over the window. It is
+covered by the `price_chart_*` goldens and by the timeline in 01, 02, 03, 06 and 08.
