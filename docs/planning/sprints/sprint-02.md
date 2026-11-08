@@ -1,6 +1,6 @@
 # Sprint 02 — Layout engine and the hard widgets: mockup 01 from YAML on real data
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-21 (`todo` — Widget: energy flow)
+**Current ticket:** T-21 (`in-progress` — Widget: energy flow)
 **Last completed:** T-20 (`done` — commit `4d5298c`)
 **Budget:** 86h estimated (band 80–120h)
 
@@ -38,7 +38,7 @@ with warning inversion, the hourly table, energy flow, rooms, and sun/moon.
 | T-18 | Widget: hourly table (Tavlan) | 4 | T-08, T-10, T-14 | B-042 | done | Landed in 45fc46d |
 | T-19 | Widget: stat / key-value | 3 | T-03 | B-051 | done | Landed in 9b2d5aa |
 | T-20 | Widget: room list | 2 | T-03 | B-048 | done | Landed in 4d5298c |
-| T-21 | Widget: energy flow | 5 | T-03, T-06 | B-047 | todo | spec: backlog row B-047 (`git show 13b3751:docs/planning/backlog.md`) |
+| T-21 | Widget: energy flow | 5 | T-03, T-06 | B-047 | in-progress | spec: backlog row B-047 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-22 | Widget: sun and moon | 2 | T-03 | B-050 | todo | spec: backlog row B-050 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-23 | "Empty house" gate | 2 | T-04, T-15 | B-045 | todo | spec: backlog row B-045 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-24 | Layout 01 Tidslinjen with the owner's changes | 3 | T-05, T-06, T-15, T-16, T-17 | B-046 | todo | spec: backlog row B-046 (`git show 13b3751:docs/planning/backlog.md`) |
