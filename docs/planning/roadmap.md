@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-07 (`todo` — Night sleep and refresh policy).
+**Current ticket:** Sprint 03 T-07 (`in-progress` — Night sleep and refresh policy).
 **Last completed:** Sprint 03 T-06 (commit `5990438`).
 
 ## Sprints
