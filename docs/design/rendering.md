@@ -74,3 +74,20 @@ from the ink shift between a start-anchored and an end-anchored copy) with Pillo
   changed. At 80 ms that is < 0.2 % of one core in the worst case.
 - **Not measured:** resvg's own native allocations (tracemalloc only sees Python), and an aarch64
   Pi. Re-run on a Pi in B-070.
+
+## aarch64 (Sprint 03 T-20, 2026-11-08)
+
+**Statically verified, not executed.**
+- **No emulation:** dev-host has no qemu binfmt handler for arm64. An arm64 container fails
+  with `exec format error`. Installing binfmt is a privileged host change and was not made.
+- **Wheel inspected:** `resvg_py-0.5.0-cp310-abi3-musllinux_1_2_aarch64.whl` (1.59 MB, from
+  PyPI) contains `resvg_py/resvg_py.abi3.so`, ELF64 **AArch64**. Its only `NEEDED` libraries
+  are `libc.so` (musl, present in HA's Alpine image) and `libgcc_s-0bf60adc.so.1`, which
+  auditwheel **vendored in the wheel** (`resvg_py.libs/`, also AArch64).
+- **Conclusion:** no system library is missing on HA's aarch64 musl image, and an abi3 wheel
+  needs no per-Python build. Pillow 13.0.0 ships musllinux aarch64 wheels and is HA core's own
+  dependency.
+- **Residual risk:** an actual crash or render difference on ARM. It is caught by running the
+  golden suite on an ARM runner in CI: B-069's workflow includes an `ubuntu-24.04-arm` job, and
+  the first PR run is the real test. Golden PNGs may differ by a few pixels on ARM if
+  FreeType/resvg float paths differ; then that job compares with a small pixel tolerance.
