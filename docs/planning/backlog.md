@@ -149,3 +149,18 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       the worker process can go.
 - [ ] **B-091 · Research: AppDaemon at 44 % CPU on ha-host** · 1h · prio P2 · src: B-088 (2026-11-08 18:30, `docker stats`)
       Move to `<the maintainer's HA repo>` HASS-BACKLOG if confirmed: it is not paperboard's.
+- [ ] **B-092 · The render worker hung Home Assistant's shutdown** · 3h · prio P1 · src: live 2026-11-08 18:48–19:00
+      After the upgrade to HA 2026.11.0, `homeassistant.restart` never finished. The last log line
+      was "Found 3 non-daemonic threads", the ProcessPoolExecutor's threads. HA was down
+      (502) for ~10 min until `docker restart homeassistant`. The worker is **off in production**
+      (`USE_WORKER = False`, deployed 19:00), so renders stall the loop again (B-088's cause).
+
+      Before it goes back on:
+      - shut the pool down on `EVENT_HOMEASSISTANT_STOP` (not only on unload);
+      - make the waiting daemonic, or use a plain `subprocess` worker with a pipe instead of
+        `concurrent.futures`;
+      - prove it with a real HA restart in a **throwaway** HA container that runs the integration.
+
+      A unit test cannot catch this: the `hass` test fixture never runs HA's process exit.
+      Also during the outage the old code answered `/api/display` with 500, which unpairs the
+      panel; 8fc7be2 now answers 202.
