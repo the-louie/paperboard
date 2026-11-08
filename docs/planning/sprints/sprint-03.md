@@ -1,6 +1,6 @@
 # Sprint 03 — All designs, the schedule, and release readiness
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-15 (`todo` — Scale YAML layouts to larger panels)
+**Current ticket:** T-15 (`in-progress` — Scale YAML layouts to larger panels)
 **Last completed:** T-14 (`done` — commit `6bb7858`)
 **Budget:** 59h estimated (band 80–120h). **Below the band on purpose: this is all the
 schedulable work left.** The remaining rows are owner decisions (deploy, device switch,
@@ -34,7 +34,7 @@ night sleep, and the repo ready for a public HACS release (docs, CI, brand, aarc
 | T-12 | Layout 07 Almanackan | 2 | T-01 | B-057 | done | Landed in 50146dc |
 | T-13 | Layout 08 Energi | 2 | — | B-058 | done | Landed in 159b76e |
 | T-14 | Layout 04 Instrument (bar-chart parts only) | 1 | — | B-059 | done | Landed in 6bb7858 |
-| T-15 | Scale YAML layouts to larger panels | 4 | — | B-083 | todo | spec: backlog row B-083 |
+| T-15 | Scale YAML layouts to larger panels | 4 | — | B-083 | in-progress | spec: backlog row B-083 |
 | T-16 | Localisation of widget texts | 3 | — | B-075 | todo | spec: backlog row B-075 |
 | T-17 | Rotate-image-token button per screen | 2 | — | B-082 | todo | spec: backlog row B-082 |
 | T-18 | Generic image clients | 3 | — | B-066 | todo | spec: backlog row B-066 |
