@@ -15,7 +15,8 @@ def test_owner_device_alias() -> None:
 def test_known_model_and_depth_cap() -> None:
     x = resolve("v2")
     assert (x.width, x.height, x.scale_factor) == (1872, 1404, 1.8)
-    assert x.bit_depth == 2  # 4-bit capped until B-065
+    assert x.bit_depth == 4
+    assert resolve("amazon_kindle_7").bit_depth == 4  # 8-bit panels get 16 greys
     assert resolve("og_plus").bit_depth == 2
 
 

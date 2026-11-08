@@ -52,7 +52,8 @@ class Theme:
     @property
     def tint(self) -> str:
         """Light background marking (night, 'not now')."""
-        return "#aaaaaa" if self.bit_depth >= 2 else "dots"
+        return ("#cccccc" if self.bit_depth >= 4 else "#aaaaaa") if self.bit_depth >= 2 \
+            else "dots"
 
     @property
     def past(self) -> str:

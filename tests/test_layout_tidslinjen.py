@@ -75,3 +75,10 @@ def test_tidslinjen_owner_2bit() -> None:
     spec = load_all(None).layouts["tidslinjen"]
     svg = render_spec(spec, owner_snapshot(), Measurer(load_fonts()), Theme(bit_depth=2))
     assert_golden("tidslinjen_owner_2bit", render(svg, PanelProfile(bit_depth=2), FONT_DIR).png)
+
+
+def test_tidslinjen_owner_4bit() -> None:
+    spec = load_all(None).layouts["tidslinjen"]
+    svg = render_spec(spec, owner_snapshot(), Measurer(load_fonts()), Theme(bit_depth=4))
+    frame = render(svg, PanelProfile(bit_depth=4, byte_limit=750_000), FONT_DIR)
+    assert_golden("tidslinjen_owner_4bit", frame.png)

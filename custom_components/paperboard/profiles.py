@@ -9,7 +9,7 @@ from functools import cache
 from pathlib import Path
 
 MODELS_FILE = Path(__file__).parent / "models.json"
-MAX_RENDER_DEPTH = 2  # this renderer emits 1- or 2-bit PNGs (4-bit: B-065)
+MAX_RENDER_DEPTH = 4  # PNG grey depths this renderer emits: 1, 2 or 4
 DEFAULT = "og_png"
 
 
@@ -31,8 +31,9 @@ def _models() -> dict:
 
 def _profile(name: str) -> Profile:
     m = _models()["models"][name]
-    return Profile(model=name, width=m["width"], height=m["height"],
-                   bit_depth=min(m["bit_depth"], MAX_RENDER_DEPTH),
+    depth = m["bit_depth"]
+    depth = 1 if depth <= 1 else 2 if depth <= 2 else MAX_RENDER_DEPTH  # 8/12/24-bit -> 4
+    return Profile(model=name, width=m["width"], height=m["height"], bit_depth=depth,
                    byte_limit=m["byte_limit"], scale_factor=m["scale_factor"],
                    rotation=m["rotation"])
 

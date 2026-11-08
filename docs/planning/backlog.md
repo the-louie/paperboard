@@ -130,7 +130,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 ## Phase 4 — Other panels (goal: a second panel type from the same layouts)
 
 - ~~**B-064 · Panel profiles from the TRMNL model table**~~ — CLOSED 2026-11-08 (Sprint 02 T-25): see commit "T-25: Panel profiles from the TRMNL model table"
-- → Sprint 02 T-26 (B-065 · 2-bit and 4-bit render paths)
+- ~~**B-065 · 2-bit and 4-bit render paths**~~ — CLOSED 2026-11-08 (Sprint 02 T-26): see commit "T-26: 2-bit and 4-bit render paths"
 - [ ] **B-066 · Generic image clients** · 3h · prio P3 · needs: B-018 · src: R §serving (Alias, ESPHome online_image, Kindle, LaraPaper)
       Document and test the token URL with the ESPHome `online_image` ETag behaviour and BMP
       output for old firmware.

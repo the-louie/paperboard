@@ -36,7 +36,7 @@ class PanelProfile:
 
     width: int = 800
     height: int = 480
-    bit_depth: int = 1  # 1 or 2
+    bit_depth: int = 1  # 1, 2 or 4
     byte_limit: int = 90_000  # TRMNL OG without PSRAM
 
 
@@ -135,15 +135,28 @@ def encode_bmp_1bit(png: bytes) -> bytes:
     return file_header + info_header + palette + pixels
 
 
+def quantize_4bit(gray: Image.Image) -> list[bytes]:
+    """Nearest of 16 grey levels (no dither) -> packed rows, two pixels per byte."""
+    idx = gray.point(lambda v: min(15, (v + 8) // 17)).tobytes()
+    width = gray.width
+    pad = width % 2
+    rows = []
+    for y in range(gray.height):
+        line = idx[y * width : (y + 1) * width] + b"\x0f" * pad
+        rows.append(bytes(a << 4 | b for a, b in zip(line[0::2], line[1::2], strict=True)))
+    return rows
+
+
+QUANTIZERS = {1: quantize_1bit, 2: quantize_2bit, 4: quantize_4bit}
+
+
 def render(svg: str, profile: PanelProfile, font_dir: Path) -> Frame:
     """The whole pipeline. Raises PipelineError; never returns a partial frame."""
     gray = rasterize(svg, profile, font_dir)
-    if profile.bit_depth == 1:
-        rows = quantize_1bit(gray)
-    elif profile.bit_depth == 2:
-        rows = quantize_2bit(gray)
-    else:
+    quantize = QUANTIZERS.get(profile.bit_depth)
+    if quantize is None:
         raise PipelineError(f"unsupported bit depth {profile.bit_depth}")
+    rows = quantize(gray)
     png = encode_png_gray(rows, profile.width, profile.height, profile.bit_depth)
     if len(png) > profile.byte_limit:
         raise ImageTooLargeError(f"{len(png)} bytes > limit {profile.byte_limit}")

@@ -73,3 +73,15 @@ def test_bmp_for_setup_is_48062_bytes() -> None:
     assert bmp[:2] == b"BM"
     img = Image.open(io.BytesIO(bmp))
     assert img.size == (800, 480)
+
+
+def test_4bit_has_sixteen_levels_at_most() -> None:
+    frame = render(SVG, PanelProfile(bit_depth=4), FONT_DIR)
+    img = _decode(frame.png)
+    assert img.size == (800, 480)
+    assert set(img.convert("L").tobytes()) <= {i * 17 for i in range(16)}
+
+
+def test_unsupported_depth() -> None:
+    with pytest.raises(PipelineError):
+        render(SVG, PanelProfile(bit_depth=3), FONT_DIR)
