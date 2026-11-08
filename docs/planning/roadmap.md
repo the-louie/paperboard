@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-05 (`in-progress` — Spike: resvg-py in an HA 2026.11 throwaway container).
-**Last completed:** Sprint 01 T-04 (commit `f5c7d66`).
+**Current ticket:** Sprint 01 T-06 (`todo` — Fonts: bundle and load).
+**Last completed:** Sprint 01 T-05 (commit `21df590`).
 
 ## Sprints
 | Sprint | Goal | Status |

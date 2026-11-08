@@ -1,7 +1,7 @@
 # Sprint 01 — Skeleton and device server: the stack proven, HA serves a TRMNL image
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-05 (`in-progress` — Spike: resvg-py in an HA 2026.11 throwaway container)
-**Last completed:** T-04 (`done` — commit `f5c7d66`)
+**Current ticket:** T-06 (`todo` — Fonts: bundle and load)
+**Last completed:** T-05 (`done` — commit `21df590`)
 **Budget:** 81h estimated (band 80–120h)
 
 ## Goal
@@ -19,7 +19,7 @@ Prove the resvg + Pillow stack and build the integration skeleton, so that a pap
 | T-02 | Research: HA test harness on Python 3.14 | 2 | T-01 | B-002 | done | Landed in 64e61b8 |
 | T-03 | Research: route collision and auth under /api | 2 | — | B-003 | done | Landed in f625b35 |
 | T-04 | Research: the owner's TRMNL OG facts | 1 | — | B-004 | done | Landed in f5c7d66 |
-| T-05 | Spike: resvg-py in an HA 2026.11 throwaway container | 3 | T-01 | B-005 | in-progress | spec: backlog row B-005 (git show 13b3751:docs/planning/backlog.md) |
+| T-05 | Spike: resvg-py in an HA 2026.11 throwaway container | 3 | T-01 | B-005 | done | Landed in 21df590 |
 | T-06 | Fonts: bundle and load | 2 | T-01 | B-007 | todo | spec: backlog row B-007 (git show 13b3751:docs/planning/backlog.md) |
 | T-07 | Spike: text metrics, Pillow vs resvg | 3 | T-06 | B-006 | todo | spec: backlog row B-006 (git show 13b3751:docs/planning/backlog.md) |
 | T-08 | Text measurement and wrap utility | 3 | T-07 | B-080 | todo | spec: backlog row B-080 (git show 13b3751:docs/planning/backlog.md) |
