@@ -49,7 +49,7 @@ night sleep, and the repo ready for a public HACS release (docs, CI, brand, aarc
 - **New widget types inside layout tickets** (each needed by its design): `hourly_strip` and `tomorrow` (T-09); `date`, `week` and `now_grid` (T-12); flag role `grid_export_positive` (T-13); `grid.paddings` (T-11).
 
 ## Retro
-**Shipped (23/23 tickets, 232 tests, ruff clean):**
+**Shipped (23/23 tickets, 230 tests, ruff clean):**
 - **Six more designs as YAML layouts on the owner's data** (Tidningen, Bento, Tavlan, TRMNL,
   Almanackan, Energi), each with the owner's changes. With Sprint 02's Tidslinjen that is all
   seven approved designs; 04 was rejected except its bar style, which lives on in the price
