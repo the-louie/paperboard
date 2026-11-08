@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-08 (`todo` — Text measurement and wrap utility).
+**Current ticket:** Sprint 01 T-08 (`in-progress` — Text measurement and wrap utility).
 **Last completed:** Sprint 01 T-07 (commit `25119f4`).
 
 ## Sprints
