@@ -80,7 +80,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-039 · TimeAxis object**~~ — CLOSED 2026-11-08 (Sprint 02 T-13): see commit "T-13: TimeAxis object"
 - ~~**B-040 · Widget: price chart**~~ — CLOSED 2026-11-08 (Sprint 02 T-15): see commit "T-15: Widget: price chart"
 - ~~**B-041 · Widget: solar forecast chart**~~ — CLOSED 2026-11-08 (Sprint 02 T-16): see commit "T-16: Widget: solar forecast chart"
-- → Sprint 02 T-18 (B-042 · Widget: hourly table (Tavlan))
+- ~~**B-042 · Widget: hourly table (Tavlan)**~~ — CLOSED 2026-11-08 (Sprint 02 T-18): see commit "T-18: Widget: hourly table (Tavlan)"
 - ~~**B-043 · Widget: daily forecast with warning inversion**~~ — CLOSED 2026-11-08 (Sprint 02 T-17): see commit "T-17: Widget: daily forecast with warning inversion"
 - ~~**B-044 · Weather icon set**~~ — CLOSED 2026-11-08 (Sprint 02 T-14): see commit "T-14: Weather icon set"
 - → Sprint 02 T-23 (B-045 · "Empty house" gate)
