@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-17 (`todo` — Widget: daily forecast with warning inversion).
+**Current ticket:** Sprint 02 T-17 (`in-progress` — Widget: daily forecast with warning inversion).
 **Last completed:** Sprint 02 T-16 (commit `634eb68`).
 
 ## Sprints
