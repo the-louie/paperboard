@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-06 (`todo` — Schedule: time-of-day layouts).
+**Current ticket:** Sprint 03 T-06 (`in-progress` — Schedule: time-of-day layouts).
 **Last completed:** Sprint 03 T-05 (commit `d6c6566`).
 
 ## Sprints
