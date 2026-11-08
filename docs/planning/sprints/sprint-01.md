@@ -1,6 +1,6 @@
 # Sprint 01 — Skeleton and device server: the stack proven, HA serves a TRMNL image
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-29 (`todo` — Performance budget)
+**Current ticket:** T-29 (`in-progress` — Performance budget)
 **Last completed:** T-28 (`done` — commit `f5fd2d4`)
 **Budget:** 81h estimated (band 80–120h)
 
@@ -43,7 +43,7 @@ Prove the resvg + Pillow stack and build the integration skeleton, so that a pap
 | T-26 | Widgets: "now" block and status footer | 4 | T-13 | B-023 | done | Landed in 9abd698 |
 | T-27 | Diagnostics and redaction | 2 | T-19 | B-024 | done | Landed in 04d2e22 |
 | T-28 | Security review of the device endpoints | 2 | T-20, T-18 | B-073 | done | Landed in f5fd2d4 |
-| T-29 | Performance budget | 2 | T-23, T-26 | B-074 | todo | spec: backlog row B-074 (git show 13b3751:docs/planning/backlog.md) |
+| T-29 | Performance budget | 2 | T-23, T-26 | B-074 | in-progress | spec: backlog row B-074 (git show 13b3751:docs/planning/backlog.md) |
 
 ## Scope changes
 
