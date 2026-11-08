@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-04 (`todo` — Header variants: masthead and title bar).
+**Current ticket:** Sprint 03 T-04 (`in-progress` — Header variants: masthead and title bar).
 **Last completed:** Sprint 03 T-03 (commit `38358a4`).
 
 ## Sprints
