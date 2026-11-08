@@ -29,6 +29,7 @@ from .prices import PriceSnapshot
 from .role_watch import bound_entities
 from .runtime import ScreenRuntime, battery_percent
 from .text import Measurer
+from .widgets_sky import sun_times
 
 _LOGGER = logging.getLogger(__name__)
 TICK = dt.timedelta(seconds=60)
@@ -101,7 +102,8 @@ class ScreenRenderer:
                         prices=PriceSnapshot.of(self.hub.prices.series())
                         if self.hub is not None and self.hub.prices is not None else None,
                         solar=self.hub.solar.snapshot()
-                        if self.hub is not None and self.hub.solar is not None else None)
+                        if self.hub is not None and self.hub.solar is not None else None,
+                        sun=sun_times(self.hass, dt_util.now().date()))
 
     def _hash(self, snap: Snapshot) -> str:
         bucket = int(snap.now.timestamp()) // self.layout.clock_resolution

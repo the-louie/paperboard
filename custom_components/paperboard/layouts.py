@@ -31,6 +31,7 @@ class Snapshot:
     forecasts: dict[str, list[dict[str, Any]]] = field(default_factory=dict)  # hourly/daily
     prices: Any = None  # prices.PriceSnapshot or None
     solar: Any = None  # data.SolarSnapshot or None
+    sun: dict[str, str] | None = None  # widgets_sky.sun_times() result
 
     def role_state(self, role: str) -> dict[str, Any] | None:
         """State dict of the entity bound to a single role, or None."""
