@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 01](./sprints/sprint-01.md) — in progress.
-**Current ticket:** Sprint 01 T-13 (`in-progress` — Static render of mockup 01 (go/no-go)).
-**Last completed:** Sprint 01 T-12 (commit `2158d1e`).
+**Current ticket:** Sprint 01 T-14 (`todo` — Research: pairing semantics).
+**Last completed:** Sprint 01 T-13 (commit `4fc2201`).
 
 ## Sprints
 | Sprint | Goal | Status |
