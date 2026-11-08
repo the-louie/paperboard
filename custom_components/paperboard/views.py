@@ -9,11 +9,14 @@ import hmac
 import json
 import time
 from http import HTTPStatus
+from ipaddress import ip_address
 
 from aiohttp import web
 from homeassistant.components.http import HomeAssistantView
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.dispatcher import async_dispatcher_send
+from homeassistant.helpers.network import is_cloud_connection
+from homeassistant.util.network import is_local
 
 from .const import DOMAIN, SIGNAL_CHECKIN
 from .devices import new_device
@@ -31,6 +34,16 @@ def image_path(screen: ScreenRuntime, ext: str = "png") -> str:
 def base_url(hub: HubRuntime, request: web.Request) -> str:
     """Configured base URL, else the origin the device used to reach us."""
     return hub.base_url or f"{request.scheme}://{request.host}"
+
+
+def from_local_network(hass: HomeAssistant, request: web.Request) -> bool:
+    """True for LAN/loopback clients that did not come in through Nabu Casa."""
+    if is_cloud_connection(hass):
+        return False
+    try:
+        return is_local(ip_address(request.remote or ""))
+    except ValueError:
+        return False
 
 
 def _json(payload: dict) -> web.Response:
@@ -98,6 +111,11 @@ class SetupView(HomeAssistantView):
             return _json({"status": 404, "message": "Missing device ID"})
         screen_id = hub.pairing_target()
         screen = hub.screens.get(screen_id) if screen_id else None
+        if screen is not None and not from_local_network(self.hass, request):
+            # The views are reachable through every HA URL (Nabu Casa, proxies). Pairing hands
+            # out a key that reveals the dashboard, so only devices on the LAN may pair.
+            return _json({"status": 404, "message": "Pairing is only allowed from the "
+                                                    "local network."})
         if screen is None:
             return _json({"status": 404, "message": "Pairing is closed. Press Pair on the "
                                                     "screen in Home Assistant."})

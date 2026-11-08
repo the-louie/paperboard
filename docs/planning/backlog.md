@@ -1,6 +1,6 @@
 # Backlog — paperboard
 
-Next ID: **B-082**
+Next ID: **B-083**
 
 **Sources:**
 - R = `docs/research/HACS e-ink dashboard renderer.md` (deep research 2026-11-08), § = section.
@@ -258,7 +258,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 ## Cross-cutting
 
-- → Sprint 01 T-28 (B-073 · Security review of the device endpoints)
+- ~~**B-073 · Security review of the device endpoints**~~ — CLOSED 2026-11-08 (Sprint 01 T-28): see commit "T-28: Security review of the device endpoints"
 - → Sprint 01 T-29 (B-074 · Performance budget)
 - [ ] **B-075 · Localisation of widget texts** · 3h · prio P3 · needs: B-051 · src: M (Swedish), HACS audience
       Weekday and month names, units, decimal separator per HA language (sv, en).
@@ -276,4 +276,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       ("Hemma"). The owner relinks it in Settings → Energy → Solar panels →
       Forecast. Without this, the HA energy dashboard has no forecast, and B-037/B-038 have no
       hourly data to test against. Mirrored as H-54 in `<the maintainer's HA repo>`.
+- [ ] **B-082 · Rotate-image-token button per screen** · 2h · prio P3 · src: Sprint 01 T-28
+      A config-category button that mints a new image token without deleting the screen, so a
+      URL leaked through proxy logs or a shared screenshot of diagnostics can be revoked.
 

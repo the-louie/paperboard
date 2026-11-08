@@ -64,3 +64,17 @@ async def test_deleted_screen_forgets_device(hass: HomeAssistant, hub_entry,
     hass.config_entries.async_remove_subentry(hub_entry, "screen1")
     await hass.async_block_till_done()
     assert not hub_entry.runtime_data.devices.devices
+
+
+async def test_pairing_refused_from_outside_lan(hass: HomeAssistant, hub_entry,
+                                                hass_client_no_auth) -> None:
+    client = await hass_client_no_auth()
+    await _press_pair(hass)
+    with patch("custom_components.paperboard.views.is_local", return_value=False):
+        data = await FakeTrmnl(client).setup()
+    assert data["status"] == 404
+    assert "local network" in data["message"]
+    assert hub_entry.runtime_data.pairing_target() == "screen1"  # window still open for the LAN
+    with patch("custom_components.paperboard.views.is_cloud_connection", return_value=True):
+        assert (await FakeTrmnl(client).setup())["status"] == 404
+    assert (await FakeTrmnl(client).setup())["status"] == 200

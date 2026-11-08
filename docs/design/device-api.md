@@ -124,3 +124,40 @@ service do.
 - Does switching the base URL in the captive portal clear the stored key? If not, path 4
   covers it.
 - That 1.8.10 accepts a PNG setup image (if so, BMP is only kept for old firmware).
+
+## Security review (T-28, 2026-11-08)
+
+| Surface (all `requires_auth=False`) | Who can call it | What it returns | Controls |
+|---|---|---|---|
+| `GET /api/setup` | anyone who can reach HA | a device key, **only** inside an owner-opened 5-min window, **only** from a LAN/loopback address and never through Nabu Casa (`is_cloud_connection`), single use | Outside those conditions: JSON 404, no state. `request.remote` honours HA's `use_x_forwarded_for` for trusted proxies. |
+| `GET /api/display` | anyone | image URL + refresh rate for a paired device; otherwise JSON 500 (no state, no hint whether the MAC exists) | ID + 256-bit key, `hmac.compare_digest`. No HA data in the body. |
+| `POST /api/log` | anyone | 204 / 403 / 400 / 413 | Same auth as display; body ≤ 64 kB, ≤ 50 entries, fixed field allow-list. |
+| `GET/HEAD /api/paperboard/image/{screen}/{token}/{file}` | anyone holding the URL | the screen's PNG/BMP | 256-bit per-screen token in the path, constant-time compare, 403/404 returned not raised. |
+
+- **Brute force:** 2²⁵⁶ keys. HA's ip_ban is deliberately not fed (T-03), because a
+  misconfigured panel would otherwise get the owner's own IP banned. No separate rate limiter:
+  every rejected request costs one dict lookup and one HMAC compare, with no rendering, I/O or
+  logging.
+- **Rendering is never on a request path**, so unauthenticated requests cannot trigger CPU work.
+- **Data exposure:**
+  - The image itself contains home data (temperatures, calendar); that is its purpose. Anyone
+    with the image URL sees it.
+  - The token sits in the URL path, so it can appear in reverse-proxy access logs. HA itself
+    does not log request paths at INFO.
+  - **Rotate:** delete and re-add the screen (a new token is minted), or re-pair (a new device
+    key). A "rotate image token" button is worth adding in phase 5 (B-082).
+- **Logging hygiene:** the integration logs only render failures (screen name + error). It
+  never logs headers, keys, tokens or MACs. Diagnostics redact keys and tokens and reduce MACs
+  to their last two octets (T-27).
+- **Nabu Casa / internet exposure:** the device endpoints are reachable wherever HA is. After
+  pairing that is harmless (keys required). Pairing itself is LAN-only. The README must say:
+  point devices at the LAN URL.
+- **Stored secrets:**
+  - Device keys live in `.storage/paperboard.<entry>.devices`.
+  - Image tokens live in the config subentry (`.storage/core.config_entries`).
+  - Both are in HA backups, like every other integration secret.
+- **Not covered:**
+  - TLS: the firmware does not verify certificates, per the research.
+  - A hostile LAN device inside an open pairing window: it can take the pairing, and the
+    owner sees the wrong friendly ID on the panel. The window is 5 minutes, single use, and
+    opened by an admin action.
