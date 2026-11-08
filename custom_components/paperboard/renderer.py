@@ -131,7 +131,8 @@ class ScreenRenderer:
                         sun=sun_times(self.hass, dt_util.now().date()),
                         events={k: list(v) for k, v in self.hub.calendars.events.items()}
                         if self.hub is not None and self.hub.calendars is not None else {},
-                        texts=self._render_templates())
+                        texts=self._render_templates(),
+                        home_name=self.hass.config.location_name or "")
 
     def _render_templates(self) -> dict[str, str]:
         """HA Jinja for text slots, in the loop; a broken template shows its error briefly."""

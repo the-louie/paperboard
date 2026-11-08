@@ -63,6 +63,11 @@ def _hourly_at(snap: Snapshot, when: dt.datetime) -> dict[str, Any] | None:
 
 @widget("header")
 def _header(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
+    style = o.get("style", "line")
+    if style == "masthead":
+        return _masthead(svg, r, snap, m, t, o)
+    if style == "titlebar":
+        return _titlebar(svg, r, snap, m, t, o)
     lang = snap.lang
     title = f"{WEEKDAY[lang][snap.now.weekday()]} {snap.now.day} {MONTH[lang][snap.now.month - 1]}"
     big, rest = t.text("m", bold=True), t.text("m")
@@ -87,6 +92,47 @@ def _header(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
             svg.text(r.x + r.w - bw / 2, base - 1, value, vstyle, "middle", t.paper)
             svg.text(r.x + r.w - bw - 8, base - 1,
                      "Imorgon kl 07" if lang == "sv" else "Tomorrow 07:00", t.text("s"), "end")
+    return True
+
+
+def _date_line(snap: Snapshot, o: dict, with_year: bool = False) -> tuple[str, str]:
+    lang = snap.lang
+    first = f"{WEEKDAY[lang][snap.now.weekday()]} {snap.now.day} {MONTH[lang][snap.now.month - 1]}"
+    if with_year:
+        first += f" {snap.now.year}"
+    second = []
+    if o.get("show_week", True):
+        second.append(f"{'vecka' if lang == 'sv' else 'week'} {snap.now.isocalendar().week}")
+    if o.get("show_flag", True) and (flag := _flag(snap)):
+        second.append(flag)
+    return first, " · ".join(second)
+
+
+def _masthead(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
+    """Newspaper masthead (02 Tidningen): big name left, date block right, double rule."""
+    name = str(o.get("title") or snap.home_name or snap.screen_name)
+    first, second = _date_line(snap, o, with_year=True)
+    small = t.text("s", bold=True)
+    right_w = max(m.width(first, small), m.width(second, small))
+    title_style = t.numeral("xl") if r.h >= 44 else t.numeral("l")
+    svg.text(r.x, r.y + r.h - 9, m.truncate(name, title_style, r.w - right_w - 16), title_style)
+    svg.text(r.x + r.w, r.y + r.h - 26, first, small, "end")
+    svg.text(r.x + r.w, r.y + r.h - 9, second, small, "end")
+    svg.line(r.x, r.y + r.h - 3, r.x + r.w, r.y + r.h - 3, 2)
+    svg.line(r.x, r.y + r.h, r.x + r.w, r.y + r.h, 1)
+    return True
+
+
+def _titlebar(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
+    """TRMNL-style title bar (06): black rounded bar, title left, date/info right."""
+    svg.rect(r.x, r.y, r.w, r.h, t.ink, rx=8)
+    title = str(o.get("title") or snap.home_name or snap.screen_name)
+    first, second = _date_line(snap, o)
+    info = f"{first} · {second}" if second else first
+    base = r.y + r.h / 2 + 6
+    svg.text(r.x + 12, base, title, t.text("s", bold=True), color=t.paper)
+    svg.text(r.x + r.w - 12, base, m.truncate(info, t.text("xs"), r.w / 2), t.text("xs"),
+             "end", t.paper)
     return True
 
 
