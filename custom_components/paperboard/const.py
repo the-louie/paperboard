@@ -19,12 +19,11 @@ CONF_IMAGE_TOKEN = "image_token"
 
 DEFAULT_LAYOUT = "tidslinjen"
 
-# Panel profiles: id -> (width, height, bit depth, byte limit). Extended in phase 4 (B-064).
-PROFILES: dict[str, tuple[int, int, int, int]] = {
-    "800x480_1bit": (800, 480, 1, 90_000),
-    "800x480_2bit": (800, 480, 2, 90_000),
-}
-DEFAULT_PROFILE = "800x480_1bit"
+# Panel profile: "auto" (from the device's Model/Width/Height headers) or a TRMNL model name
+# from models.json. The two early ids are kept as aliases for screens created before B-064.
+PROFILE_AUTO = "auto"
+PROFILE_ALIASES = {"800x480_1bit": "og_png", "800x480_2bit": "og_plus"}
+DEFAULT_PROFILE = PROFILE_AUTO
 
 # Dispatcher signal fired on every authenticated check-in; format with the screen id.
 SIGNAL_CHECKIN = "paperboard_checkin_{}"

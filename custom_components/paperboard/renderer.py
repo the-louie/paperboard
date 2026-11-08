@@ -16,16 +16,17 @@ from typing import Any
 
 from homeassistant.core import Event, EventStateChangedData, HomeAssistant, callback
 from homeassistant.helpers.debounce import Debouncer
-from homeassistant.helpers.dispatcher import async_dispatcher_send
+from homeassistant.helpers.dispatcher import async_dispatcher_connect, async_dispatcher_send
 from homeassistant.helpers.event import async_track_state_change_event, async_track_time_interval
 from homeassistant.util import dt as dt_util
 
-from .const import SIGNAL_FRAME
+from .const import SIGNAL_CHECKIN, SIGNAL_FRAME
 from .fmt import to_float
 from .fonts import FontRegistry
 from .layouts import Layout, Snapshot
 from .pipeline import PanelProfile, PipelineError, render
 from .prices import PriceSnapshot
+from .profiles import resolve as resolve_profile
 from .role_watch import bound_entities
 from .runtime import ScreenRuntime, battery_percent
 from .text import Measurer
@@ -53,6 +54,8 @@ class ScreenRenderer:
         self._debouncer = Debouncer(hass, _LOGGER, cooldown=DEBOUNCE_SECONDS, immediate=False,
                                     function=self.async_render)
         self._unsubs: list[Any] = []
+        self.auto_profile = False  # set by setup: follow the device's reported model
+        self.layout_name = ""
         self.hub = hub
         roles = hub.roles if hub is not None else {}
         bound = [eid for _role, eid in bound_entities(roles)]
@@ -65,6 +68,8 @@ class ScreenRenderer:
             self._unsubs.append(async_track_state_change_event(
                 self.hass, list(self.entities), self._state_changed))
         self._unsubs.append(async_track_time_interval(self.hass, self._tick, TICK))
+        self._unsubs.append(async_dispatcher_connect(
+            self.hass, SIGNAL_CHECKIN.format(self.screen.subentry_id), self._checkin))
         self.hass.async_create_background_task(self.async_render(), "paperboard initial render")
 
     @callback
@@ -73,6 +78,24 @@ class ScreenRenderer:
             unsub()
         self._unsubs.clear()
         self._debouncer.async_cancel()
+
+    @callback
+    def _checkin(self) -> None:
+        """With profile 'auto', adopt the panel the device says it is (first poll, swaps)."""
+        if not self.auto_profile:
+            return
+        t = self.screen.telemetry
+        prof = resolve_profile(t.get("Model"), to_int(t.get("Width")), to_int(t.get("Height")))
+        wanted = PanelProfile(prof.width, prof.height, prof.bit_depth, prof.byte_limit)
+        if wanted == self.profile:
+            return
+        self.profile = wanted
+        if self.hub is not None and self.hub.layouts is not None:
+            from . import layout_for  # late: __init__ imports this module
+
+            self.layout = layout_for(self.hub.layouts, self.layout_name, prof.bit_depth)
+        self._last_hash = None
+        self.hass.async_create_background_task(self.async_render(), "paperboard re-profile")
 
     @callback
     def _state_changed(self, event: Event[EventStateChangedData]) -> None:
@@ -148,3 +171,8 @@ class ScreenRenderer:
     def _draw(self, snap: Snapshot):  # runs in the executor
         return render(self.layout.build(snap, self._measurer), self.profile,
                       self.fonts.font_dir)
+
+
+def to_int(value: object) -> int | None:
+    number = to_float(value)
+    return int(number) if number is not None else None

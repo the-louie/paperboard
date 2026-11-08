@@ -16,7 +16,7 @@ from custom_components.paperboard.const import (
     SUBENTRY_SCREEN,
 )
 
-SCREEN = {CONF_NAME: "Hallen", CONF_PROFILE: "800x480_1bit", CONF_LAYOUT: "tidslinjen",
+SCREEN = {CONF_NAME: "Hallen", CONF_PROFILE: "auto", CONF_LAYOUT: "tidslinjen",
           CONF_REFRESH_RATE: 900}
 
 

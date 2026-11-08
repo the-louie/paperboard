@@ -23,7 +23,8 @@ from .const import (
     DEFAULT_PROFILE,
     DEFAULT_REFRESH_RATE,
     DOMAIN,
-    PROFILES,
+    PROFILE_ALIASES,
+    PROFILE_AUTO,
     SUBENTRY_SCREEN,
 )
 from .data import ForecastCache, PriceProvider, SolarProvider
@@ -32,6 +33,7 @@ from .fonts import load_fonts
 from .layout_watch import SIGNAL_LAYOUTS, LayoutWatcher
 from .layouts import Layout, get_layout
 from .pipeline import PanelProfile
+from .profiles import resolve as resolve_profile
 from .renderer import ScreenRenderer
 from .role_watch import RoleWatcher
 from .runtime import HubRuntime, ScreenRuntime
@@ -113,11 +115,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     for subentry_id, screen in hub.screens.items():
         data = entry.subentries[subentry_id].data
-        width, height, depth, limit = PROFILES.get(data.get(CONF_PROFILE, DEFAULT_PROFILE),
-                                                   PROFILES[DEFAULT_PROFILE])
+        choice = data.get(CONF_PROFILE, DEFAULT_PROFILE)
+        choice = PROFILE_ALIASES.get(choice, choice)
+        auto = choice == PROFILE_AUTO
+        prof = resolve_profile(screen.telemetry.get("Model"), None, None) if auto \
+            else resolve_profile(choice)
         renderer = ScreenRenderer(hass, screen,
-                                  _layout_for(watcher, data.get(CONF_LAYOUT, ""), depth),
-                                  PanelProfile(width, height, depth, limit), fonts, hub)
+                                  layout_for(watcher, data.get(CONF_LAYOUT, ""), prof.bit_depth),
+                                  PanelProfile(prof.width, prof.height, prof.bit_depth,
+                                               prof.byte_limit), fonts, hub)
+        renderer.auto_profile = auto
+        renderer.layout_name = data.get(CONF_LAYOUT, "")
         hub.renderers[subentry_id] = renderer
         renderer.async_start()
         entry.async_on_unload(renderer.async_stop)
@@ -126,7 +134,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     return True
 
 
-def _layout_for(watcher: LayoutWatcher, name: str, depth: int) -> Layout:
+def layout_for(watcher: LayoutWatcher, name: str, depth: int) -> Layout:
     """A YAML layout (bundled or the user's) by name, else a built-in code layout."""
     spec = watcher.result.layouts.get(name)
     if spec is not None:

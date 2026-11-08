@@ -1,6 +1,6 @@
 # Backlog — paperboard
 
-Next ID: **B-083**
+Next ID: **B-084**
 
 **Sources:**
 - R = `docs/research/HACS e-ink dashboard renderer.md` (deep research 2026-11-08), § = section.
@@ -129,7 +129,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 ## Phase 4 — Other panels (goal: a second panel type from the same layouts)
 
-- → Sprint 02 T-25 (B-064 · Panel profiles from the TRMNL model table)
+- ~~**B-064 · Panel profiles from the TRMNL model table**~~ — CLOSED 2026-11-08 (Sprint 02 T-25): see commit "T-25: Panel profiles from the TRMNL model table"
 - → Sprint 02 T-26 (B-065 · 2-bit and 4-bit render paths)
 - [ ] **B-066 · Generic image clients** · 3h · prio P3 · needs: B-018 · src: R §serving (Alias, ESPHome online_image, Kindle, LaraPaper)
       Document and test the token URL with the ESPHome `online_image` ETag behaviour and BMP
@@ -177,4 +177,9 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - [ ] **B-082 · Rotate-image-token button per screen** · 2h · prio P3 · src: Sprint 01 T-28
       A config-category button that mints a new image token without deleting the screen, so a
       URL leaked through proxy logs or a shared screenshot of diagnostics can be revoked.
+- [ ] **B-083 · Scale YAML layouts to larger panels** · 4h · prio P3 · src: Sprint 02 T-25
+      Profiles now resolve TRMNL X (1872×1404, scale 1.8) and Kindles. Layout px tracks,
+      padding, rules and the Theme scale_factor are still applied at scale 1.0, so a layout
+      renders small in a corner of a big panel. Multiply px tracks, padding and rule widths by
+      the profile's scale_factor, and pass scale_factor to Theme.
 

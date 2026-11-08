@@ -44,10 +44,11 @@ from .const import (
     LIST_ROLES,
     MAX_REFRESH_RATE,
     MIN_REFRESH_RATE,
-    PROFILES,
+    PROFILE_AUTO,
     ROLE_FILTERS,
     SUBENTRY_SCREEN,
 )
+from .profiles import names as profile_names
 from .schema import vol
 
 
@@ -146,7 +147,7 @@ def _screen_schema(defaults: dict[str, Any], hub_refresh: int) -> vol.Schema:
     return vol.Schema({
         vol.Required(CONF_NAME, default=defaults.get(CONF_NAME, "")): TextSelector(),
         vol.Required(CONF_PROFILE, default=defaults.get(CONF_PROFILE, DEFAULT_PROFILE)):
-            SelectSelector(SelectSelectorConfig(options=list(PROFILES),
+            SelectSelector(SelectSelectorConfig(options=[PROFILE_AUTO, *profile_names()],
                                                 mode=SelectSelectorMode.DROPDOWN,
                                                 translation_key="profile")),
         vol.Required(CONF_LAYOUT, default=defaults.get(CONF_LAYOUT, DEFAULT_LAYOUT)):
