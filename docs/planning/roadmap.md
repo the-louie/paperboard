@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-23 (`todo` — "Empty house" gate).
+**Current ticket:** Sprint 02 T-23 (`in-progress` — "Empty house" gate).
 **Last completed:** Sprint 02 T-22 (commit `e17c280`).
 
 ## Sprints
