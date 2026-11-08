@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import secrets
 from typing import Any
 
 from homeassistant.config_entries import (
@@ -28,6 +29,7 @@ from homeassistant.helpers.selector import (
 
 from .const import (
     CONF_BASE_URL,
+    CONF_IMAGE_TOKEN,
     CONF_LAYOUT,
     CONF_NAME,
     CONF_PROFILE,
@@ -136,6 +138,7 @@ class ScreenSubentryFlow(ConfigSubentryFlow):
             if not data[CONF_NAME]:
                 errors[CONF_NAME] = "name_required"
             else:
+                data[CONF_IMAGE_TOKEN] = secrets.token_urlsafe(32)
                 return self.async_create_entry(title=data[CONF_NAME], data=data)
         return self.async_show_form(step_id="user", errors=errors,
                                     data_schema=_screen_schema(user_input or {},
