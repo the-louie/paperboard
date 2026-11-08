@@ -159,3 +159,28 @@ widgets:
 
 Two widgets may share one area when both are vertical stacks (`now` + `energy` above). The
 area is split top to bottom in list order, each widget taking its natural height.
+
+## Schedules (Sprint 03 T-06)
+
+A layout file can instead be a **schedule** that picks one of the other layouts for each
+render. The screen's `layout:` names the schedule.
+
+```yaml
+name: hallen
+default: tidslinjen
+schedule:
+  - {layout: tavlan, from: "07:00", to: "08:00", days: weekdays, when: binary_sensor.skoldag}
+  - {layout: almanackan, from: "22:00", to: "06:00", refresh_rate: 3600}
+```
+
+- **Matching:** entries are tried in order and the first match wins; nothing matching means
+  `default`.
+- **Time:** `from` is inclusive and `to` exclusive; a window may cross midnight. The part
+  after midnight belongs to the start day, for `days` purposes.
+- **`days`:** `all` (default), `weekdays`, `weekend`, or `[mon, tue, …]`.
+- **`when`:** an entity that must be `on`. A missing or unavailable entity does not match:
+  the safe default, so a broken school-day sensor never shows the school layout on a holiday.
+- **Refresh:** `/api/display` shortens the device's `refresh_rate` so it wakes ~30 s after the
+  next window boundary. An entry's own `refresh_rate` applies inside it (e.g. sleep at night).
+- **Validation:** every named layout must exist (bundled, user YAML or built-in). Otherwise
+  the schedule is rejected with a Repairs issue.

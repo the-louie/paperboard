@@ -80,7 +80,7 @@ class LoadResult:
     mtimes: dict[str, tuple[int, int]] = field(default_factory=dict)  # (mtime_ns, size)
 
 
-def parse(text: str, source: str) -> LayoutSpec:
+def parse(text: str, source: str) -> LayoutSpec:  # or a ScheduleSpec for schedule files
     """Validate one file's text; raises ValueError with all messages joined by newlines."""
     try:
         raw = yaml.safe_load(text)
@@ -88,6 +88,13 @@ def parse(text: str, source: str) -> LayoutSpec:
         raise ValueError(f"YAML: {err}") from err
     if not isinstance(raw, dict):
         raise ValueError("the file must be a mapping with name, grid and widgets")
+    if "schedule" in raw:
+        from .schedule import parse_schedule
+
+        try:
+            return parse_schedule(raw, source)  # type: ignore[return-value]
+        except vol.Invalid as err:
+            raise ValueError("\n".join(format_errors(err))) from err
     try:
         data = LAYOUT(raw)
     except vol.Invalid as err:
@@ -130,6 +137,18 @@ def load_all(user_dir: Path | None, previous: LoadResult | None = None) -> LoadR
                         result.layouts[name] = spec_prev
             continue
         result.layouts[spec.name] = spec
+    # A schedule may only name layouts that exist (checked after all files are read).
+    for name, spec in list(result.layouts.items()):
+        targets = [e.layout for e in getattr(spec, "entries", ())]
+        if hasattr(spec, "entries"):
+            targets.append(spec.default)
+            from .layouts import LAYOUTS as CODE_LAYOUTS
+
+            missing = [t for t in targets
+                       if t == name or (t not in result.layouts and t not in CODE_LAYOUTS)]
+            if missing:
+                result.errors[spec.source] = [f"schedule: unknown layout {t!r}" for t in missing]
+                del result.layouts[name]
     return result
 
 

@@ -101,7 +101,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - → Sprint 03 T-12 (B-057 · Layout 07 Almanackan)
 - → Sprint 03 T-13 (B-058 · Layout 08 Energi)
 - → Sprint 03 T-14 (B-059 · Layout 04 Instrument (bar-chart parts only))
-- → Sprint 03 T-06 (B-060 · Schedule: time-of-day layouts)
+- ~~**B-060 · Schedule: time-of-day layouts**~~ — CLOSED 2026-11-08 (Sprint 03 T-06): see commit "T-06: Schedule: time-of-day layouts"
 - → Sprint 03 T-07 (B-061 · Night sleep and refresh policy)
 - [ ] **B-062 · decision: which layout when** · 1h · prio P2 · needs: B-060 · src: V
       The owner picks the schedule.

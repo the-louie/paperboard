@@ -11,7 +11,7 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
 from . import widget_registry  # noqa: F401 - registers the layout widget types
-from .compose import as_layout
+from .compose import as_layout, scheduled_layout
 from .const import (
     CONF_BASE_URL,
     CONF_IMAGE_TOKEN,
@@ -139,6 +139,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
 def layout_for(watcher: LayoutWatcher, name: str, depth: int) -> Layout:
     """A YAML layout (bundled or the user's) by name, else a built-in code layout."""
     spec = watcher.result.layouts.get(name)
+    if spec is not None and hasattr(spec, "entries"):  # a schedule of other layouts
+        return scheduled_layout(spec, lambda n: layout_for(watcher, n, depth))
     if spec is not None:
         return as_layout(spec, lambda: Theme(bit_depth=depth))
     return get_layout(name)

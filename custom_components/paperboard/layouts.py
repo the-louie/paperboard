@@ -51,6 +51,7 @@ class Layout:
     discover: Callable[[list[str]], tuple[str, ...]] | None = None
     # HA Jinja templates used by text slots; rendered in the event loop per snapshot.
     templates: tuple[str, ...] = ()
+    schedule: Any = None  # schedule.ScheduleSpec when this layout is a time-of-day schedule
 
     def resolve(self, entity_ids: list[str]) -> tuple[str, ...]:
         found = self.discover(entity_ids) if self.discover else ()

@@ -16,6 +16,7 @@ from homeassistant.components.http import HomeAssistantView
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.network import is_cloud_connection
+from homeassistant.util import dt as dt_util
 from homeassistant.util.network import is_local
 
 from .const import DOMAIN, SIGNAL_CHECKIN
@@ -146,6 +147,17 @@ def _authenticated_screen(hub: HubRuntime | None, request: web.Request) -> Scree
     return hub.screens.get(screen_id)
 
 
+def _refresh_rate(hass: HomeAssistant, hub: HubRuntime, screen: ScreenRuntime) -> int:
+    """The screen's rate, shortened so the device wakes just after the next schedule switch."""
+    renderer = hub.renderers.get(screen.subentry_id)
+    schedule = getattr(getattr(renderer, "layout", None), "schedule", None)
+    if schedule is None:
+        return screen.refresh_rate
+    states = {e: {"state": s.state} for e in schedule.conditions
+              if (s := hass.states.get(e)) is not None}
+    return schedule.refresh_rate(dt_util.now(), states, screen.refresh_rate)
+
+
 class DisplayView(HomeAssistantView):
     """GET /api/display: authenticated poll -> current image and refresh rate."""
 
@@ -178,7 +190,7 @@ class DisplayView(HomeAssistantView):
         return _json({"status": 0,
                       "image_url": base_url(hub, request) + image_path(screen),
                       "filename": screen.frame.sha,
-                      "refresh_rate": screen.refresh_rate,
+                      "refresh_rate": _refresh_rate(self.hass, hub, screen),
                       "update_firmware": False, "reset_firmware": False,
                       "special_function": "none"})
 

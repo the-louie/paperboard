@@ -143,3 +143,18 @@ def axis_for(snap: Snapshot, r: Rect, hours: int, gutter: float = 42) -> TimeAxi
 
 
 _ = dt  # re-exported for widget modules
+
+
+def scheduled_layout(schedule: Any, resolve: Callable[[str], Layout]) -> Layout:
+    """A Layout that delegates to the schedule's active layout at each render."""
+    targets = {e.layout for e in schedule.entries} | {schedule.default}
+    layouts = {name: resolve(name) for name in targets}
+
+    def build(snap: Snapshot, measure: Measurer) -> str:
+        return layouts[schedule.layout_at(snap.now, snap.states)].build(snap, measure)
+
+    entities = tuple(dict.fromkeys(e for lay in layouts.values() for e in lay.entities))
+    templates = tuple(dict.fromkeys(t for lay in layouts.values() for t in lay.templates))
+    return Layout(build=build, entities=(*entities, *schedule.conditions),
+                  clock_resolution=min(lay.clock_resolution for lay in layouts.values()),
+                  templates=templates, schedule=schedule)
