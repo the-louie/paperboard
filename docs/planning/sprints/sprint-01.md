@@ -1,6 +1,6 @@
 # Sprint 01 — Skeleton and device server: the stack proven, HA serves a TRMNL image
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-23 (`todo` — Render scheduler)
+**Current ticket:** T-23 (`in-progress` — Render scheduler)
 **Last completed:** T-22 (`done` — commit `cde6d5e`)
 **Budget:** 81h estimated (band 80–120h)
 
@@ -37,7 +37,7 @@ Prove the resvg + Pillow stack and build the integration skeleton, so that a pap
 | T-20 | View: /api/display | 4 | T-19, T-18 | B-015 | done | Landed in 1e4621c |
 | T-21 | View: /api/log | 2 | T-20 | B-017 | done | Landed in ad83f21 |
 | T-22 | ImageEntity per screen | 2 | T-18, T-16 | B-019 | done | Landed in cde6d5e |
-| T-23 | Render scheduler | 5 | T-10, T-16 | B-020 | todo | spec: backlog row B-020 (git show 13b3751:docs/planning/backlog.md) |
+| T-23 | Render scheduler | 5 | T-10, T-16 | B-020 | in-progress | spec: backlog row B-020 (git show 13b3751:docs/planning/backlog.md) |
 | T-24 | Telemetry sensors | 3 | T-20 | B-021 | todo | spec: backlog row B-021 (git show 13b3751:docs/planning/backlog.md) |
 | T-25 | Missed-check-in problem sensor | 2 | T-24 | B-022 | todo | spec: backlog row B-022 (git show 13b3751:docs/planning/backlog.md) |
 | T-26 | Widgets: "now" block and status footer | 4 | T-13 | B-023 | todo | spec: backlog row B-023 (git show 13b3751:docs/planning/backlog.md) |
