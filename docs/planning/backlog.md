@@ -268,5 +268,5 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       change is made in the `<the maintainer's HA repo>` repo).
 - [ ] **B-078 · Spike: a Lovelace preview card (optional)** · 3h · prio P3 · src: R (the cryptomilk editor is a card)
       Only a read-only preview of the ImageEntity with a layout picker; no WYSIWYG editing.
-- → Sprint 01 T-09 (B-079 · Unit-format helpers)
+- ~~**B-079 · Unit-format helpers**~~ — CLOSED 2026-11-08 (Sprint 01 T-09): see commit "T-09: Unit-format helpers"
 - ~~**B-080 · Text measurement and wrap utility**~~ — CLOSED 2026-11-08 (Sprint 01 T-08): see commit "T-08: Text measurement and wrap utility"
