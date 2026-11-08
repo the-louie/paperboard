@@ -43,3 +43,23 @@
 No escape hatch is needed. If a future core release claims one of the paths, the fallback is a
 firmware "custom server" base URL that includes a prefix, e.g. `http://ha:8123/paperboard`.
 The firmware appends `/api/...` to its base URL; verify this in B-011.
+
+## The owner's device (T-04, 2026-11-08, read-only from byos-host's trmnl-service)
+
+Read from `http://127.0.0.1:3077/status.json` and the container log on byos-host. The MAC is
+deliberately not recorded here.
+
+| Header / fact | Value | Consequence |
+|---|---|---|
+| `Model` | **`xiao_epaper_display`** | The device is **not a TRMNL OG**. It is a Seeed XIAO 7.5" ePaper panel running TRMNL firmware. Panel profiles must key on `Model`, and B-064 moves earlier in priority. |
+| `FW-Version` | **1.8.10** | ≥ 1.6.0, so 2-bit PNG is supported per the protocol notes. ≥ 1.5.2, so 1-bit PNG with partial refresh works. |
+| `Width` × `Height` | 800 × 480 | Same canvas as the OG. |
+| `Battery-Voltage` | 4.20 V on every check-in | It sits on USB power (the photo shows a cable), so the voltage is a flat line. The battery % sensor stays useful for other homes. |
+| `RSSI` | −55 to −58 dBm | Good. |
+| `Refresh-Rate` | 900 s | Matches trmnl-service's `REFRESH_RATE: "900"`. |
+| `WiFi-Band` | 2.4 | Extra header, not in the protocol notes; record it as telemetry. |
+| `Wake-Time` | ~5374 ms | Extra header; useful for diagnostics. |
+| `Image-Cached` | false | |
+| Image served today | png1, 3–5 kB | 18× under the 90 kB OG limit. |
+| Byte limit | **not yet confirmed** | The XIAO ESP32-S3 has PSRAM, which would make it the 750 kB class. Verify against the firmware's board table in B-064; until then, keep the 90 kB OG limit. |
+| `Access-Token` | sent (`d506…`) | trmnl-service runs with `api_key_required: false`, so it is not checked today. |
