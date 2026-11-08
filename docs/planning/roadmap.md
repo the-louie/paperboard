@@ -2,8 +2,8 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-01 (`in-progress` — Research: schema library for layouts).
-**Last completed:** Sprint 01 T-29 (commit `01612e5`).
+**Current ticket:** Sprint 02 T-02 (`todo` — Design: layout YAML schema).
+**Last completed:** Sprint 02 T-01 (commit `2113c43`).
 
 ## Sprints
 | Sprint | Goal | Status |
