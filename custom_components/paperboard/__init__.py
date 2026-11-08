@@ -29,6 +29,7 @@ from .layout_watch import LayoutWatcher
 from .layouts import get_layout
 from .pipeline import PanelProfile
 from .renderer import ScreenRenderer
+from .role_watch import RoleWatcher
 from .runtime import HubRuntime, ScreenRuntime
 from .views import DisplayView, ImageView, LogView, SetupView
 
@@ -57,6 +58,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     await store.async_load()
     hub = HubRuntime(devices=store, base_url=entry.options.get(CONF_BASE_URL, ""),
                      layouts=watcher, roles=dict(entry.options.get(CONF_ROLES, {})))
+    entry.async_on_unload(RoleWatcher(hass, hub.roles).async_start())
     registry = dr.async_get(hass)
     wanted: set[str] = set()
     for subentry in list(entry.subentries.values()):

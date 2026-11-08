@@ -147,6 +147,10 @@
     "layout_invalid": {
       "title": "Paperboard-layouten {file} har fel",
       "description": "Layoutfilen {file} kunde inte läsas in. Skärmarna använder den senast fungerande versionen (om det fanns någon).\n\n{errors}"
+    },
+    "role_missing": {
+      "title": "Paperboard: {entity} finns inte längre",
+      "description": "Rollen {role} är kopplad till {entity}, som inte längre finns. Skärmarna fortsätter att fungera och visar ett streck eller hoppar över den delen. Koppla rollen till en annan entitet under Paperboard → Konfigurera → Roller, eller töm den."
     }
   }
 }

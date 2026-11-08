@@ -71,7 +71,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-030 · Grid engine with reflow**~~ — CLOSED 2026-11-08 (Sprint 02 T-04): see commit "T-04: Grid engine with reflow"
 - ~~**B-031 · Type scale and style tokens**~~ — CLOSED 2026-11-08 (Sprint 02 T-03): see commit "T-03: Type scale and style tokens"
 - ~~**B-032 · Roles: binding in config/options flow**~~ — CLOSED 2026-11-08 (Sprint 02 T-06): see commit "T-06: Roles: binding in config/options flow"
-- → Sprint 02 T-07 (B-033 · Repairs for missing entities)
+- ~~**B-033 · Repairs for missing entities**~~ — CLOSED 2026-11-08 (Sprint 02 T-07): see commit "T-07: Repairs for missing entities"
 - → Sprint 02 T-08 (B-034 · Data: weather forecasts)
 - → Sprint 02 T-09 (B-035 · Research: price sources)
 - → Sprint 02 T-10 (B-036 · Price adapters)
