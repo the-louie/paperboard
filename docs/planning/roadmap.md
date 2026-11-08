@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 03](./sprints/sprint-03.md) — in progress.
-**Current ticket:** Sprint 03 T-23 (`todo` — README and documentation).
+**Current ticket:** Sprint 03 T-23 (`in-progress` — README and documentation).
 **Last completed:** Sprint 03 T-22 (commit `e39187c`).
 
 ## Sprints
