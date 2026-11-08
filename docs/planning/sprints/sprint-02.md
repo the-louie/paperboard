@@ -1,7 +1,7 @@
 # Sprint 02 — Layout engine and the hard widgets: mockup 01 from YAML on real data
 **Status:** in progress (opened 2026-11-08)
-**Current ticket:** T-13 (`in-progress` — TimeAxis object)
-**Last completed:** T-12 (`done` — commit `64c999f`)
+**Current ticket:** T-14 (`todo` — Weather icon set)
+**Last completed:** T-13 (`done` — commit `d9bca94`)
 **Budget:** 86h estimated (band 80–120h)
 
 ## Goal
@@ -30,7 +30,7 @@ with warning inversion, the hourly table, energy flow, rooms, and sun/moon.
 | T-10 | Price adapters | 4 | T-09 | B-036 | done | Landed in ac5c7f8 |
 | T-11 | Research: solar forecast source | 2 | — | B-037 | done | Landed in 7764679 |
 | T-12 | Solar forecast adapter | 3 | T-11 | B-038 | done | Landed in 64c999f |
-| T-13 | TimeAxis object | 3 | T-04 | B-039 | in-progress | spec: backlog row B-039 (`git show 13b3751:docs/planning/backlog.md`) |
+| T-13 | TimeAxis object | 3 | T-04 | B-039 | done | Landed in d9bca94 |
 | T-14 | Weather icon set | 3 | T-03 | B-044 | todo | spec: backlog row B-044 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-15 | Widget: price chart | 4 | T-10, T-13 | B-040 | todo | spec: backlog row B-040 (`git show 13b3751:docs/planning/backlog.md`) |
 | T-16 | Widget: solar forecast chart | 3 | T-12, T-13 | B-041 | todo | spec: backlog row B-041 (`git show 13b3751:docs/planning/backlog.md`) |
