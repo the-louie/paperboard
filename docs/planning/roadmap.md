@@ -2,7 +2,7 @@
 
 ## Current position
 **Active sprint:** [Sprint 02](./sprints/sprint-02.md) — in progress.
-**Current ticket:** Sprint 02 T-16 (`todo` — Widget: solar forecast chart).
+**Current ticket:** Sprint 02 T-16 (`in-progress` — Widget: solar forecast chart).
 **Last completed:** Sprint 02 T-15 (commit `60e1bf4`).
 
 ## Sprints
