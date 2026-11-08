@@ -111,7 +111,9 @@ def _now(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> b
     values = {
         "indoor": fmt.with_unit(role_value(snap, "indoor_temp")[0], "°", 1, lang)
         if snap.roles.get("indoor_temp") else None,
-        "feels_like": fmt.with_unit(attrs.get("apparent_temperature"), "°", 1, lang)
+        "feels_like": fmt.with_unit(role_value(snap, "feels_like")[0], "°", 1, lang)
+        if snap.roles.get("feels_like") else
+        fmt.with_unit(attrs.get("apparent_temperature"), "°", 1, lang)
         if "apparent_temperature" in attrs else None,
         "humidity": fmt.with_unit(role_value(snap, "outdoor_humidity")[0]
                                   if snap.roles.get("outdoor_humidity")

@@ -53,7 +53,8 @@
           "battery_power": "Hembatteriets effekt",
           "sun": "Sol",
           "rooms": "Rumstemperaturer",
-          "calendars": "Kalendrar"
+          "calendars": "Kalendrar",
+          "feels_like": "Känns som-temperatur"
         }
       }
     }

@@ -18,7 +18,8 @@ from custom_components.paperboard.const import (
     SUBENTRY_SCREEN,
 )
 
-SCREEN_DATA = {CONF_NAME: "Hallen", CONF_PROFILE: "800x480_1bit", CONF_LAYOUT: "tidslinjen",
+# Mechanics tests use the minimal "status" layout; real layouts have their own tests.
+SCREEN_DATA = {CONF_NAME: "Hallen", CONF_PROFILE: "800x480_1bit", CONF_LAYOUT: "status",
                CONF_REFRESH_RATE: 900, CONF_IMAGE_TOKEN: "img-token-for-tests-0123456789abcdef"}
 
 

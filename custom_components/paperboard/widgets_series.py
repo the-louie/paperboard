@@ -66,6 +66,8 @@ def price_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
         svg.path(f"M{bx0 + 1:.1f},{by + 5:.1f}V{by:.1f}H{bx1 - 1:.1f}V{by + 5:.1f}", width=2)
         text = f"{best[0]:%H}–{(best[0] + dt.timedelta(hours=cheapest_hours)):%H} " \
                f"{fmt.number(best[1], 2, snap.lang)}"
+        tw = measure.width(text, theme.text("xs", bold=True))
+        svg.rect((bx0 + bx1) / 2 - tw / 2 - 2, by - 15, tw + 4, 13, theme.paper)
         svg.text((bx0 + bx1) / 2, by - 4, text, theme.text("xs", bold=True), "middle")
     last_end = max(p.end for p in hourly)
     if last_end < axis.end and series.tomorrow_expected_at:

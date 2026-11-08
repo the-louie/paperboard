@@ -37,6 +37,7 @@ ROLE_FILTERS: dict[str, dict] = {
     "weather": {"domain": "weather"},
     "outdoor_temp": {"domain": "sensor", "device_class": "temperature"},
     "indoor_temp": {"domain": "sensor", "device_class": "temperature"},
+    "feels_like": {"domain": "sensor", "device_class": "temperature"},
     "outdoor_humidity": {"domain": "sensor", "device_class": "humidity"},
     "rain_today": {"domain": "sensor"},
     "price": {"domain": "sensor"},

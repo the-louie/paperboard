@@ -6,9 +6,12 @@ import secrets
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
+from . import widget_registry  # noqa: F401 - registers the layout widget types
+from .compose import as_layout
 from .const import (
     CONF_BASE_URL,
     CONF_IMAGE_TOKEN,
@@ -26,12 +29,13 @@ from .const import (
 from .data import ForecastCache, PriceProvider, SolarProvider
 from .devices import DeviceStore
 from .fonts import load_fonts
-from .layout_watch import LayoutWatcher
-from .layouts import get_layout
+from .layout_watch import SIGNAL_LAYOUTS, LayoutWatcher
+from .layouts import Layout, get_layout
 from .pipeline import PanelProfile
 from .renderer import ScreenRenderer
 from .role_watch import RoleWatcher
 from .runtime import HubRuntime, ScreenRuntime
+from .style import Theme
 from .views import DisplayView, ImageView, LogView, SetupView
 
 PLATFORMS = [Platform.BINARY_SENSOR, Platform.BUTTON, Platform.IMAGE, Platform.SENSOR]
@@ -55,6 +59,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     watcher = LayoutWatcher(hass)
     await watcher.async_load()
     entry.async_on_unload(watcher.async_start())
+    # A changed layout file: reload the hub so every renderer picks the new spec up.
+    @callback
+    def _layouts_changed() -> None:
+        hass.config_entries.async_schedule_reload(entry.entry_id)
+
+    entry.async_on_unload(async_dispatcher_connect(hass, SIGNAL_LAYOUTS, _layouts_changed))
     store = DeviceStore(hass, entry.entry_id)
     await store.async_load()
     hub = HubRuntime(devices=store, base_url=entry.options.get(CONF_BASE_URL, ""),
@@ -105,7 +115,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
         data = entry.subentries[subentry_id].data
         width, height, depth, limit = PROFILES.get(data.get(CONF_PROFILE, DEFAULT_PROFILE),
                                                    PROFILES[DEFAULT_PROFILE])
-        renderer = ScreenRenderer(hass, screen, get_layout(data.get(CONF_LAYOUT, "")),
+        renderer = ScreenRenderer(hass, screen,
+                                  _layout_for(watcher, data.get(CONF_LAYOUT, ""), depth),
                                   PanelProfile(width, height, depth, limit), fonts, hub)
         hub.renderers[subentry_id] = renderer
         renderer.async_start()
@@ -113,6 +124,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     # Options and subentry changes both fire update listeners; reload picks them all up.
     entry.async_on_unload(entry.add_update_listener(_async_reload))
     return True
+
+
+def _layout_for(watcher: LayoutWatcher, name: str, depth: int) -> Layout:
+    """A YAML layout (bundled or the user's) by name, else a built-in code layout."""
+    spec = watcher.result.layouts.get(name)
+    if spec is not None:
+        return as_layout(spec, lambda: Theme(bit_depth=depth))
+    return get_layout(name)
 
 
 async def _async_reload(hass: HomeAssistant, entry: ConfigEntry) -> None:

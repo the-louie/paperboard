@@ -53,7 +53,8 @@
           "battery_power": "Home battery power",
           "sun": "Sun",
           "rooms": "Room temperatures",
-          "calendars": "Calendars"
+          "calendars": "Calendars",
+          "feels_like": "Feels-like temperature"
         }
       }
     }

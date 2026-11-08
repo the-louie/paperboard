@@ -1,0 +1,38 @@
+# 01 Tidslinjen - the owner's chosen design with the changes from 2026-11-08:
+# no "Tryck" in the now block; expected solar replaces the temperature/sun graph and shares
+# the price graph's time axis; energy shows "Sol idag förväntat".
+name: tidslinjen
+title: Tidslinjen
+grid:
+  columns: [250, 182, fr]
+  rows: [40, 262, fr, 26]
+  rules: 2
+  padding: [6, 16]
+  areas:
+    - header header   header
+    - now    timeline timeline
+    - days   days     energy
+    - footer footer   footer
+widgets:
+  - type: header
+    area: header
+    options: {show_week: true, show_flag: true, badge: tomorrow_07}
+  - type: now
+    area: now
+    collapse: right
+    options:
+      rows: [indoor, feels_like, humidity, wind, rain_today]
+  - type: timeline
+    area: timeline
+    collapse: left
+    options: {hours: 24, series: [solar_forecast, price], cheapest_hours: 2, night: dots}
+  - type: daily
+    area: days
+    options: {days: 6}
+  - type: energy
+    area: energy
+    options:
+      rows: [price_now, solar_expected_today, solar_now, house_now, battery]
+  - type: footer
+    area: footer
+    options: {left: rooms}

@@ -84,7 +84,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-043 · Widget: daily forecast with warning inversion**~~ — CLOSED 2026-11-08 (Sprint 02 T-17): see commit "T-17: Widget: daily forecast with warning inversion"
 - ~~**B-044 · Weather icon set**~~ — CLOSED 2026-11-08 (Sprint 02 T-14): see commit "T-14: Weather icon set"
 - ~~**B-045 · "Empty house" gate**~~ — CLOSED 2026-11-08 (Sprint 02 T-23): see commit "T-23: "Empty house" gate"
-- → Sprint 02 T-24 (B-046 · Layout 01 Tidslinjen with the owner's changes)
+- ~~**B-046 · Layout 01 Tidslinjen with the owner's changes**~~ — CLOSED 2026-11-08 (Sprint 02 T-24): see commit "T-24: Layout 01 Tidslinjen with the owner's changes"
 
 ## Phase 3 — Remaining widgets and the schedule (goal: all 8 mockups in rotation, night sleep)
 
