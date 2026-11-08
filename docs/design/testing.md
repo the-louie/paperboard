@@ -32,3 +32,21 @@ an HA release, pin both `homeassistant` and `pytest-homeassistant` to the last m
 .venv/bin/ruff check .
 .venv/bin/pytest -q
 ```
+
+## Golden images (T-11)
+
+- **Helper:** `tests/golden_util.assert_golden(name, png)` compares against
+  `tests/golden/<name>.png` and requires an **exact** pixel match.
+  - On mismatch it writes `tests/output/<name>.actual.png` and `<name>.diff.png` (changed
+    pixels black) and fails with the pixel count.
+  - `tests/output/` is git-ignored.
+- **Creating and updating:**
+  - A missing golden is created on first run locally. In CI (`CI` set), a missing golden
+    fails.
+  - Re-render all goldens with `python scripts/update_golden.py`, then review the PNGs in the
+    diff before committing.
+- **Determinism:**
+  - Fonts come only from the bundled dir (`skip_system_fonts`).
+  - Rendering code receives `now` as a parameter (never `datetime.now()` inside a widget), so
+    a golden is frozen by passing a fixed time.
+  - State fixtures live in `tests/fixtures/states/*.json` (T-12).

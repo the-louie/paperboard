@@ -36,7 +36,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-006 · Spike: text metrics, Pillow vs resvg**~~ — CLOSED 2026-11-08 (Sprint 01 T-07): see commit "T-07: Spike: text metrics, Pillow vs resvg"
 - ~~**B-007 · Fonts: bundle and load**~~ — CLOSED 2026-11-08 (Sprint 01 T-06): see commit "T-06: Fonts: bundle and load"
 - ~~**B-008 · Pipeline: SVG → panel PNG**~~ — CLOSED 2026-11-08 (Sprint 01 T-10): see commit "T-10: Pipeline: SVG → panel PNG"
-- → Sprint 01 T-11 (B-009 · Golden-image test harness)
+- ~~**B-009 · Golden-image test harness**~~ — CLOSED 2026-11-08 (Sprint 01 T-11): see commit "T-11: Golden-image test harness"
 - → Sprint 01 T-13 (B-010 · Static render of mockup 01 (go/no-go))
 
 ## Phase 1 — Device server (goal: the owner's OG is served from HA, battery and liveness monitored)
