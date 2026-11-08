@@ -19,8 +19,11 @@ class ScreenRuntime:
     name: str
     image_token: str
     frame: Frame | None = None
+    refresh_rate: int = 900
     stale: bool = False  # True while the last render failed and an older frame is served
     last_error: str | None = None
+    telemetry: dict[str, str] = field(default_factory=dict)  # last /api/display headers
+    last_checkin: float | None = None  # time.time() of the last authenticated poll
 
     _bmp: tuple[str, bytes] | None = None
 
@@ -49,6 +52,7 @@ class HubRuntime:
     screens: dict[str, ScreenRuntime] = field(default_factory=dict)
     base_url: str = ""
     pairing_screen: str | None = None
+    last_rejected: dict[str, str] | None = None
     pairing_until: float = 0.0
 
     def open_pairing(self, screen_id: str, seconds: int = PAIRING_SECONDS) -> None:

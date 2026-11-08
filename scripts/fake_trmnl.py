@@ -38,6 +38,7 @@ class FakeTrmnl:
     refresh_rate: str = "900"
     cached: list[str] = field(default_factory=list)
     last_image: bytes = b""
+    _relative: bool = False
 
     def _common(self) -> dict[str, str]:
         return {"ID": self.mac, "Content-Type": "application/json", "FW-Version": FW_VERSION,
@@ -101,6 +102,15 @@ class FakeTrmnl:
         await resp.read()
         return resp.status
 
+    async def cycle_relative(self) -> dict[str, Any]:
+        """cycle() for test clients that only take paths: absolute image URLs are cut to the
+        path (the firmware itself always uses the absolute URL)."""
+        self._relative = True
+        try:
+            return await self.cycle()
+        finally:
+            self._relative = False
+
     async def cycle(self) -> dict[str, Any]:
         """One wake: setup if needed, display, fetch the image unless cached, log."""
         if not self.api_key:
@@ -110,7 +120,10 @@ class FakeTrmnl:
         disp = await self.display()
         result: dict[str, Any] = {"display": disp}
         if disp.get("status") == 0 and disp.get("filename") not in self.cached:
-            status, body = await self.fetch_image(disp["image_url"])
+            url = disp["image_url"]
+            if self._relative and "://" in url:
+                url = "/" + url.split("/", 3)[3]
+            status, body = await self.fetch_image(url)
             result["image"] = {"status": status, "bytes": len(body)}
             if status == 200:
                 self.cached = [disp["filename"], *self.cached][:30]

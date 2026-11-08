@@ -25,3 +25,6 @@ PROFILES: dict[str, tuple[int, int, int, int]] = {
     "800x480_2bit": (800, 480, 2, 90_000),
 }
 DEFAULT_PROFILE = "800x480_1bit"
+
+# Dispatcher signal fired on every authenticated check-in; format with the screen id.
+SIGNAL_CHECKIN = "paperboard_checkin_{}"

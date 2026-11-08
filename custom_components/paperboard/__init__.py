@@ -14,12 +14,14 @@ from .const import (
     CONF_IMAGE_TOKEN,
     CONF_NAME,
     CONF_PROFILE,
+    CONF_REFRESH_RATE,
+    DEFAULT_REFRESH_RATE,
     DOMAIN,
     SUBENTRY_SCREEN,
 )
 from .devices import DeviceStore
 from .runtime import HubRuntime, ScreenRuntime
-from .views import ImageView, SetupView
+from .views import DisplayView, ImageView, SetupView
 
 PLATFORMS = [Platform.BUTTON]
 
@@ -34,6 +36,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
         # Views cannot be unregistered; they look the hub up per request instead.
         hass.http.register_view(ImageView(hass))
         hass.http.register_view(SetupView(hass))
+        hass.http.register_view(DisplayView(hass))
         hass.data[_VIEWS_REGISTERED] = True
 
     store = DeviceStore(hass, entry.entry_id)
@@ -54,6 +57,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
             subentry_id=subentry.subentry_id,
             name=subentry.data.get(CONF_NAME, subentry.title),
             image_token=subentry.data[CONF_IMAGE_TOKEN],
+            refresh_rate=int(subentry.data.get(
+                CONF_REFRESH_RATE, entry.options.get(CONF_REFRESH_RATE, DEFAULT_REFRESH_RATE))),
         )
         device = registry.async_get_or_create(
             config_entry_id=entry.entry_id,
