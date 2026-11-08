@@ -1,0 +1,54 @@
+# Checks for every push and PR. Action inputs verified against their action.yml on 2026-11-08:
+# hacs/action needs `category`; home-assistant/actions/hassfest takes none.
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 4 * * 1"  # weekly: catches HA/HACS rule changes between releases
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv venv -p 3.14 .venv && uv pip install -p .venv/bin/python -r requirements_test.txt
+      - run: .venv/bin/ruff check .
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        # The ARM job is the real aarch64 check (docs/design/rendering.md, T-20).
+        runner: [ubuntu-latest, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv venv -p 3.14 .venv && uv pip install -p .venv/bin/python -r requirements_test.txt
+      # Golden images and the empty-house gate are part of the suite; CI=true makes a
+      # missing golden fail instead of being created.
+      - run: .venv/bin/pytest -q
+        env:
+          CI: "true"
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-diffs-${{ matrix.runner }}
+          path: tests/output/
+
+  hassfest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hacs/action@main
+        with:
+          category: integration

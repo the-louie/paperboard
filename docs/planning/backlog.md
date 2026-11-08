@@ -118,7 +118,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 
 - → Sprint 03 T-23 (B-067 · README and documentation)
 - → Sprint 03 T-22 (B-068 · Brand assets)
-- → Sprint 03 T-21 (B-069 · CI workflow)
+- ~~**B-069 · CI workflow**~~ — CLOSED 2026-11-08 (Sprint 03 T-21): see commit "T-21: CI workflow"
 - ~~**B-070 · Research: aarch64 verification**~~ — CLOSED 2026-11-08 (Sprint 03 T-20): see commit "T-20: Research: aarch64 verification"
 - [ ] **B-071 · decision: release and HACS default PR** · 1h · prio P3 · needs: B-067, B-069, B-070 · src: N HACS rules
       The owner pushes, tags the release, and opens a PR to hacs/default.
