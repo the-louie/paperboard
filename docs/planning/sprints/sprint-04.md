@@ -1,7 +1,7 @@
 # Sprint 04 — Internationalisation (0.2.0)
 **Status:** active (opened 2026-11-09)
-**Current ticket:** T-07
-**Last completed:** T-06
+**Current ticket:** T-08
+**Last completed:** T-07
 **Budget:** 31h estimated (band 80–120h). **Below the band on purpose:** the owner scoped this
 loop to the 0.2.0 internationalisation rows only (B-105 to B-115); B-116 is the owner's release.
 
@@ -24,7 +24,7 @@ language with two JSON files. Plan and test plan: `docs/design/i18n.md`.
 | T-04 | Move labels (now block, energy, flow, charts, sky, footer) | 4 | T-01 | B-108 | done | no lang branches left in widgets; sv "indoor" = Inne; sv goldens identical (fixture names the room) |
 | T-05 | Layout texts: section keys and layout display names | 3 | T-01 | B-109 | done | `{key: …}` titles; dropdown "Timeline (bundled)"; ids unchanged |
 | T-06 | Numbers follow the language | 2 | T-01 | B-110 | done | fmt default en; now_block passed no lang (4 calls) |
-| T-07 | Test suite for i18n | 5 | T-02..T-06 | B-111 | todo | |
+| T-07 | Test suite for i18n | 5 | T-02..T-06 | B-111 | done | stray-word tests both ways (mutation-checked), 7 `*_owner_en` goldens, empty in every language, renderer follows HA |
 | T-08 | HA UI texts audit | 1 | — | B-112 | todo | |
 | T-09 | Docs: add-a-language guide, README language section | 2 | T-01, T-05 | B-113 | todo | |
 | T-10 | README images from the English default | 1 | T-07 | B-114 | todo | |
@@ -32,5 +32,6 @@ language with two JSON files. Plan and test plan: `docs/design/i18n.md`.
 
 ## Scope changes
 - Found: an intermittent ERROR in the suite, filed as **B-117** (not in this sprint).
+- Found: English labels cut off in narrow cells, filed as **B-118** (P1, next sprint).
 
 ## Retro

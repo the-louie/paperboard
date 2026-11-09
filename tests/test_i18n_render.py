@@ -1,0 +1,94 @@
+"""Rendered text per language (docs/design/i18n.md test plan 4-8): every bundled layout in
+English has no Swedish word, in Swedish no English word; English goldens; empty renders."""
+
+import html
+import re
+
+import pytest
+from homeassistant.core import HomeAssistant
+
+import custom_components.paperboard.widget_registry  # noqa: F401
+from custom_components.paperboard import i18n
+from custom_components.paperboard.compose import render_spec
+from custom_components.paperboard.fonts import FONT_DIR, load_fonts
+from custom_components.paperboard.layout_file import load_all
+from custom_components.paperboard.pipeline import PanelProfile, render
+from custom_components.paperboard.style import Theme
+from custom_components.paperboard.text import Measurer
+from tests.golden_util import assert_golden
+from tests.test_empty_house import EMPTY, GARBAGE
+from tests.test_layout_tidslinjen import english_owner_snapshot, owner_snapshot
+
+MEASURE = Measurer(load_fonts())
+LAYOUTS = load_all(None).layouts
+BUNDLED = sorted(n for n, s in LAYOUTS.items() if not hasattr(s, "entries"))
+
+# Words only one language uses. Data that stays as it is (the price unit "kr", "Father's Day"
+# on an English calendar, "Bento"/"TRMNL") is not listed.
+SWEDISH = {"och", "idag", "imorgon", "vecka", "nu", "sol", "el", "inne", "ute", "uppehåll",
+           "natt", "grader", "regn", "mån", "tis", "ons", "tor", "fre", "lör", "sön",
+           "kalender", "energi", "batteri", "huset", "nät", "hemmet", "vädret", "solen",
+           "månen", "kvar", "förväntat", "morgondagens", "pris", "kommer", "fukt", "vind",
+           "tryck", "känns", "uppdaterad", "heldag", "upp", "ned", "mulet", "halvklart"}
+ENGLISH = {"today", "tomorrow", "week", "wk", "now", "solar", "price", "prices", "inside",
+           "outside", "battery", "house", "grid", "weather", "home", "calendar", "sunset",
+           "sunrise", "expected", "cloudy", "rain", "low", "dry", "humidity", "wind",
+           "feels", "updated", "indoor", "energy", "power", "due", "monday", "sunday"}
+
+
+def _texts(svg: str) -> list[str]:
+    return [html.unescape(t) for t in re.findall(r"<text[^>]*>(.*?)</text>", svg, re.S)]
+
+
+def _words(texts: list[str]) -> set[str]:
+    return {w.lower() for t in texts for w in re.findall(r"[^\W\d_]+", t)}
+
+
+@pytest.mark.parametrize("name", BUNDLED)
+def test_english_has_no_swedish(name: str) -> None:
+    texts = _texts(render_spec(LAYOUTS[name], english_owner_snapshot(), MEASURE, Theme()))
+    words = _words(texts)
+    assert not (words & SWEDISH), (name, sorted(words & SWEDISH))
+    assert not any(c in t for t in texts for c in "åäöÅÄÖ"), (name, texts)
+    assert not any(re.search(r"\d,\d", t) for t in texts), (name, "decimal comma in English")
+
+
+@pytest.mark.parametrize("name", BUNDLED)
+def test_swedish_has_no_english(name: str) -> None:
+    texts = _texts(render_spec(LAYOUTS[name], owner_snapshot(lang="sv"), MEASURE, Theme()))
+    stray = _words(texts) & ENGLISH
+    assert not stray, (name, sorted(stray))
+
+
+@pytest.mark.parametrize("name", BUNDLED)
+def test_english_golden(name: str) -> None:
+    notes: list[str] = []
+    frame = render(render_spec(LAYOUTS[name], english_owner_snapshot(), MEASURE, Theme(), notes),
+                   PanelProfile(), FONT_DIR)
+    assert notes == [] and len(frame.png) < 90_000
+    assert_golden(f"{name}_owner_en", frame.png)
+
+
+def test_every_layout_renders_empty_in_every_language() -> None:
+    import dataclasses
+
+    for lang in i18n.available():
+        for spec in LAYOUTS.values():
+            for snap in (EMPTY, GARBAGE):
+                notes: list[str] = []
+                render_spec(spec, dataclasses.replace(snap, lang=lang), MEASURE, Theme(), notes)
+                assert notes == [], (lang, spec.name, notes)
+
+
+def test_unknown_language_renders_english() -> None:
+    svg = render_spec(LAYOUTS["tidslinjen"], english_owner_snapshot(lang="de"), MEASURE, Theme())
+    assert "Sunday" in " ".join(_texts(svg))
+
+
+@pytest.mark.parametrize(("ha_language", "expected"),
+                         [("en", "en"), ("en-GB", "en"), ("sv", "sv"), ("de", "en")])
+async def test_renderer_follows_home_assistant(hass: HomeAssistant, hub_entry, ha_language: str,
+                                               expected: str) -> None:
+    hass.config.language = ha_language
+    renderer = next(iter(hub_entry.runtime_data.renderers.values()))
+    assert renderer.snapshot().lang == expected

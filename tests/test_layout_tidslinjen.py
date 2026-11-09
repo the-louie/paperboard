@@ -69,6 +69,30 @@ def owner_snapshot(**kw) -> Snapshot:
                          "set_y": "2026-11-07T16:05:40+01:00"}, **kw)
 
 
+# The owner's data with English room, calendar and screen names (README images, English
+# goldens): Swedish data must not trip the "no Swedish in English" checks.
+EN_NAMES = {
+    "sensor.v1_koket_temp_temp": "Kitchen", "sensor.tvrum_temp_temperatur": "TV room",
+    "sensor.hallen_temperatur": "Hall", "sensor.v1_badrum_temphumid_temp": "Bathroom",
+    "sensor.v1_sovrum_a_temperatur": "Bedroom A", "sensor.v2_sovrum_b_temperatur": "Bedroom B",
+    "sensor.ecowitt_tempin": "Sunroom",
+}
+EN_SUMMARIES = {"Jobb": "Work"}
+
+
+def english_owner_snapshot(**kw) -> Snapshot:
+    import copy
+    import dataclasses
+
+    snap = owner_snapshot(**{"lang": "en", **kw})
+    states = copy.deepcopy(snap.states)
+    for entity, name in EN_NAMES.items():
+        states[entity]["attributes"]["friendly_name"] = name
+    events = {cal: [{**e, "summary": EN_SUMMARIES.get(e.get("summary"), e.get("summary"))}
+                    for e in evs] for cal, evs in snap.events.items()}
+    return dataclasses.replace(snap, states=states, events=events, screen_name="Hall")
+
+
 def test_tidslinjen_owner_1bit() -> None:
     spec = load_all(None).layouts["tidslinjen"]
     notes: list[str] = []
