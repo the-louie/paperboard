@@ -15,7 +15,7 @@ from .layouts import Snapshot
 from .style import Theme
 from .svg import Svg
 from .text import Measurer
-from .widgets import CONDITION, LABELS, Rect, _ms
+from .widgets import LABELS, Rect, _ms
 from .widgets_agenda import agenda
 from .widgets_almanac import date_block, week
 from .widgets_flow import energy_flow
@@ -199,13 +199,14 @@ def _now(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> b
     hero = t.numeral("hero")
     svg.text(r.x - p(4), r.y + p(14) + hero.size * 0.92, fmt.with_unit(temp, "°", 1, lang),
              hero)
-    summary = CONDITION[lang].get(str((weather_state or {}).get("state", "")), "")
+    summary = i18n.group(lang, "weather.condition").get(
+        str((weather_state or {}).get("state", "")), "")
     days = snap.forecasts.get("daily") or []
     if days:
         hi, lo = days[0].get("temperature"), days[0].get("templow")
         parts = [summary] if summary else []
         parts.append(f"max {fmt.with_unit(hi, '°', 1, lang)}")
-        parts.append(f"{'natt' if lang == 'sv' else 'low'} {fmt.with_unit(lo, '°', 1, lang)}")
+        parts.append(f"{i18n.t(lang, 'weather.low')} {fmt.with_unit(lo, '°', 1, lang)}")
         summary = " · ".join(parts)
     sy = r.y + p(14) + hero.size * 0.92 + p(26)  # clear margin under the numeral (owner)
     if summary:
@@ -398,7 +399,8 @@ def _now_grid(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
     hero_w = m.width("−00,0°", hero) + p(12)
     svg.text(r.x, r.y + p(12), LABELS[lang]["now"], t.text("xs", bold=True))
     svg.text(r.x - p(2), r.y + p(18) + hero.size * 0.9, fmt.with_unit(temp, "°", 1, lang), hero)
-    cond = CONDITION[lang].get(str((snap.role_state("weather") or {}).get("state", "")), "")
+    cond = i18n.group(lang, "weather.condition").get(
+        str((snap.role_state("weather") or {}).get("state", "")), "")
     if cond:
         svg.text(r.x, r.y + r.h - p(4), cond, t.text("s"))
     svg.line(r.x + hero_w, r.y + p(4), r.x + hero_w, r.y + r.h - p(4), 1)

@@ -3,23 +3,12 @@ automatic weather headline built from the forecast - wrapped to the area by meas
 
 from __future__ import annotations
 
-from . import fmt
+from . import fmt, i18n
 from .layouts import Snapshot
 from .style import Theme
 from .svg import Svg
 from .text import Measurer
 from .widgets import Rect
-
-HEADLINE = {"sv": {"cloudy": "Grått", "partlycloudy": "Växlande molnighet", "sunny": "Soligt",
-                   "clear-night": "Klart", "rainy": "Regnigt", "pouring": "Skyfall",
-                   "snowy": "Snö", "snowy-rainy": "Snöblandat", "fog": "Dimmigt",
-                   "windy": "Blåsigt", "lightning": "Åska", "lightning-rainy": "Åska och regn",
-                   "dry": "uppehåll", "rain": "{mm} mm regn", "deg": "{lo}–{hi} grader"},
-            "en": {"cloudy": "Grey", "partlycloudy": "Mixed clouds", "sunny": "Sunny",
-                   "clear-night": "Clear", "rainy": "Rainy", "pouring": "Downpours",
-                   "snowy": "Snow", "snowy-rainy": "Sleet", "fog": "Foggy", "windy": "Windy",
-                   "lightning": "Thunder", "lightning-rainy": "Thunder and rain",
-                   "dry": "dry", "rain": "{mm} mm of rain", "deg": "{lo} to {hi} degrees"}}
 
 
 def auto_headline(snap: Snapshot) -> str:
@@ -27,19 +16,21 @@ def auto_headline(snap: Snapshot) -> str:
     if not days:
         return ""
     today = days[0]
-    words = HEADLINE.get(snap.lang, HEADLINE["en"])
+    lang = snap.lang
+    conditions = i18n.group(lang, "weather.prose.condition")
     parts = []
-    if (cond := words.get(str(today.get("condition")))) is not None:
+    if (cond := conditions.get(str(today.get("condition")))) is not None:
         parts.append(cond)
     rain = fmt.to_float(today.get("precipitation"))
-    parts.append(words["rain"].format(mm=fmt.number(rain, 0, snap.lang)) if rain and rain >= 1
-                 else words["dry"])
+    parts.append(i18n.t(lang, "weather.prose.rain", mm=fmt.number(rain, 0, lang))
+                 if rain and rain >= 1 else i18n.t(lang, "weather.prose.dry"))
     lo, hi = fmt.to_float(today.get("templow")), fmt.to_float(today.get("temperature"))
     if lo is not None and hi is not None:
-        parts.append(words["deg"].format(lo=fmt.number(lo, 0, snap.lang),
-                                         hi=fmt.number(hi, 0, snap.lang)))
-    text = ", ".join(p for p in [" och ".join(parts[:2]) if snap.lang == "sv"
-                                 else " and ".join(parts[:2]), *parts[2:]] if p)
+        parts.append(i18n.t(lang, "weather.prose.degrees", lo=fmt.number(lo, 0, lang),
+                            hi=fmt.number(hi, 0, lang)))
+    head = i18n.t(lang, "weather.prose.join", a=parts[0], b=parts[1]) if len(parts) >= 2 \
+        else "".join(parts[:1])
+    text = ", ".join(p for p in [head, *parts[2:]] if p)
     return text[:1].upper() + text[1:]
 
 

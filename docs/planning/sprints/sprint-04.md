@@ -1,7 +1,7 @@
 # Sprint 04 — Internationalisation (0.2.0)
 **Status:** active (opened 2026-11-09)
-**Current ticket:** T-03
-**Last completed:** T-02
+**Current ticket:** T-04
+**Last completed:** T-03
 **Budget:** 31h estimated (band 80–120h). **Below the band on purpose:** the owner scoped this
 loop to the 0.2.0 internationalisation rows only (B-105 to B-115); B-116 is the owner's release.
 
@@ -20,7 +20,7 @@ language with two JSON files. Plan and test plan: `docs/design/i18n.md`.
 |---|---|---|---|---|---|---|
 | T-01 | i18n core: catalogs, resolution, lookup | 3 | — | B-105 | done | i18n.py, layout pin any code, default en; test snapshots pinned sv |
 | T-02 | Move date and agenda vocabulary | 4 | T-01 | B-106 | done | catalogs generated from the old tables; sv goldens identical |
-| T-03 | Move weather conditions and prose | 4 | T-01 | B-107 | todo | |
+| T-03 | Move weather conditions and prose | 4 | T-01 | B-107 | done | and/och grammar is a template; sv goldens identical |
 | T-04 | Move labels (now block, energy, flow, charts, sky, footer) | 4 | T-01 | B-108 | todo | |
 | T-05 | Layout texts: section keys and layout display names | 3 | T-01 | B-109 | todo | |
 | T-06 | Numbers follow the language | 2 | T-01 | B-110 | todo | |

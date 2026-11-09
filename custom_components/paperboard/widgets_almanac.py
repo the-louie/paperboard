@@ -89,7 +89,7 @@ def week(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
                      small)
             rain = fmt.to_float(item.get("precipitation"))
             svg.text(x + p(6), y + p(42), f"{fmt.number(rain, 1, lang)} mm" if rain else
-                     ("uppehåll" if lang == "sv" else "dry"), small)
+                     i18n.t(lang, "weather.dry_day"), small)
             y += p(50)
         svg.line(x + p(4), y, x + cw - p(4), y, 1, dash="1 2")
         y += p(4)

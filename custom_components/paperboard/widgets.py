@@ -10,24 +10,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from . import fmt
+from . import fmt, i18n
 from .layouts import Snapshot
 from .style import Theme
 from .svg import BLACK, Svg
 from .text import Measurer
 
-CONDITION = {
-    "sv": {"clear-night": "Klart", "cloudy": "Mulet", "fog": "Dimma", "hail": "Hagel",
-           "lightning": "Åska", "lightning-rainy": "Åska och regn", "partlycloudy": "Halvklart",
-           "pouring": "Skyfall", "rainy": "Regn", "snowy": "Snö", "snowy-rainy": "Snöblandat regn",
-           "sunny": "Sol", "windy": "Blåsigt", "windy-variant": "Blåsigt",
-           "exceptional": "Extremt"},
-    "en": {"clear-night": "Clear", "cloudy": "Cloudy", "fog": "Fog", "hail": "Hail",
-           "lightning": "Thunder", "lightning-rainy": "Thunder, rain",
-           "partlycloudy": "Partly cloudy", "pouring": "Pouring", "rainy": "Rain",
-           "snowy": "Snow", "snowy-rainy": "Sleet", "sunny": "Sunny", "windy": "Windy",
-           "windy-variant": "Windy", "exceptional": "Exceptional"},
-}
 LABELS = {"sv": {"now": "UTE NU", "humidity": "Fukt", "wind": "Vind", "pressure": "Tryck",
                  "dew": "Daggpunkt", "updated": "uppdaterad", "stale": "GAMMAL BILD",
                  "battery": "batteri"},
@@ -78,7 +66,7 @@ def now_block(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, lang: str = 
     b12, r16, b16 = t.text("xs", bold=True), t.text("s"), t.text("s", bold=True)
     svg.text(r.x, r.y + p(12), LABELS[lang]["now"], b12)
     svg.text(r.x - p(4), r.y + p(82), fmt.with_unit(temp, "°"), t.numeral("hero"))
-    label = CONDITION[lang].get(condition or "", "")
+    label = i18n.group(lang, "weather.condition").get(condition or "", "")
     if label:
         svg.text(r.x, r.y + p(110), measure.truncate(label, r16, r.w), r16)
     y = r.y + p(140)
