@@ -16,6 +16,7 @@ from aiohttp import web
 from homeassistant.components import persistent_notification
 from homeassistant.components.http import HomeAssistantView
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.network import is_cloud_connection
 from homeassistant.util import dt as dt_util
@@ -154,14 +155,53 @@ class ImageView(HomeAssistantView):
         return await self.get(request, screen_id, token, filename)
 
 
+def _ask_owner_to_repair(hass: HomeAssistant, hub: HubRuntime, mac: str,
+                         request: web.Request) -> None:
+    """A panel this hub paired before asks to pair while the window is closed: almost always a
+    factory reset. Tell the owner instead of re-pairing by itself (a MAC can be spoofed), with
+    both addresses so a stranger using the panel's MAC stands out."""
+    screen_id = hub.devices.screen_for_mac(mac)
+    screen = hub.screens.get(screen_id) if screen_id else None
+    if screen is None or not from_local_network(hass, request):
+        return
+    device = hub.devices.devices[screen.subentry_id]
+    ir.async_create_issue(
+        hass, DOMAIN, f"repair_wanted_{screen.subentry_id}", is_fixable=False,
+        severity=ir.IssueSeverity.WARNING, translation_key="repair_wanted",
+        translation_placeholders={"screen": screen.name, "code": device.friendly_id,
+                                  "ip": request.remote or "?",
+                                  "last_ip": device.last_ip or "?"})
+
+
+MAX_TRACKED_REJECTED = 50
+REJECTED_ALERT_PER_HOUR = 10
+
+
+def _count_rejected(hass: HomeAssistant, hub: HubRuntime, mac: str, remote: str) -> None:
+    """Raise a Repairs issue when one device ID polls with a wrong key more than 10 times an
+    hour. Bounded: at most 50 IDs are tracked, so random IDs cannot fill memory."""
+    now = time.time()
+    key = mac or "?"
+    polls = [t for t in hub.rejected_polls.pop(key, []) if now - t < 3600] + [now]
+    hub.rejected_polls[key] = polls[-(REJECTED_ALERT_PER_HOUR + 1):]
+    while len(hub.rejected_polls) > MAX_TRACKED_REJECTED:
+        hub.rejected_polls.pop(next(iter(hub.rejected_polls)))
+    if len(polls) > REJECTED_ALERT_PER_HOUR:
+        ir.async_create_issue(
+            hass, DOMAIN, "unknown_device", is_fixable=False,
+            severity=ir.IssueSeverity.WARNING, translation_key="unknown_device",
+            translation_placeholders={"mac": key[-5:], "ip": remote})
+
+
 def _notify_paired(hass: HomeAssistant, screen: ScreenRuntime, device: PairedDevice,
-                   remote: str) -> None:
+                   remote: str, last_ip: str | None = None) -> None:
     """Make every pairing visible, so a device that took the window before the real panel is
     noticed. One notification per screen: a new pairing replaces the old one."""
     persistent_notification.async_create(
         hass,
         f"**{screen.name}** was paired with the device whose screen shows the code "
-        f"**{device.friendly_id}** (MAC ending {device.mac[-5:]}, from {remote}).\n\n"
+        f"**{device.friendly_id}** (MAC ending {device.mac[-5:]}, from {remote}"
+        + (f"; this MAC last checked in from {last_ip}" if last_ip else "") + ").\n\n"
         "If your panel shows another code, or you did not pair anything, press **Pair "
         "device** on the screen and pair your panel again: that replaces this device.",
         title="Paperboard: screen paired",
@@ -193,12 +233,18 @@ class SetupView(HomeAssistantView):
             return _json({"status": 404, "message": "Pairing is only allowed from the "
                                                     "local network."})
         if screen is None:
+            _ask_owner_to_repair(self.hass, hub, mac, request)
             return _json({"status": 404, "message": "Pairing is closed. Press Pair on the "
                                                     "screen in Home Assistant."})
+        previous = hub.devices.devices.get(hub.devices.screen_for_mac(mac) or "")
         device = new_device(mac)
         hub.devices.bind(screen.subentry_id, device)
         hub.close_pairing()
-        _notify_paired(self.hass, screen, device, request.remote or "?")
+        ir.async_delete_issue(self.hass, DOMAIN, f"repair_wanted_{screen.subentry_id}")
+        ir.async_delete_issue(self.hass, DOMAIN, "unknown_device")
+        hub.rejected_polls.pop(mac, None)
+        _notify_paired(self.hass, screen, device, request.remote or "?",
+                       previous.last_ip if previous else None)
         return _json({"status": 200, "api_key": device.api_key,
                       "friendly_id": device.friendly_id,
                       "image_url": base_url(hub, request) + image_path(screen, "bmp"),
@@ -265,6 +311,7 @@ class DisplayView(HomeAssistantView):
             mac = device_id(request)
             hub.last_rejected = {"mac": mac or "?", "ip": request.remote or "?",
                                  "at": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
+            _count_rejected(self.hass, hub, mac, request.remote or "?")
             # JSON status 500 without reset_firmware: the firmware drops its key and re-runs
             # setup (which only succeeds inside a pairing window). Never a full reset.
             return _json({"status": 500, "message": "Unknown device, re-running setup"})
@@ -282,7 +329,7 @@ class DisplayView(HomeAssistantView):
                     await renderer.async_step()  # short press: next layout
         rate = 60 if screen.frame is None else _refresh_rate(self.hass, hub, screen)
         screen.last_checkin, screen.last_rate = now, rate
-        hub.devices.record_checkin(screen.subentry_id, now, rate)
+        hub.devices.record_checkin(screen.subentry_id, now, rate, request.remote)
         async_dispatcher_send(self.hass, SIGNAL_CHECKIN.format(screen.subentry_id))
         if screen.frame is None:
             return _json({"status": 202, "message": "No image rendered yet",

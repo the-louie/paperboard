@@ -165,3 +165,73 @@ async def test_pairing_is_announced(hass: HomeAssistant, hub_entry, hass_client_
     note = notes["paperboard_paired_screen1"]
     assert dev.friendly_id in note["message"] and "00:AA" in note["message"]
     assert dev.api_key not in note["message"]
+
+
+async def test_known_panel_outside_window_asks_owner(hass: HomeAssistant, hub_entry,
+                                                     hass_client_no_auth) -> None:
+    """A reset panel cannot re-pair by itself, but the owner is told, with both addresses;
+    pairing clears the notice and the new notification names the last check-in address."""
+    from homeassistant.components import persistent_notification
+    from homeassistant.helpers import issue_registry as ir
+
+    client = await hass_client_no_auth()
+    await _press_pair(hass)
+    dev = FakeTrmnl(client, mac="02:00:00:00:00:aa")
+    await dev.setup()
+    await dev.display()
+    issues = ir.async_get(hass)
+    assert issues.async_get_issue("paperboard", "repair_wanted_screen1") is None
+
+    assert (await FakeTrmnl(client, mac="02:00:00:00:00:aa").setup())["status"] == 404
+    issue = issues.async_get_issue("paperboard", "repair_wanted_screen1")
+    assert issue is not None and issue.translation_placeholders["code"] == dev.friendly_id
+    assert issue.translation_placeholders["last_ip"] == "127.0.0.1"
+
+    await FakeTrmnl(client, mac="02:00:00:00:00:bb").setup()  # unknown MAC: no notice
+    assert [i for i in issues.issues if i[1].startswith("repair_wanted")] == [
+        ("paperboard", "repair_wanted_screen1")]
+
+    await _press_pair(hass)
+    await FakeTrmnl(client, mac="02:00:00:00:00:aa").setup()
+    assert issues.async_get_issue("paperboard", "repair_wanted_screen1") is None
+    note = persistent_notification._async_get_or_create_notifications(hass)[
+        "paperboard_paired_screen1"]
+    assert "last checked in from 127.0.0.1" in note["message"]
+
+
+async def test_known_panel_notice_not_from_outside(hass: HomeAssistant, hub_entry,
+                                                   hass_client_no_auth) -> None:
+    from homeassistant.helpers import issue_registry as ir
+
+    client = await hass_client_no_auth()
+    await _press_pair(hass)
+    await FakeTrmnl(client, mac="02:00:00:00:00:aa").setup()
+    resp = await client.get("/api/setup", headers={"ID": "02:00:00:00:00:aa",
+                                                   "X-Real-IP": "203.0.113.7"})
+    assert (await resp.json())["status"] == 404
+    assert ir.async_get(hass).async_get_issue("paperboard", "repair_wanted_screen1") is None
+
+
+async def test_rejected_polls_raise_one_bounded_alert(hass: HomeAssistant, hub_entry,
+                                                      hass_client_no_auth) -> None:
+    from homeassistant.helpers import issue_registry as ir
+
+    hub = hub_entry.runtime_data
+    client = await hass_client_no_auth()
+    issues = ir.async_get(hass)
+    spoof = FakeTrmnl(client, mac="02:00:00:00:00:ee", api_key="wrong")
+    for _ in range(10):
+        assert (await spoof.display())["status"] == 500
+    assert issues.async_get_issue("paperboard", "unknown_device") is None
+    await spoof.display()
+    issue = issues.async_get_issue("paperboard", "unknown_device")
+    assert issue is not None and issue.translation_placeholders["mac"] == "00:EE"
+
+    for i in range(100):
+        await FakeTrmnl(client, mac=f"02:00:00:00:{i // 256:02x}:{i % 256:02x}",
+                        api_key="wrong").display()
+    assert len(hub.rejected_polls) <= 50
+
+    await _press_pair(hass)
+    await FakeTrmnl(client, mac="02:00:00:00:00:aa").setup()
+    assert issues.async_get_issue("paperboard", "unknown_device") is None

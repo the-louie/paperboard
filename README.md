@@ -79,7 +79,8 @@ short version:
    - Pairing only works from your local network, never through the cloud URL or through a
      proxy on behalf of a caller outside it.
    - After a factory reset, press **Pair device** again: a MAC address proves nothing, so a
-     panel is never re-paired without the window.
+     panel is never re-paired without the window. Home Assistant tells you under Repairs when
+     a known panel asks to pair again.
 
 Each screen gets:
 - an **image entity**, which previews in a *picture-entity* card;

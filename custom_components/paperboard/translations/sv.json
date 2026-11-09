@@ -227,6 +227,14 @@
     }
   },
   "issues": {
+    "repair_wanted": {
+      "title": "Paperboard: panelen för {screen} vill paras igen",
+      "description": "En panel med {screen}-panelens MAC-adress (dess skärm visar koden {code}) bad om att paras från {ip} medan parning var stängd. Panelen hörde senast av sig från {last_ip}. Det betyder oftast att den har återställts.\n\nOm det är din panel, tryck **Para enhet** på {screen}; därefter bekräftar en avisering parningen.\n\nOm du inte har återställt den, eller om adresserna skiljer sig utan anledning, tryck inte Para: en annan enhet i ditt nätverk kan använda panelens MAC-adress."
+    },
+    "unknown_device": {
+      "title": "Paperboard: en enhet frågar utan giltig nyckel",
+      "description": "En enhet med en MAC-adress som slutar på {mac} frågade mer än 10 gånger på en timme från {ip} utan giltig nyckel.\n\nOm det är din panel, tryck **Para enhet** på dess skärm och para den igen. Om inte, försöker en enhet i ditt nätverk utge sig för att vara en panel. Meddelandet försvinner vid nästa parning."
+    },
     "layout_invalid": {
       "title": "Paperboard-layouten {file} har fel",
       "description": "Layoutfilen {file} kunde inte läsas in. Skärmarna använder den senast fungerande versionen (om det fanns någon).\n\n{errors}"

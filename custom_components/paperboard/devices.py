@@ -27,6 +27,9 @@ class PairedDevice:
     # B-093: kept across restarts so the missed-check-in alert is not blind after one.
     last_checkin: float | None = None  # time.time() of the last authenticated poll
     last_rate: int | None = None  # refresh_rate (s) given to the device in that answer
+    # Where that poll came from: shown when someone asks to pair with this MAC, because a MAC
+    # (and the friendly ID derived from it) can be spoofed, an address on the LAN less easily.
+    last_ip: str | None = None
 
 
 def friendly_id(mac: str) -> str:
@@ -58,11 +61,14 @@ class DeviceStore:
         self.devices[screen_id] = device
         self._store.async_delay_save(self._data, 1)
 
-    def record_checkin(self, screen_id: str, at: float, rate: int) -> None:
+    def record_checkin(self, screen_id: str, at: float, rate: int,
+                       ip: str | None = None) -> None:
         device = self.devices.get(screen_id)
         if device is None:
             return
         device.last_checkin, device.last_rate = at, rate
+        if ip:
+            device.last_ip = ip
         self._store.async_delay_save(self._data, CHECKIN_SAVE_DELAY)
 
     def forget(self, screen_id: str) -> None:

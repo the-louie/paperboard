@@ -227,6 +227,14 @@
     }
   },
   "issues": {
+    "repair_wanted": {
+      "title": "Paperboard: the panel of {screen} wants to pair again",
+      "description": "A panel with the MAC of the {screen} panel (its screen shows the code {code}) asked to pair from {ip} while pairing was closed. This panel last checked in from {last_ip}. That usually means it was reset.\n\nIf it is your panel, press **Pair device** on {screen}; afterwards a notification confirms the pairing.\n\nIf you did not reset it, or the two addresses differ for no reason, do not press Pair: another device on your network may be using the panel's MAC address."
+    },
+    "unknown_device": {
+      "title": "Paperboard: a device keeps polling without a valid key",
+      "description": "A device with a MAC ending {mac} polled more than 10 times in an hour from {ip} without a valid key.\n\nIf it is your panel, press **Pair device** on its screen and pair it again. If not, a device on your network is trying to act as a panel. This message goes away at the next pairing."
+    },
     "layout_invalid": {
       "title": "Paperboard layout {file} has errors",
       "description": "The layout file {file} could not be loaded. Screens keep using the last working version of it (if there was one).\n\n{errors}"

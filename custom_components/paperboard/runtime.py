@@ -82,6 +82,8 @@ class HubRuntime:
     calendars: Any = None  # data.CalendarCache
     pairing_screen: str | None = None
     last_rejected: dict[str, str] | None = None
+    # device ID -> times (time.time()) of rejected polls in the last hour; bounded in views.py
+    rejected_polls: dict[str, list[float]] = field(default_factory=dict)
     pairing_until: float = 0.0
 
     def open_pairing(self, screen_id: str, seconds: int = PAIRING_SECONDS) -> None:

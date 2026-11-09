@@ -107,13 +107,18 @@ Sources: research notes (firmware `5246feb`, 1.8.19) and the owner's working trm
    2026-11-09 (B-094) a known MAC re-paired without the window; the HACS review showed that
    any LAN device could then take a key, read the dashboard and lock the real panel out, so
    it was removed (B-101). After a factory reset the owner presses Pair device once.
+   To make up for it, such a request from the LAN raises a Repairs issue ("the panel of
+   <screen> wants to pair again") with the code, the requesting address and the address the
+   panel last checked in from. The friendly ID is derived from the MAC, so a spoofer shows the
+   same code; the two addresses are what can tell them apart. Pairing clears the issue.
 4. **`/api/display` with a missing, unknown or wrong `Access-Token` for that `ID`:** HTTP 200
    `{"status": 500, "message": "unknown device, re-running setup"}`, **without**
    `reset_firmware`. The device then re-runs setup, which works only inside a window. This is
    also the migration path from trmnl-service, whose MAC-derived key paperboard does not know.
    - It is returned, never raised, so HA's ip_ban is untouched (T-03).
    - Each such event updates a diagnostic "last rejected device" with MAC, time and IP. A
-     Repairs issue is raised when an unknown MAC polls more than 10 times in an hour.
+     Repairs issue is raised when one device ID polls with a wrong key more than 10 times in
+     an hour (at most 50 IDs are tracked). The next pairing clears it.
 5. **Re-pair:** pressing Pair on a screen that already has a device replaces the binding at
    the next setup. The old key stops working at once.
 
