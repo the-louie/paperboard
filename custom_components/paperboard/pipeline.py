@@ -21,7 +21,9 @@ from .raster_worker import WORKER, svg_to_png
 
 # B-088: resvg runs in a worker process so it never holds the GIL in HA's process.
 # Tests switch this off (conftest) to keep pytest-homeassistant's thread checks clean.
-USE_WORKER = False  # off 2026-11-08 19:00: the worker pool hung HA's shutdown; see B-092
+# Off 2026-11-08 19:00 (the ProcessPoolExecutor hung HA's shutdown); back on with the
+# thread-free subprocess worker, proven by a real restart in a throwaway HA (B-092).
+USE_WORKER = True
 
 CRISP_ATTRS = 'shape-rendering="crispEdges" text-rendering="optimizeSpeed"'
 GRAY4 = (0, 85, 170, 255)

@@ -149,7 +149,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       the worker process can go.
 - [ ] **B-091 · Research: AppDaemon at 44 % CPU on ha-host** · 1h · prio P2 · src: B-088 (2026-11-08 18:30, `docker stats`)
       Move to `<the maintainer's HA repo>` HASS-BACKLOG if confirmed: it is not paperboard's.
-- [ ] **B-092 · The render worker hung Home Assistant's shutdown** · 3h · prio P1 · src: live 2026-11-08 18:48–19:00
+- [x] **B-092 · The render worker hung Home Assistant's shutdown** · 3h · prio P1 · src: live 2026-11-08 18:48–19:00 · done 2026-11-09
       After the upgrade to HA 2026.11.0, `homeassistant.restart` never finished. The last log line
       was "Found 3 non-daemonic threads", the ProcessPoolExecutor's threads. HA was down
       (502) for ~10 min until `docker restart homeassistant`. The worker is **off in production**
@@ -164,6 +164,17 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       A unit test cannot catch this: the `hass` test fixture never runs HA's process exit.
       Also during the outage the old code answered `/api/display` with 500, which unpairs the
       panel; 8fc7be2 now answers 202.
+      **Done 2026-11-09:** `raster_worker.py` is now a plain `subprocess.Popen` child speaking
+      length-prefixed messages over stdin/stdout. It starts **no threads** (test), exits on EOF
+      (so it dies with HA), and is stopped on `EVENT_HOMEASSISTANT_STOP` and on unload (off the
+      loop). A dead or hung child (60 s) is killed and replaced on the next render.
+      **Proof in a throwaway HA 2026.11.0 container on dev-host:** with the new worker,
+      3 restarts via `homeassistant.restart` took 4.1 s each, with one child each time and no
+      leftovers. **Control:** the old ProcessPoolExecutor version in the same container did
+      not come back within 300 s and logged "Found 2 non-daemonic threads", the production
+      symptom. Main-thread stall per render (`scripts/check_worker_stall.py`, dev-host):
+      63 ms in-process, 2 ms with the worker. `USE_WORKER = True` again.
+      Tests: test_raster_worker.py (5 new).
 - [x] **B-095 · Normal text halfway to bold** · 1h · prio P1 · src: owner 2026-11-09 · done 2026-11-09
       Owner: "the normal thin test is hard to read ... can you increase the weight of normal
       text? not as much as bold text, but halfway there maybe". Inter Medium → SemiBold; pixel

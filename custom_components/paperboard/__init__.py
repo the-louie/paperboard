@@ -5,8 +5,8 @@ from __future__ import annotations
 import secrets
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.const import EVENT_HOMEASSISTANT_STOP, Platform
+from homeassistant.core import Event, HomeAssistant, callback
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
@@ -70,6 +70,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
     if pipeline.USE_WORKER:  # start the render process now, not on the first frame (B-088)
         # Fire and forget: async_add_executor_job returns a Future, not a coroutine.
         hass.async_add_executor_job(WORKER.render, WARMUP_SVG, str(fonts.font_dir))
+
+        async def _stop_worker(_event: Event) -> None:
+            # B-092: HA does not unload config entries on stop; end the child here too.
+            await hass.async_add_executor_job(WORKER.shutdown)
+
+        entry.async_on_unload(
+            hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, _stop_worker))
     watcher = LayoutWatcher(hass)
     await watcher.async_load()
     entry.async_on_unload(watcher.async_start())
@@ -172,5 +179,6 @@ async def _async_reload(hass: HomeAssistant, entry: ConfigEntry) -> None:
 async def async_unload_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -> bool:
     unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     await entry.runtime_data.devices.async_flush()
-    WORKER.shutdown()  # a reload starts a fresh worker on its first render
+    # A reload starts a fresh worker on its first render. Off the loop: shutdown waits.
+    await hass.async_add_executor_job(WORKER.shutdown)
     return unloaded
