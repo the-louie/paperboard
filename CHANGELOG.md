@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-09
+
 First public version.
 
 ### Added
@@ -34,3 +36,6 @@ First public version.
 - The last check-in survives a restart. The missed-check-in alert follows the poll interval
   actually given to the device, so night schedules no longer trigger it.
 - Widget spacing scales on large panels such as the TRMNL X.
+
+[Unreleased]: https://github.com/the-louie/paperboard/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/the-louie/paperboard/releases/tag/v0.1.0
