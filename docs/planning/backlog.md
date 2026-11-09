@@ -157,6 +157,25 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       a info-circle that explain what type of value is expected". HA's config forms have no
       info-circle; the native mechanism is `data_description`, shown as help text under each
       field. All 18 roles, en + sv. A test fails if a role lacks a description in any language.
+- [x] **B-100 · FOSS documentation standard** · 3h · prio P1 · src: owner 2026-11-09 · done 2026-11-09
+      Owner: "the documentation in the code project must meet the high standard of FOSS, there
+      should also be mentions that contributions are welcome and links to how to contribute".
+      Added CONTRIBUTING.md, CODE_OF_CONDUCT.md (Contributor Covenant 2.1), SECURITY.md (GitHub
+      private reporting), CHANGELOG.md (Keep a Changelog), issue forms and PR template,
+      docs/configuration.md (every setting; the roles table is generated from strings.json),
+      docs/README.md (index); README badges, a configuration link and a Contributing section.
+      All local doc links checked.
+- [ ] **B-099 · decision: privacy scrub before the repository goes public** · 2h · prio P1 · needs: owner · src: B-100 review 2026-11-09
+      Found 2026-11-09:
+      - The children's first names are in room-sensor names in `tests/fixtures/states/owner_2026-11-08.json`
+        and so in the "owner" goldens and **the README screenshots** (footer: "Sovrum a …").
+        Calendar events are already anonymised.
+      - `CLAUDE.md` (agent instructions: hosts ha-host/byos-host, paths, the commit address) and
+        `docs/planning/`, `docs/research/` mention the owner's servers. They hold no secrets.
+      Options: rename the rooms in the fixture and regenerate the goldens and README images;
+      remove CLAUDE.md from the public tree (or .gitignore it); keep or drop the planning notes.
+      History: the names are in earlier commits too, so going public needs either a fresh
+      history (squash to one initial commit) or a history rewrite.
 - [ ] **B-096 · Type scale on big panels: pixel fonts stop at 21 px** · 3h · prio P3 · src: B-087 review 2026-11-09
       On TRMNL X (scale 1.8) spacing grows but the TRMNL pixel fonts cap at 21 px, so small and
       medium text looks sparse and the "Imorgon" badge is a 56 px box around 21 px text.

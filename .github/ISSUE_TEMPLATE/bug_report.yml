@@ -1,0 +1,42 @@
+name: Bug report
+description: Something renders wrong, a device does not pair, or an error appears in the log.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Security problems go to [SECURITY.md](https://github.com/the-louie/paperboard/blob/main/SECURITY.md), not here.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Add a screen with layout ...\n2. ..."
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      placeholder: "Paperboard 0.1.0, Home Assistant 2026.11.0, install type (OS / Container / Core)"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and firmware
+      placeholder: "TRMNL OG, firmware 1.8.10 (or: Kindle via image URL)"
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics and logs
+      description: >-
+        Settings → Devices & services → Paperboard → ⋮ → Download diagnostics (no secrets inside),
+        plus any log lines that mention paperboard. A screenshot of the screen's image entity helps
+        for rendering bugs.
+      render: text

@@ -1,5 +1,10 @@
 # paperboard
 
+[![CI](https://github.com/the-louie/paperboard/actions/workflows/ci.yml/badge.svg)](https://github.com/the-louie/paperboard/actions/workflows/ci.yml)
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/docs/faq/custom_repositories/)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 **Designed e-ink dashboards from Home Assistant data, served straight to TRMNL devices.**
 
 paperboard draws dense, readable dashboards for 1-bit and greyscale e-ink panels, using your
@@ -53,6 +58,9 @@ one.
 
 ## Set up a screen
 
+The full guide to every setting is in [docs/configuration.md](docs/configuration.md). The
+short version:
+
 1. **Roles:** on the Paperboard entry, open **Configure → Sensors and data (roles)** and pick
    what each role means in your home. Leave anything you don't have empty.
 
@@ -61,7 +69,7 @@ one.
    | Weather (forecast) | `weather.home` |
    | Outdoor / second temperature, feels-like, humidity, rain today | weather-station sensors |
    | Electricity price | Nord Pool (core or HACS), ENTSO-e |
-   | Expected solar energy today | Forecast.Solar or Solcast "energy production today": the hourly curve is read from the same integration |
+   | Expected solar energy today | "Energy production today" from Forecast.Solar, Open-Meteo Solar Forecast or another integration that feeds the Energy dashboard (Solcast via its attributes): the hourly curve is read from the same integration |
    | Solar / grid / house / battery power, house energy today, battery charge | inverter and meter sensors. Tick **"Grid meter reports export as positive"** for Huawei-style meters. |
    | Rooms, calendars | any number of temperature sensors and calendars |
 2. **Screen:** **Add screen**. Pick a name and a layout. Leave **Panel** on *Automatic*: it
@@ -120,6 +128,25 @@ HA states + services (forecast, prices, solar, calendars)
   - See the screen's **Render error** sensor and the integration's diagnostics.
 - **"It renders tiny on my TRMNL X."**
   - Layouts scale to the panel. Some widget spacing does not scale yet (tracked).
+
+## Contributing
+
+**Contributions are welcome:** bug reports, layouts, widgets, translations, documentation and
+code.
+- [CONTRIBUTING.md](CONTRIBUTING.md): development setup, tests, golden images, and what a pull
+  request needs.
+- [Open an issue](https://github.com/the-louie/paperboard/issues/new/choose) for bugs and ideas.
+- Security problems: report privately, see [SECURITY.md](SECURITY.md).
+- Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+All documentation: [docs/](docs/README.md). Changes per version:
+[CHANGELOG.md](CHANGELOG.md).
+
+## How this was built
+
+Paperboard was developed with help from an AI coding assistant (Anthropic's Claude), under the
+maintainer's direction. Every change is reviewed by the maintainer and checked by the test
+suite: pixel-exact golden images, the empty-house tests, and CI on x86-64 and aarch64.
 
 ## Credits
 

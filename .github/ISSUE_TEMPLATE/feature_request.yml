@@ -1,0 +1,20 @@
+name: Feature request
+description: A widget, a layout, a data source or anything else Paperboard should do.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the need first; the solution comes next.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to happen?
+  - type: textarea
+    id: data
+    attributes:
+      label: Which Home Assistant data would it use?
+      description: Integrations or entity types, e.g. "Nord Pool prices", "a calendar".
