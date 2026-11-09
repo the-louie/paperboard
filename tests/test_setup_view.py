@@ -151,3 +151,17 @@ async def test_proxy_naming_a_lan_client_still_pairs(hass: HomeAssistant, hub_en
     assert (await _setup_with(client, {"X-Real-IP": "192.168.1.50:4321"}))["status"] == 200
     await _press_pair(hass)
     assert (await _setup_with(client, {"Forwarded": "for=10.0.0.5"}))["status"] == 200
+
+
+async def test_pairing_is_announced(hass: HomeAssistant, hub_entry, hass_client_no_auth) -> None:
+    """Every pairing shows the panel's code, so a device that took the window is noticed."""
+    from homeassistant.components import persistent_notification
+
+    client = await hass_client_no_auth()
+    await _press_pair(hass)
+    dev = FakeTrmnl(client, mac="02:00:00:00:00:aa")
+    await dev.setup()
+    notes = persistent_notification._async_get_or_create_notifications(hass)
+    note = notes["paperboard_paired_screen1"]
+    assert dev.friendly_id in note["message"] and "00:AA" in note["message"]
+    assert dev.api_key not in note["message"]

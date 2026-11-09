@@ -13,6 +13,7 @@ from http import HTTPStatus
 from ipaddress import ip_address
 
 from aiohttp import web
+from homeassistant.components import persistent_notification
 from homeassistant.components.http import HomeAssistantView
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.dispatcher import async_dispatcher_send
@@ -21,7 +22,7 @@ from homeassistant.util import dt as dt_util
 from homeassistant.util.network import is_local
 
 from .const import DOMAIN, SIGNAL_CHECKIN
-from .devices import new_device
+from .devices import PairedDevice, new_device
 from .runtime import HubRuntime, ScreenRuntime
 
 _LOGGER = logging.getLogger(__name__)
@@ -153,6 +154,20 @@ class ImageView(HomeAssistantView):
         return await self.get(request, screen_id, token, filename)
 
 
+def _notify_paired(hass: HomeAssistant, screen: ScreenRuntime, device: PairedDevice,
+                   remote: str) -> None:
+    """Make every pairing visible, so a device that took the window before the real panel is
+    noticed. One notification per screen: a new pairing replaces the old one."""
+    persistent_notification.async_create(
+        hass,
+        f"**{screen.name}** was paired with the device whose screen shows the code "
+        f"**{device.friendly_id}** (MAC ending {device.mac[-5:]}, from {remote}).\n\n"
+        "If your panel shows another code, or you did not pair anything, press **Pair "
+        "device** on the screen and pair your panel again: that replaces this device.",
+        title="Paperboard: screen paired",
+        notification_id=f"{DOMAIN}_paired_{screen.subentry_id}")
+
+
 class SetupView(HomeAssistantView):
     """GET /api/setup: pairs a device, but only inside the window (docs/design/device-api.md)."""
 
@@ -183,6 +198,7 @@ class SetupView(HomeAssistantView):
         device = new_device(mac)
         hub.devices.bind(screen.subentry_id, device)
         hub.close_pairing()
+        _notify_paired(self.hass, screen, device, request.remote or "?")
         return _json({"status": 200, "api_key": device.api_key,
                       "friendly_id": device.friendly_id,
                       "image_url": base_url(hub, request) + image_path(screen, "bmp"),

@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- Every pairing raises a notification with the code the panel shows, its MAC ending and the
+  address it came from, so a device that took the pairing window instead of your panel is
+  noticed.
+
 ### Security
 - The image link's token is no longer in the image entity's attributes (`png_path`,
   `bmp_path`), which every Home Assistant user can read and the recorder keeps. The links are

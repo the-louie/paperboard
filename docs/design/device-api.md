@@ -171,6 +171,7 @@ service do.
   - TLS: the firmware does not verify certificates, per the research.
   - A hostile LAN device inside an open pairing window: it can take the pairing, and the
     owner sees the wrong friendly ID on the panel. The window is 5 minutes, single use, and
-    opened by an admin action.
+    opened by an admin action. Every pairing raises a persistent notification with the
+    friendly ID, the MAC ending and the source address, so a wrong pairing is visible.
   - A hostile LAN device spoofing an already-paired MAC outside a window gets nothing: setup
     case 4 (B-101).
