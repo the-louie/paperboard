@@ -1,7 +1,7 @@
 # Sprint 04 — Internationalisation (0.2.0)
 **Status:** active (opened 2026-11-09)
-**Current ticket:** T-11
-**Last completed:** T-10
+**Current ticket:** —
+**Last completed:** T-11
 **Budget:** 31h estimated (band 80–120h). **Below the band on purpose:** the owner scoped this
 loop to the 0.2.0 internationalisation rows only (B-105 to B-115); B-116 is the owner's release.
 
@@ -28,10 +28,11 @@ language with two JSON files. Plan and test plan: `docs/design/i18n.md`.
 | T-08 | HA UI texts audit | 1 | — | B-112 | done | already British and complete; spelling guard test added |
 | T-09 | Docs: add-a-language guide, README language section | 2 | T-01, T-05 | B-113 | done | e4a02f1 |
 | T-10 | README images from the English default | 1 | T-07 | B-114 | done | images = English goldens, guarded by a test; --lang for translators |
-| T-11 | End-to-end language check in a throwaway HA | 2 | T-07 | B-115 | todo | |
+| T-11 | End-to-end language check in a throwaway HA | 2 | T-07 | B-115 | done | HA 2026.11.0: en → "Monday … week 46 … SUN", sv → "Måndag … vecka 46 … SOLEN", de → English; dropdown "Almanac (bundled)"; no errors |
 
 ## Scope changes
 - Found: an intermittent ERROR in the suite, filed as **B-117** (not in this sprint).
 - Found: English labels cut off in narrow cells, filed as **B-118** (P1, next sprint).
+- Seen in T-11: on a live language change HA core logs "Failed to load integration for translation: Invalid domain paperboard.sensor" (HA reloads translations for `hass.config.components`, which holds platform entries). Not Paperboard's code; no action.
 
 ## Retro
