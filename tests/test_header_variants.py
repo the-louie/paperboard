@@ -16,7 +16,8 @@ from tests.golden_util import assert_golden
 
 
 def test_header_variants_golden() -> None:
-    snap = Snapshot(now=dt.datetime(2026, 11, 8, 12, 15, tzinfo=ZoneInfo("Europe/Stockholm")),
+    snap = Snapshot(lang="sv",
+                    now=dt.datetime(2026, 11, 8, 12, 15, tzinfo=ZoneInfo("Europe/Stockholm")),
                     width=800, height=480, screen_name="Hallen", home_name="Hemma",
                     roles={"calendars": ["calendar.h"]},
                     events={"calendar.h": [{"all_day": True, "date": "2026-11-08",

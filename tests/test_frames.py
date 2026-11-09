@@ -44,7 +44,8 @@ def test_invert_colors() -> None:
 
 def test_tiles_golden() -> None:
     spec = parse(TILES, "x")
-    snap = Snapshot(now=dt.datetime(2026, 11, 8, 12, 15, tzinfo=ZoneInfo("Europe/Stockholm")),
+    snap = Snapshot(lang="sv",
+                    now=dt.datetime(2026, 11, 8, 12, 15, tzinfo=ZoneInfo("Europe/Stockholm")),
                     width=800, height=480, screen_name="Hallen",
                     states={"weather.x": {"state": "cloudy",
                                           "attributes": {"temperature": 3.1, "humidity": 89}}},

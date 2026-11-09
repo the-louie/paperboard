@@ -22,12 +22,12 @@ from tests.golden_util import assert_golden
 NOW = dt.datetime(2026, 11, 8, 12, 15, tzinfo=ZoneInfo("Europe/Stockholm"))
 MEASURE = Measurer(load_fonts())
 
-EMPTY = Snapshot(now=NOW, width=800, height=480, screen_name="Tom")
+EMPTY = Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="Tom")
 GARBAGE_ROLES = {r: f"sensor.{r}" for r in (
     "weather", "outdoor_temp", "indoor_temp", "outdoor_humidity", "rain_today", "price",
     "solar_forecast_today", "solar_power", "grid_power", "house_power", "house_energy_today",
     "battery_soc", "battery_power", "sun")}
-GARBAGE = Snapshot(
+GARBAGE = Snapshot(lang="sv",
     now=NOW, width=800, height=480, screen_name="Skräp",
     roles={**GARBAGE_ROLES, "rooms": ["sensor.r1", None, 7], "calendars": ["calendar.x"]},
     states={f"sensor.{r}": {"state": s, "attributes": {"temperature": "x", "unit_of_measurement":

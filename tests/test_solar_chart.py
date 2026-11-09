@@ -44,7 +44,7 @@ def _solar() -> SolarSnapshot:
 
 def _snap(**kw) -> Snapshot:
     state = json.loads(FIXTURE.read_text())["states"]["sensor.nordpool_kwh_se3_sek_2_10_025"]
-    return Snapshot(now=NOW, width=800, height=480, screen_name="x", states=SUN,
+    return Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x", states=SUN,
                     prices=PriceSnapshot.of(from_state(state, NOW)), **kw)
 
 
@@ -71,8 +71,9 @@ def test_solar_collapses_without_curve() -> None:
 def test_nights_day_and_night() -> None:
     day = nights(_snap())
     assert day[0][0].hour == 15 and len(day) == 2
-    night_snap = Snapshot(now=NOW, width=1, height=1, screen_name="x", states={"sun.sun": {
+    night_snap = Snapshot(lang="sv",
+                          now=NOW, width=1, height=1, screen_name="x", states={"sun.sun": {
         "attributes": {"next_setting": "2026-11-09T15:00:00+00:00",
                        "next_rising": "2026-11-09T06:30:00+00:00"}}})
     assert nights(night_snap)[0][1].hour == 6
-    assert nights(Snapshot(now=NOW, width=1, height=1, screen_name="x")) == []
+    assert nights(Snapshot(lang="sv", now=NOW, width=1, height=1, screen_name="x")) == []

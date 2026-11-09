@@ -30,7 +30,7 @@ def measure() -> Measurer:
 
 
 def _draw(state: dict | None, measure: Measurer) -> tuple[bool, bytes]:
-    snap = Snapshot(now=NOW, width=800, height=480, screen_name="x",
+    snap = Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x",
                     prices=PriceSnapshot.of(from_state(state, NOW)))
     svg, theme = Svg(800, 480), Theme()
     axis = TimeAxis.from_now(NOW, 24, 60, 780)

@@ -22,7 +22,7 @@ FIXTURE = Path(__file__).parent / "fixtures/states/owner_2026-11-08.json"
 
 def _render(forecast: list[dict]) -> tuple[bool, bytes]:
     fx = json.loads(FIXTURE.read_text())
-    snap = Snapshot(now=NOW, width=800, height=480, screen_name="x",
+    snap = Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x",
                     states={"weather.forecast_home": fx["states"]["weather.forecast_home"]},
                     roles={"weather": "weather.forecast_home"}, forecasts={"daily": forecast})
     svg = Svg(800, 480)

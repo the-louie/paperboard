@@ -27,7 +27,7 @@ class Snapshot:
     states: dict[str, dict[str, Any]] = field(default_factory=dict)
     stale_since: str | None = None  # "HH:MM" of the frame still shown after a failed render
     battery: int | None = None  # the screen's own battery %, from its last check-in
-    lang: str = "sv"
+    lang: str = "en"
     roles: dict[str, Any] = field(default_factory=dict)  # role -> entity id / list of ids
     forecasts: dict[str, list[dict[str, Any]]] = field(default_factory=dict)  # hourly/daily
     prices: Any = None  # prices.PriceSnapshot or None

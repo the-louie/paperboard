@@ -31,7 +31,7 @@ def test_room_names() -> None:
 
 
 def test_rooms_golden() -> None:
-    snap = Snapshot(now=NOW, width=800, height=480, screen_name="x", states=STATES,
+    snap = Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x", states=STATES,
                     roles={"rooms": ROOMS})
     svg, m, t = Svg(800, 480), Measurer(load_fonts()), Theme()
     assert rooms(svg, Rect(20, 20, 220, 200), snap, m, t, title="INNE")
@@ -41,6 +41,6 @@ def test_rooms_golden() -> None:
 
 
 def test_no_rooms_collapses() -> None:
-    snap = Snapshot(now=NOW, width=800, height=480, screen_name="x")
+    snap = Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x")
     assert rooms(Svg(800, 480), Rect(0, 0, 200, 100), snap, Measurer(load_fonts()),
                  Theme()) is False

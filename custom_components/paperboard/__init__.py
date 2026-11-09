@@ -11,6 +11,7 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
 from . import (
+    i18n,
     pipeline,
     widget_registry,  # noqa: F401 - registers the layout widget types
 )
@@ -66,6 +67,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
 
     # Warm the model-registry cache off the loop: resolve() is called from the loop later.
     await hass.async_add_executor_job(profile_names)
+    await hass.async_add_executor_job(i18n.load_catalogs)  # drawn texts; file reads off the loop
     fonts = await hass.async_add_executor_job(load_fonts)
     if pipeline.USE_WORKER:  # start the render process now, not on the first frame (B-088)
         # Fire and forget: async_add_executor_job returns a Future, not a coroutine.

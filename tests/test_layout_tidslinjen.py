@@ -58,6 +58,7 @@ def owner_snapshot(**kw) -> Snapshot:
                              "summary": "Jobb"},
                             {"all_day": False, "start": "2026-11-10T09:00:00+01:00",
                              "summary": "Jobb"}]}
+    kw.setdefault("lang", "sv")  # the owner goldens are the Swedish reference
     return Snapshot(now=NOW, width=800, height=480, screen_name="Hallen", states=st,
                     roles=OWNER_ROLES, battery=100,
                     forecasts=FIXTURE["weather_forecasts"]["weather.forecast_home"],

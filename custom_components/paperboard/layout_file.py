@@ -60,7 +60,8 @@ LAYOUT = vol.Schema({
     },
     vol.Required("widgets"): vol.All([WIDGET], vol.Length(min=1)),
     vol.Optional("clock_resolution", default=300): vol.All(int, vol.Range(min=60)),
-    vol.Optional("lang", default="auto"): vol.In(("auto", "sv", "en")),
+    # "auto" follows Home Assistant; a code ("sv", "en", "pt-BR") pins the layout's language.
+    vol.Optional("lang", default="auto"): vol.Match(r"^(auto|[a-z]{2,3}(-[A-Za-z0-9]{2,4})?)$"),
 })
 
 

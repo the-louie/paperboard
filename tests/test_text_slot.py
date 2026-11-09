@@ -26,12 +26,14 @@ DAILY = json.loads((Path(__file__).parent / "fixtures/states/owner_2026-11-08.js
 
 
 def test_auto_headline_owner_day() -> None:
-    snap = Snapshot(now=NOW, width=800, height=480, screen_name="x", forecasts={"daily": DAILY})
+    snap = Snapshot(lang="sv",
+                    now=NOW, width=800, height=480, screen_name="x", forecasts={"daily": DAILY})
     assert auto_headline(snap) == "Grått och uppehåll, 3–4 grader"
 
 
 def test_text_golden() -> None:
-    snap = Snapshot(now=NOW, width=800, height=480, screen_name="x", forecasts={"daily": DAILY},
+    snap = Snapshot(lang="sv",
+                    now=NOW, width=800, height=480, screen_name="x", forecasts={"daily": DAILY},
                     texts={"{{ x }}": "Ett längre stycke text som måste radbrytas snyggt "
                                       "inom sin ruta utan att flyta över kanten alls."})
     svg, m, t = Svg(800, 480), Measurer(load_fonts()), Theme()

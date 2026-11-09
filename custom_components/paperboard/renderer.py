@@ -22,6 +22,7 @@ from homeassistant.helpers.event import async_track_state_change_event, async_tr
 from homeassistant.helpers.template import Template
 from homeassistant.util import dt as dt_util
 
+from . import i18n
 from .const import SIGNAL_CHECKIN, SIGNAL_FRAME
 from .fmt import to_float
 from .fonts import FontRegistry
@@ -183,7 +184,7 @@ class ScreenRenderer:
         return Snapshot(now=dt_util.now(), width=self.profile.width, height=self.profile.height,
                         screen_name=self.screen.name, states=states, stale_since=stale,
                         battery=battery_percent(volts) if volts is not None else None,
-                        lang="sv" if self.hass.config.language.startswith("sv") else "en",
+                        lang=i18n.resolve(self.hass.config.language),
                         roles=dict(self.hub.roles) if self.hub is not None else {},
                         forecasts={k: list(v) for k, v in self.hub.forecasts.forecasts.items()}
                         if self.hub is not None and self.hub.forecasts is not None else {},

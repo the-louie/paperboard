@@ -23,7 +23,8 @@ def measure() -> Measurer:
 
 
 def _snap(states: dict, **kw) -> Snapshot:
-    return Snapshot(now=NOW, width=800, height=480, screen_name="Hallen", states=states, **kw)
+    return Snapshot(lang="sv",
+                    now=NOW, width=800, height=480, screen_name="Hallen", states=states, **kw)
 
 
 def test_now_layout_full(measure: Measurer) -> None:

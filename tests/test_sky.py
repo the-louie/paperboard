@@ -28,14 +28,14 @@ def test_moon_on_mockup_day() -> None:
 
 def test_sun_moon_golden() -> None:
     svg, m, t = Svg(800, 480), Measurer(load_fonts()), Theme()
-    snap = Snapshot(now=NOW, width=800, height=480, screen_name="x", sun=SUN)
+    snap = Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x", sun=SUN)
     assert sun_moon(svg, Rect(16, 20, 360, 64), snap, m, t)
-    polar = Snapshot(now=NOW, width=800, height=480, screen_name="x", sun=None)
+    polar = Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x", sun=None)
     assert sun_moon(svg, Rect(16, 120, 360, 64), polar, m, t)  # moon only, still drawn
     for i, day in enumerate((0, 4, 8, 15, 22)):
         when = dt.datetime(2026, 11, 10, 12, tzinfo=TZ) + dt.timedelta(days=day)
         sun_moon(svg, Rect(16 + i * 150, 220, 140, 64),
-                 Snapshot(now=when, width=800, height=480, screen_name="x"), m, t)
+                 Snapshot(lang="sv", now=when, width=800, height=480, screen_name="x"), m, t)
     assert_golden("sun_moon", render(str(svg), PanelProfile(), FONT_DIR).png)
 
 

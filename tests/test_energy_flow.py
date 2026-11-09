@@ -25,7 +25,8 @@ ALL = {"solar_power": "sensor.pv_1_power", "grid_power": "sensor.ams_946c_p",
 def _snap(roles: dict) -> Snapshot:
     states = dict(STATES)
     states["sensor.ams_946c_p"] = {"state": "1603", "attributes": {"unit_of_measurement": "W"}}
-    return Snapshot(now=NOW, width=800, height=480, screen_name="x", states=states, roles=roles)
+    return Snapshot(lang="sv",
+                    now=NOW, width=800, height=480, screen_name="x", states=states, roles=roles)
 
 
 def test_flow_golden() -> None:

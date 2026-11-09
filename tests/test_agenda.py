@@ -28,18 +28,18 @@ EVENTS = {"calendar.family": [
 
 
 def test_agenda_golden() -> None:
-    snap = Snapshot(now=NOW, width=800, height=480, screen_name="x",
+    snap = Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x",
                     roles={"calendars": ["calendar.family"]}, events=EVENTS)
     svg = Svg(800, 480)
     assert agenda(svg, Rect(20, 20, 260, 300), snap, Measurer(load_fonts()), Theme())
-    empty = Snapshot(now=NOW, width=800, height=480, screen_name="x",
+    empty = Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x",
                      roles={"calendars": ["calendar.family"]})
     assert agenda(svg, Rect(320, 20, 260, 80), empty, Measurer(load_fonts()), Theme())
     assert_golden("agenda", render(str(svg), PanelProfile(), FONT_DIR).png)
 
 
 def test_agenda_collapses_without_calendars() -> None:
-    snap = Snapshot(now=NOW, width=800, height=480, screen_name="x")
+    snap = Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x")
     assert agenda(Svg(800, 480), Rect(0, 0, 200, 200), snap, Measurer(load_fonts()),
                   Theme()) is False
 

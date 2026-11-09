@@ -27,7 +27,8 @@ ROLES = {"price": "sensor.nordpool_kwh_se3_sek_2_10_025",
 
 def _snap(roles: dict) -> Snapshot:
     st = json.loads(FIXTURE.read_text())["states"]
-    return Snapshot(now=NOW, width=800, height=480, screen_name="x", states=st, roles=roles,
+    return Snapshot(lang="sv",
+                    now=NOW, width=800, height=480, screen_name="x", states=st, roles=roles,
                     prices=PriceSnapshot.of(from_state(st[ROLES["price"]], NOW)),
                     solar=SolarSnapshot(hours=[], today_kwh=3.657))
 

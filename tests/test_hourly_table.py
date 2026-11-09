@@ -27,7 +27,7 @@ def _snap(with_prices: bool) -> Snapshot:
     hourly = fx["weather_forecasts"]["weather.forecast_home"]["hourly"]
     prices = PriceSnapshot.of(from_state(st["sensor.nordpool_kwh_se3_sek_2_10_025"], NOW)) \
         if with_prices else None
-    return Snapshot(now=NOW, width=800, height=480, screen_name="x",
+    return Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x",
                     states={"weather.forecast_home": st["weather.forecast_home"]},
                     roles={"weather": "weather.forecast_home"},
                     forecasts={"hourly": hourly}, prices=prices)
@@ -48,6 +48,6 @@ def test_without_prices() -> None:
 
 
 def test_no_forecast_collapses() -> None:
-    snap = Snapshot(now=NOW, width=800, height=480, screen_name="x")
+    snap = Snapshot(lang="sv", now=NOW, width=800, height=480, screen_name="x")
     assert hourly_table(Svg(800, 480), Rect(0, 0, 400, 200), snap, Measurer(load_fonts()),
                         Theme()) is False
