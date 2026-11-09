@@ -16,6 +16,7 @@ from homeassistant.helpers.storage import Store
 from .const import DOMAIN
 
 STORAGE_VERSION = 1
+CHECKIN_SAVE_DELAY = 30  # s; unload flushes, so a restart never loses the last check-in
 
 
 @dataclass
@@ -23,6 +24,9 @@ class PairedDevice:
     mac: str
     api_key: str
     friendly_id: str
+    # B-093: kept across restarts so the missed-check-in alert is not blind after one.
+    last_checkin: float | None = None  # time.time() of the last authenticated poll
+    last_rate: int | None = None  # refresh_rate (s) given to the device in that answer
 
 
 def friendly_id(mac: str) -> str:
@@ -53,6 +57,13 @@ class DeviceStore:
             del self.devices[sid]
         self.devices[screen_id] = device
         self._store.async_delay_save(self._data, 1)
+
+    def record_checkin(self, screen_id: str, at: float, rate: int) -> None:
+        device = self.devices.get(screen_id)
+        if device is None:
+            return
+        device.last_checkin, device.last_rate = at, rate
+        self._store.async_delay_save(self._data, CHECKIN_SAVE_DELAY)
 
     def forget(self, screen_id: str) -> None:
         if self.devices.pop(screen_id, None):

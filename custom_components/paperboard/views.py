@@ -203,8 +203,7 @@ class DisplayView(HomeAssistantView):
 
         screen.telemetry = {h: request.headers[h] for h in TELEMETRY_HEADERS
                             if h in request.headers}
-        screen.last_checkin = time.time()
-        async_dispatcher_send(self.hass, SIGNAL_CHECKIN.format(screen.subentry_id))
+        now = time.time()
         if request.headers.get("Update-Source") in BUTTON_SOURCES:
             # B-089: render before answering, so this very wake shows the new layout.
             renderer = hub.renderers.get(screen.subentry_id)
@@ -213,13 +212,17 @@ class DisplayView(HomeAssistantView):
                     await renderer.async_resume()  # double click: back to the schedule
                 else:
                     await renderer.async_step()  # short press: next layout
+        rate = 60 if screen.frame is None else _refresh_rate(self.hass, hub, screen)
+        screen.last_checkin, screen.last_rate = now, rate
+        hub.devices.record_checkin(screen.subentry_id, now, rate)
+        async_dispatcher_send(self.hass, SIGNAL_CHECKIN.format(screen.subentry_id))
         if screen.frame is None:
             return _json({"status": 202, "message": "No image rendered yet",
-                          "refresh_rate": 60})
+                          "refresh_rate": rate})
         return _json({"status": 0,
                       "image_url": base_url(hub, request) + image_path(screen),
                       "filename": screen.frame.sha,
-                      "refresh_rate": _refresh_rate(self.hass, hub, screen),
+                      "refresh_rate": rate,
                       "update_firmware": False, "reset_firmware": False,
                       "special_function": "none"})
 

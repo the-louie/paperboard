@@ -174,10 +174,17 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       `/api/setup` from a MAC the hub already paired, outside a window, re-binds it to its
       own screen with a fresh key (LAN-only). Trade-off in device-api.md setup case 4.
       Tests: test_setup_view.py (2 new).
-- [ ] **B-093 · Remember the last check-in across restarts** · 2h · prio P1 · src: live 2026-11-08 19:14
+- [x] **B-093 · Remember the last check-in across restarts** · 2h · prio P1 · src: live 2026-11-08 19:14 · done 2026-11-09
       `last_checkin` lives only in memory. After a restart it is None, and
       `binary_sensor.<screen>_missed_checkin` stays **off** forever if the device never comes
       back. That happened on 2026-11-08: the panel lost its pairing in the 18:48–18:59 outage
       and nothing alerted, so B-077's alert was blind.
       - Persist `last_checkin` with the device store.
       - Treat "no check-in for 3 polls since start-up" as missed as well.
+      **Done 2026-11-09:** `last_checkin` and the refresh rate given in that answer are stored
+      with the paired device (saved 30 s after a poll, flushed on unload) and restored at
+      setup. The second bullet already held (the clock starts at setup).
+      **Also fixed:** the missed-check-in allowance used the base rate (3 x 900 s), so with
+      the night schedule (1 h polls) the alert turned on every night hour 22:45–04:45 on
+      2026-11-08/09. It now uses 3 x the rate the device was last told.
+      Tests: test_missed_checkin.py (3 new, all fail on the old code).

@@ -110,6 +110,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
             refresh_rate=int(subentry.data.get(
                 CONF_REFRESH_RATE, entry.options.get(CONF_REFRESH_RATE, DEFAULT_REFRESH_RATE))),
         )
+        if (paired := store.devices.get(subentry.subentry_id)) is not None:
+            screen.last_checkin, screen.last_rate = paired.last_checkin, paired.last_rate
         device = registry.async_get_or_create(
             config_entry_id=entry.entry_id,
             config_subentry_id=subentry.subentry_id,
