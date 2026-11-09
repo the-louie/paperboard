@@ -136,7 +136,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - [x] **B-103 · CI: `permissions: contents: read` in every workflow** · 0.5h · prio P3 · src: B-102 · done 2026-11-09 (owner: "do the ci fix also before release")
       Keep `hacs/action@main` and `hassfest@master`; optionally pin the other actions by SHA
       with Dependabot for github-actions.
-- [ ] **B-104 · README: install from the HACS catalog first** · 0.5h · prio P2 · src: hacs/default #13762 approval (frenck) 2026-11-09
+- [x] **B-104 · README: install from the HACS catalog first** · 0.5h · prio P2 · src: hacs/default #13762 approval (frenck) 2026-11-09 · done 2026-11-09, released in 0.1.2
       Paperboard was merged into the HACS default list 2026-11-09 21:02 (v0.1.1). Reviewer:
       "lead with searching for Paperboard in HACS and keep the custom repository route as a
       fallback". For the next release.

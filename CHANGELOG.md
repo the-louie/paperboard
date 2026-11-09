@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-09
+
+Paperboard is now in the HACS default list.
+
+### Changed
+- README: install by searching for Paperboard in HACS (with a one-click button); the custom
+  repository route stays as a fallback.
+
 ## [0.1.1] - 2026-11-09
 
 Security release, after the HACS review.
@@ -70,6 +78,7 @@ First public version.
   actually given to the device, so night schedules no longer trigger it.
 - Widget spacing scales on large panels such as the TRMNL X.
 
-[Unreleased]: https://github.com/the-louie/paperboard/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/the-louie/paperboard/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/the-louie/paperboard/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/the-louie/paperboard/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/the-louie/paperboard/releases/tag/v0.1.0

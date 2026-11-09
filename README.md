@@ -1,7 +1,7 @@
 # paperboard
 
 [![CI](https://github.com/the-louie/paperboard/actions/workflows/ci.yml/badge.svg)](https://github.com/the-louie/paperboard/actions/workflows/ci.yml)
-[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/docs/faq/custom_repositories/)
+[![HACS Default](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://hacs.xyz/)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
@@ -49,8 +49,14 @@ one.
 
 ## Install
 
-1. In HACS, add this repository as a custom repository (category *Integration*), then install
-   **Paperboard**. It needs Home Assistant **2026.3** or newer.
+1. In HACS, search for **Paperboard** and download it. It needs Home Assistant **2026.3** or
+   newer.
+
+   [![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=the-louie&repository=paperboard&category=integration)
+
+   If it does not show up yet, add `https://github.com/the-louie/paperboard` as a custom
+   repository (HACS → ⋮ → **Custom repositories**, category *Integration*) and download it
+   from there.
 2. Restart Home Assistant, then go to **Settings → Devices & services → Add integration →
    Paperboard**.
    - Give the **base URL** your devices use to reach Home Assistant.
