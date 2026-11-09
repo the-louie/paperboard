@@ -153,7 +153,9 @@ service do.
     recorder (B-101).
 - **Logging hygiene:** the integration logs only render failures (screen name + error). It
   never logs headers, keys, tokens or MACs. Diagnostics redact keys and tokens and reduce MACs
-  to their last two octets (T-27).
+  to their last two octets (T-27). Every known token, key and full MAC is also replaced
+  inside free text (device log lines), the base URL is redacted, and a rejected device's IP
+  becomes "local" or "remote".
 - **Nabu Casa / internet exposure:** the device endpoints are reachable wherever HA is. After
   pairing that is harmless (keys required). Pairing itself is LAN-only. The README must say:
   point devices at the LAN URL.
