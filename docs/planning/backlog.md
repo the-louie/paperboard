@@ -147,8 +147,11 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       Draft an issue or PR for resvg-py (`py.allow_threads` around the render), with the
       measurement from `scripts/check_worker_stall.py`. The owner posts it. If upstream does it,
       the worker process can go.
-- [ ] **B-091 · Research: AppDaemon at 44 % CPU on ha-host** · 1h · prio P2 · src: B-088 (2026-11-08 18:30, `docker stats`)
+- [x] **B-091 · Research: AppDaemon at 44 % CPU on ha-host** · 1h · prio P2 · src: B-088 (2026-11-08 18:30, `docker stats`) · done 2026-11-09
       Move to `<the maintainer's HA repo>` HASS-BACKLOG if confirmed: it is not paperboard's.
+      **Done 2026-11-09, moved to hass H-58:** AppDaemon re-checks its app files every 1 s
+      (`utility_delay`), and ha-host runs at 792 MHz (the VM host's BIOS lock, hass H-40). That gives
+      a 2–3 s check and 65 % CPU. The same apps on dev-host: 3.5 %. Not paperboard's.
 - [x] **B-092 · The render worker hung Home Assistant's shutdown** · 3h · prio P1 · src: live 2026-11-08 18:48–19:00 · done 2026-11-09
       After the upgrade to HA 2026.11.0, `homeassistant.restart` never finished. The last log line
       was "Found 3 non-daemonic threads", the ProcessPoolExecutor's threads. HA was down
