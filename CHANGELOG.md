@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-09
+
+Security release, after the HACS review.
+
 ### Added
 - Every pairing raises a notification with the code the panel shows, its MAC ending and the
   address it came from, so a device that took the pairing window instead of your panel is
@@ -66,5 +70,6 @@ First public version.
   actually given to the device, so night schedules no longer trigger it.
 - Widget spacing scales on large panels such as the TRMNL X.
 
-[Unreleased]: https://github.com/the-louie/paperboard/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/the-louie/paperboard/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/the-louie/paperboard/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/the-louie/paperboard/releases/tag/v0.1.0
