@@ -19,7 +19,9 @@ All notable changes to this project are documented here. The format follows
 ### Security
 - The image link's token is no longer in the image entity's attributes (`png_path`,
   `bmp_path`), which every Home Assistant user can read and the recorder keeps. The links are
-  now shown in the screen's **Reconfigure** dialog, for admins only. **If you used 0.1.0,
+  now shown in the screen's **Reconfigure** dialog, for admins only. Without a base URL the
+  links use Home Assistant's internal URL, which in a bridged Docker container is the
+  container's address: set the base URL there. **If you used 0.1.0,
   press Rotate image link once:** the old token is in your recorder history.
 - Diagnostics no longer include secrets that the panel's own log lines may quote (image
   token, device key, full MAC), the base URL or the address of a rejected device; they show

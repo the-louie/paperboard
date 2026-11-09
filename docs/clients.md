@@ -6,6 +6,13 @@ screen.
 - **Where the URL comes from:** open the screen's **Reconfigure** dialog (admins only). It
   shows the PNG and BMP links, built from the hub's base URL. The links are deliberately not
   entity attributes: every user can read those, and the recorder keeps them.
+- **Without a base URL the host part may be wrong.** The links then start with Home
+  Assistant's own idea of its internal URL (Settings → System → Network, else the address it
+  detects). In a Docker container on a bridge network that is the container's address, for
+  example `http://172.17.0.3:8123`, which other devices cannot reach. Set the base URL in the
+  hub's options (Paperboard → Configure), or replace the host part by hand: everything from
+  `/api/paperboard/` on is correct. Host networking (`network_mode: host`), Home Assistant OS
+  and Supervised installs are not affected.
 - **Credentials:** the token in the path is the only one. Rotate it with the screen's
   **Rotate image link** button.
 

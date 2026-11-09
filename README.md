@@ -55,6 +55,8 @@ one.
    Paperboard**.
    - Give the **base URL** your devices use to reach Home Assistant.
    - Use the **LAN address** (e.g. `http://192.168.1.10:8123`), not the cloud URL.
+   - Set it on Docker installs with a bridge network: without it, image links for other
+     clients use the container's own address ([details](docs/clients.md)).
 
 ## Set up a screen
 
