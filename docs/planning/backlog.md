@@ -133,7 +133,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       the asking and last check-in addresses) and for >10 bad-key polls an hour; /api/log
       limit on bytes read and 500-character fields; ID header capped at 64 characters.
       Withdrawn: Repairs prompt to rotate 0.1.0 tokens (no 0.1.0 users besides the lab).
-- [ ] **B-103 · CI: `permissions: contents: read` in every workflow** · 0.5h · prio P3 · src: B-102 · after the 0.1.1 release (owner)
+- [x] **B-103 · CI: `permissions: contents: read` in every workflow** · 0.5h · prio P3 · src: B-102 · done 2026-11-09 (owner: "do the ci fix also before release")
       Keep `hacs/action@main` and `hassfest@master`; optionally pin the other actions by SHA
       with Dependabot for github-actions.
 - [ ] **B-072 · Upstream offer to cryptomilk** · 1h · prio P3 · needs: B-071 · src: R §build new

@@ -8,6 +8,12 @@ on:
   schedule:
     - cron: "0 4 * * 1"  # weekly: catches HA/HACS rule changes between releases
 
+# Read-only token: no job writes to the repository, so a compromised action cannot either.
+# hacs/action@main and hassfest@master stay on the branches their projects document; pinning
+# them would let validation fall behind HACS and HA rule changes.
+permissions:
+  contents: read
+
 jobs:
   lint:
     runs-on: ubuntu-latest
