@@ -50,3 +50,15 @@ def test_layout_can_pin_language() -> None:
                     width=800, height=480, screen_name="x", lang="sv")
     svg = render_spec(spec, snap, Measurer(load_fonts()), Theme())
     assert "Sunday 8 November" in svg and "Söndag" not in svg
+
+
+def test_layout_text_per_language() -> None:
+    from custom_components.paperboard.widget_registry import layout_text
+
+    title = {"sv": "Vädret", "en": "Weather"}
+    assert layout_text(title, "sv") == "Vädret"
+    assert layout_text(title, "en") == "Weather"
+    assert layout_text(title, "de") == "Weather"  # unknown language: English
+    assert layout_text({"sv": "Bara svenska"}, "en") == "Bara svenska"
+    assert layout_text("Plain", "en") == "Plain"
+    assert layout_text(None, "en") is None

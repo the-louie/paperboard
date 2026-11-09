@@ -30,14 +30,14 @@ def _label(svg: Svg, r: Rect, title: str, unit: str, theme: Theme) -> None:
 
 
 def price_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
-                axis: TimeAxis, cheapest_hours: int = 2, label: str = "EL") -> bool:
+                axis: TimeAxis, cheapest_hours: int = 2, label: str | None = None) -> bool:
     series: PriceSeries = snap.prices.series() if snap.prices else PriceSeries()
     hourly = [p for p in series.hourly() if axis.contains(p.start)]
     if not hourly:
         return False
     currency = series.unit.split("/")[0] if series.unit else ""
     unit = {"SEK": "kr", "NOK": "kr", "DKK": "kr", "EUR": "€"}.get(currency, currency.lower())
-    _label(svg, r, label, unit, theme)
+    _label(svg, r, label or ("EL" if snap.lang == "sv" else "PRICE"), unit, theme)
     px = theme.px
     top, bottom = r.y + px(16), r.y + r.h
     vmin, vmax = min(p.value for p in hourly), max(p.value for p in hourly)
@@ -105,13 +105,13 @@ SOLAR_LEFT = {"sv": " · kvar {left}", "en": " · {left} to go"}
 
 
 def solar_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
-                axis: TimeAxis, label: str = "SOL") -> bool:
+                axis: TimeAxis, label: str | None = None) -> bool:
     """Expected production per hour as hatched bars (an estimate, not a measurement)."""
     hours = snap.solar.wh_at() if snap.solar else {}
     shown = {t: wh for t, wh in hours.items() if axis.contains(t) and wh > 0}
     if not shown:
         return False
-    _label(svg, r, label, "kWh", theme)
+    _label(svg, r, label or ("SOL" if snap.lang == "sv" else "SOLAR"), "kWh", theme)
     p = theme.px
     top, bottom = r.y + p(18), r.y + r.h
     peak = max(max(shown.values()), 200.0)  # flat days do not blow up to full height

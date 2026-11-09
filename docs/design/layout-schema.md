@@ -73,6 +73,9 @@ widgets:
     collapse: none
 ```
 
+A `title` option may be a plain string or one string per language, picked by Home Assistant's
+language, with English as the fallback: `title: {en: Weather, sv: Vädret}`.
+
 | Type | Roles read | Key options |
 |---|---|---|
 | `header` | `calendars[]` (holiday names), `weather` (tomorrow 07) | `style: line \| masthead \| titlebar`, `title`, `show_week`, `show_flag`, `badge: tomorrow_07 \| none` |

@@ -11,6 +11,10 @@ All notable changes to this project are documented here. The format follows
 Paperboard is now in the HACS default list.
 
 ### Changed
+- Bundled layouts follow Home Assistant's language everywhere: the chart labels and the
+  section titles of Tidningen, Bento and TRMNL were Swedish in English too. A layout `title`
+  option can now be one string per language (`{en: Weather, sv: Vädret}`).
+- README images are in English (`scripts/readme_images.py`).
 - README: install by searching for Paperboard in HACS (with a one-click button); the custom
   repository route stays as a fallback.
 

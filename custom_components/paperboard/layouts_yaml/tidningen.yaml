@@ -26,7 +26,7 @@ widgets:
   - type: energy
     area: el
     options: {rows: [price_now], title: false}
-  - {type: rooms, area: home, height: 150, options: {title: HEMMET, columns: 1}}
+  - {type: rooms, area: home, height: 150, options: {title: {sv: HEMMET, en: HOME}, columns: 1}}
   - type: energy
     area: home
     options: {rows: [solar_expected_today, solar_now, house_now, battery]}

@@ -33,6 +33,14 @@ MONTH = {"sv": ["januari", "februari", "mars", "april", "maj", "juni", "juli", "
                 "September", "October", "November", "December"]}
 
 
+
+def layout_text(value: Any, lang: str) -> Any:
+    """A text from a layout file: a plain string, or one per language ({sv: Vädret, en:
+    Weather}) picked by the screen's language, falling back to English, then to any."""
+    if isinstance(value, dict):
+        return str(value.get(lang) or value.get("en") or next(iter(value.values()), ""))
+    return value
+
 def _flag(snap: Snapshot) -> str:
     """Today's all-day event from the bound calendars (holiday names translated for sv)."""
     for cal in snap.roles.get("calendars") or []:
@@ -110,7 +118,7 @@ def _date_line(snap: Snapshot, o: dict, with_year: bool = False) -> tuple[str, s
 
 def _masthead(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
     """Newspaper masthead (02 Tidningen): big name left, date block right, double rule."""
-    name = str(o.get("title") or snap.home_name or snap.screen_name)
+    name = str(layout_text(o.get("title"), snap.lang) or snap.home_name or snap.screen_name)
     first, second = _date_line(snap, o, with_year=True)
     p = t.px
     small = t.text("s", bold=True)
@@ -129,7 +137,7 @@ def _titlebar(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
     """TRMNL-style title bar (06): black rounded bar, title left, date/info right."""
     p = t.px
     svg.rect(r.x, r.y, r.w, r.h, t.ink, rx=p(8))
-    title = str(o.get("title") or snap.home_name or snap.screen_name)
+    title = str(layout_text(o.get("title"), snap.lang) or snap.home_name or snap.screen_name)
     first, second = _date_line(snap, o)
     info = f"{first} · {second}" if second else first
     base = r.y + r.h / 2 + p(6)
@@ -263,7 +271,8 @@ def _flow(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> 
 
 @widget("rooms")
 def _rooms(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
-    return rooms(svg, r, snap, m, t, int(o.get("columns", 1)), o.get("labels"), o.get("title"))
+    return rooms(svg, r, snap, m, t, int(o.get("columns", 1)), o.get("labels"),
+                 layout_text(o.get("title"), snap.lang))
 
 
 @widget("stat")
@@ -326,7 +335,8 @@ def _text(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> 
 
 @widget("hourly_strip")
 def _strip(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
-    return hourly_strip(svg, r, snap, m, t, int(o.get("hours", 12)), o.get("title"))
+    return hourly_strip(svg, r, snap, m, t, int(o.get("hours", 12)),
+                        layout_text(o.get("title"), snap.lang))
 
 
 @widget("tomorrow")
