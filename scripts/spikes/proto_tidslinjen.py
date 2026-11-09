@@ -17,13 +17,21 @@ import datetime as dt
 import json
 import math
 import re
+from functools import partial
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from custom_components.paperboard import fmt
+from custom_components.paperboard import fmt as _fmt
 from custom_components.paperboard.fonts import load_fonts
 from custom_components.paperboard.svg import BLACK, WHITE, Svg
 from custom_components.paperboard.text import Measurer, TextStyle
+
+
+class fmt:  # noqa: N801 - the Sprint 01 prototype is the Swedish reference: Swedish numbers
+    MISSING = _fmt.MISSING
+    to_float = staticmethod(_fmt.to_float)
+    number = staticmethod(partial(_fmt.number, lang="sv"))
+    with_unit = staticmethod(partial(_fmt.with_unit, lang="sv"))
 
 TZ = ZoneInfo("Europe/Stockholm")
 ICON_DIR = Path(__file__).parent / "icons"

@@ -48,17 +48,17 @@ def now_block(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, lang: str = 
     condition, attrs = _weather(snap)
     temp = attrs.get("temperature")
     rows = [
-        (i18n.t(lang, "now.humidity"), fmt.with_unit(attrs.get("humidity"), "%", 0)),
+        (i18n.t(lang, "now.humidity"), fmt.with_unit(attrs.get("humidity"), "%", 0, lang)),
         (i18n.t(lang, "now.wind"), _wind(attrs, lang)),
-        (i18n.t(lang, "now.dew"), fmt.with_unit(attrs.get("dew_point"), "°")),
-        (i18n.t(lang, "now.pressure"), fmt.with_unit(attrs.get("pressure"), "hPa", 0)),
+        (i18n.t(lang, "now.dew"), fmt.with_unit(attrs.get("dew_point"), "°", 1, lang)),
+        (i18n.t(lang, "now.pressure"), fmt.with_unit(attrs.get("pressure"), "hPa", 0, lang)),
     ]
     rows = [(k, v) for k, v in rows if v != fmt.MISSING]
     if fmt.to_float(temp) is None and condition is None and not rows:
         return False
     b12, r16, b16 = t.text("xs", bold=True), t.text("s"), t.text("s", bold=True)
     svg.text(r.x, r.y + p(12), i18n.t(lang, "now.now"), b12)
-    svg.text(r.x - p(4), r.y + p(82), fmt.with_unit(temp, "°"), t.numeral("hero"))
+    svg.text(r.x - p(4), r.y + p(82), fmt.with_unit(temp, "°", 1, lang), t.numeral("hero"))
     label = i18n.group(lang, "weather.condition").get(condition or "", "")
     if label:
         svg.text(r.x, r.y + p(110), measure.truncate(label, r16, r.w), r16)

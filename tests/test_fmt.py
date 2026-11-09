@@ -14,20 +14,20 @@ def test_garbage_is_missing(raw: object) -> None:
 
 
 def test_decimal_comma_and_minus() -> None:
-    assert number(3.14) == "3,1"
-    assert number("-0.84") == "−0,8"
-    assert number(-0.04) == "0,0"  # no "−0,0"
+    assert number(3.14, lang="sv") == "3,1"
+    assert number("-0.84", lang="sv") == "−0,8"
+    assert number(-0.04, lang="sv") == "0,0"  # no "−0,0"
     assert number(3.1, 1, "en") == "3.1"
-    assert number("3,5") == "3,5"
+    assert number("3,5", lang="sv") == "3,5"
 
 
 def test_signed() -> None:
-    assert signed(1.2) == "+1,2"
-    assert signed(-0.8) == "−0,8"
-    assert signed(0.01) == "±0,0"
+    assert signed(1.2, lang="sv") == "+1,2"
+    assert signed(-0.8, lang="sv") == "−0,8"
+    assert signed(0.01, lang="sv") == "±0,0"
 
 
 def test_units() -> None:
-    assert with_unit(3.1, "°") == "3,1°"
+    assert with_unit(3.1, "°", lang="sv") == "3,1°"
     assert with_unit(89, "%", 0) == "89 %"
-    assert with_unit(1.894, "kr", 2) == "1,89 kr"
+    assert with_unit(1.894, "kr", 2, lang="sv") == "1,89 kr"

@@ -30,8 +30,8 @@ def decimal_sep(lang: str) -> str:
     return "," if lang.split("-")[0].lower() in _COMMA_LANGS else "."
 
 
-def number(value: object, decimals: int = 1, lang: str = "sv") -> str:
-    """'3,1' / '−0,8' / '—'."""
+def number(value: object, decimals: int = 1, lang: str = "en") -> str:
+    """'3.1' / '−0.8' / '—' (a decimal comma for languages that use one: '3,1')."""
     num = to_float(value)
     if num is None:
         return MISSING
@@ -41,7 +41,7 @@ def number(value: object, decimals: int = 1, lang: str = "sv") -> str:
     return text
 
 
-def signed(value: object, decimals: int = 1, lang: str = "sv") -> str:
+def signed(value: object, decimals: int = 1, lang: str = "en") -> str:
     """'+1,2' / '−0,8' / '±0,0' / '—'."""
     num = to_float(value)
     if num is None:
@@ -52,7 +52,7 @@ def signed(value: object, decimals: int = 1, lang: str = "sv") -> str:
     return ("+" if num > 0 else MINUS) + body
 
 
-def with_unit(value: object, unit: str, decimals: int = 1, lang: str = "sv") -> str:
+def with_unit(value: object, unit: str, decimals: int = 1, lang: str = "en") -> str:
     """'3,1°' (no space for °), '89 %', '1,89 kr', or '—' with no unit."""
     text = number(value, decimals, lang)
     if text == MISSING:

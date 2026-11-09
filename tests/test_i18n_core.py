@@ -70,3 +70,13 @@ def test_every_bundled_layout_has_a_display_name() -> None:
     for name in load_all(None).layouts:
         for lang in i18n.available():
             assert i18n.t(lang, f"layout.{name}") != f"layout.{name}", (lang, name)
+
+
+def test_numbers_follow_the_language() -> None:
+    from custom_components.paperboard import fmt
+
+    assert fmt.number(2.84) == "2.8"  # English default
+    assert fmt.number(2.84, 1, "en") == "2.8" and fmt.number(2.84, 1, "sv") == "2,8"
+    assert fmt.with_unit(-0.84, "°", 1, "sv") == "−0,8°"
+    assert fmt.number(2.84, 1, "pt-BR") == "2,8"  # base language decides
+    assert fmt.signed(1.25, 1, "en") == "+1.2" or fmt.signed(1.25, 1, "en") == "+1.3"
