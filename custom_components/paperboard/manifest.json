@@ -1,6 +1,9 @@
 {
   "domain": "paperboard",
   "name": "Paperboard",
+  "categories": [
+    "diy_makers"
+  ],
   "codeowners": [
     "@the-louie"
   ],
