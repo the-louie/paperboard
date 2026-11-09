@@ -125,6 +125,17 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       users to rotate the image link. Tests: test_generic_clients.py (token not in any state),
       test_setup_view.py (spoofed known MAC refused, real key kept), test_subentry_flow.py.
       Next: the owner's own security QA, then release 0.1.1 and re-request review.
+- [x] **B-102 · Own security QA after the HACS review** · 6h · prio P1 · src: owner 2026-11-09 · done 2026-11-09
+      Owner: "add 1, 2, 3, 5 with the re-pair notice, 6 and 7. issue 8 will be fixed after
+      release. do the fixes as one commit each." Done: proxy-forwarded client addresses must
+      be local to pair; diagnostics scrub tokens, keys, MACs, base URL and rejected IP; every
+      pairing raises a notification; Repairs issues for a known panel asking to re-pair (with
+      the asking and last check-in addresses) and for >10 bad-key polls an hour; /api/log
+      limit on bytes read and 500-character fields; ID header capped at 64 characters.
+      Withdrawn: Repairs prompt to rotate 0.1.0 tokens (no 0.1.0 users besides the lab).
+- [ ] **B-103 · CI: `permissions: contents: read` in every workflow** · 0.5h · prio P3 · src: B-102 · after the 0.1.1 release (owner)
+      Keep `hacs/action@main` and `hassfest@master`; optionally pin the other actions by SHA
+      with Dependabot for github-actions.
 - [ ] **B-072 · Upstream offer to cryptomilk** · 1h · prio P3 · needs: B-071 · src: R §build new
       Claude drafts an issue offering the device-API views; the owner posts it.
 

@@ -24,6 +24,9 @@ All notable changes to this project are documented here. The format follows
 - Diagnostics no longer include secrets that the panel's own log lines may quote (image
   token, device key, full MAC), the base URL or the address of a rejected device; they show
   whether a base URL is set, its scheme, and "local" or "remote" instead.
+- `/api/log` enforces its 64 kB limit on the bytes actually read (also for a chunked body)
+  and keeps at most 500 characters per log field.
+- The device `ID` header is capped at 64 characters wherever it is read or stored.
 - Pairing also checks the client address a reverse proxy forwards (`X-Forwarded-For`,
   `X-Real-IP`, `Forwarded`, `CF-Connecting-IP`, `True-Client-IP`): a proxy Home Assistant is
   not configured for could otherwise make an internet caller look local.
