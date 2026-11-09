@@ -64,8 +64,9 @@ def _header(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
         return _titlebar(svg, r, snap, m, t, o)
     lang = snap.lang
     title = f"{WEEKDAY[lang][snap.now.weekday()]} {snap.now.day} {MONTH[lang][snap.now.month - 1]}"
+    p = t.px
     big, rest = t.text("m", bold=True), t.text("m")
-    base = r.y + r.h / 2 + 7
+    base = r.y + r.h / 2 + p(7)
     svg.text(r.x, base, title, big)
     right_edge = r.x + r.w
     if o.get("badge", "tomorrow_07") == "tomorrow_07":
@@ -76,18 +77,18 @@ def _header(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
             value = fmt.with_unit(item.get("temperature"), "°", 1, lang)
             vstyle, lstyle = t.text("s", bold=True), t.text("s")
             label = "Imorgon kl 07" if lang == "sv" else "Tomorrow 07:00"
-            bw = m.width(value, vstyle) + 14
-            svg.rect(r.x + r.w - bw, r.y + r.h / 2 - 12, bw, 24, t.ink, rx=3)
-            svg.text(r.x + r.w - bw / 2, base - 1, value, vstyle, "middle", t.paper)
-            svg.text(r.x + r.w - bw - 8, base - 1, label, lstyle, "end")
-            right_edge = r.x + r.w - bw - 16 - m.width(label, lstyle)
+            bw = m.width(value, vstyle) + p(14)
+            svg.rect(r.x + r.w - bw, r.y + r.h / 2 - p(12), bw, p(24), t.ink, rx=p(3))
+            svg.text(r.x + r.w - bw / 2, base - p(1), value, vstyle, "middle", t.paper)
+            svg.text(r.x + r.w - bw - p(8), base - p(1), label, lstyle, "end")
+            right_edge = r.x + r.w - bw - p(16) - m.width(label, lstyle)
     extra = []
     if o.get("show_week", True):
         extra.append(f"{'v.' if lang == 'sv' else 'wk'} {snap.now.isocalendar().week}")
     if o.get("show_flag", True) and (flag := _flag(snap)):
         extra.append(flag)
     x = r.x + m.width(title + " ", big)
-    while extra and x + m.width(" · ".join(extra), rest) > right_edge - 8:
+    while extra and x + m.width(" · ".join(extra), rest) > right_edge - p(8):
         extra.pop()  # drop the holiday flag first, then the week number
     if extra:
         svg.text(x, base, " · ".join(extra), rest)
@@ -111,26 +112,29 @@ def _masthead(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
     """Newspaper masthead (02 Tidningen): big name left, date block right, double rule."""
     name = str(o.get("title") or snap.home_name or snap.screen_name)
     first, second = _date_line(snap, o, with_year=True)
+    p = t.px
     small = t.text("s", bold=True)
     right_w = max(m.width(first, small), m.width(second, small))
-    title_style = t.numeral("xl") if r.h >= 44 else t.numeral("l")
-    svg.text(r.x, r.y + r.h - 9, m.truncate(name, title_style, r.w - right_w - 16), title_style)
-    svg.text(r.x + r.w, r.y + r.h - 26, first, small, "end")
-    svg.text(r.x + r.w, r.y + r.h - 9, second, small, "end")
-    svg.line(r.x, r.y + r.h - 3, r.x + r.w, r.y + r.h - 3, 2)
+    title_style = t.numeral("xl") if r.h >= p(44) else t.numeral("l")
+    svg.text(r.x, r.y + r.h - p(9), m.truncate(name, title_style, r.w - right_w - p(16)),
+             title_style)
+    svg.text(r.x + r.w, r.y + r.h - p(26), first, small, "end")
+    svg.text(r.x + r.w, r.y + r.h - p(9), second, small, "end")
+    svg.line(r.x, r.y + r.h - p(3), r.x + r.w, r.y + r.h - p(3), 2)
     svg.line(r.x, r.y + r.h, r.x + r.w, r.y + r.h, 1)
     return True
 
 
 def _titlebar(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
     """TRMNL-style title bar (06): black rounded bar, title left, date/info right."""
-    svg.rect(r.x, r.y, r.w, r.h, t.ink, rx=8)
+    p = t.px
+    svg.rect(r.x, r.y, r.w, r.h, t.ink, rx=p(8))
     title = str(o.get("title") or snap.home_name or snap.screen_name)
     first, second = _date_line(snap, o)
     info = f"{first} · {second}" if second else first
-    base = r.y + r.h / 2 + 6
-    svg.text(r.x + 12, base, title, t.text("s", bold=True), color=t.paper)
-    svg.text(r.x + r.w - 12, base, m.truncate(info, t.text("xs"), r.w / 2), t.text("xs"),
+    base = r.y + r.h / 2 + p(6)
+    svg.text(r.x + p(12), base, title, t.text("s", bold=True), color=t.paper)
+    svg.text(r.x + r.w - p(12), base, m.truncate(info, t.text("xs"), r.w / 2), t.text("xs"),
              "end", t.paper)
     return True
 
@@ -183,9 +187,11 @@ def _now(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> b
             for k in wanted if values.get(k) not in (None, fmt.MISSING)]
     if temp is None and weather_state is None and not rows:
         return False
-    svg.text(r.x, r.y + 12, LABELS[lang]["now"], t.text("xs", bold=True))
+    p = t.px
+    svg.text(r.x, r.y + p(12), LABELS[lang]["now"], t.text("xs", bold=True))
     hero = t.numeral("hero")
-    svg.text(r.x - 4, r.y + 14 + hero.size * 0.92, fmt.with_unit(temp, "°", 1, lang), hero)
+    svg.text(r.x - p(4), r.y + p(14) + hero.size * 0.92, fmt.with_unit(temp, "°", 1, lang),
+             hero)
     summary = CONDITION[lang].get(str((weather_state or {}).get("state", "")), "")
     days = snap.forecasts.get("daily") or []
     if days:
@@ -194,18 +200,19 @@ def _now(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> b
         parts.append(f"max {fmt.with_unit(hi, '°', 1, lang)}")
         parts.append(f"{'natt' if lang == 'sv' else 'low'} {fmt.with_unit(lo, '°', 1, lang)}")
         summary = " · ".join(parts)
-    sy = r.y + 14 + hero.size * 0.92 + 26  # clear margin under the numeral (owner, rows 01/03)
+    sy = r.y + p(14) + hero.size * 0.92 + p(26)  # clear margin under the numeral (owner)
     if summary:
         svg.text(r.x, sy, m.truncate(summary, t.text("s"), r.w), t.text("s"))
-    kv_list(svg, Rect(r.x, sy + 10, r.w, r.y + r.h - sy - 10), rows, m, t, dotted=False)
+    kv_list(svg, Rect(r.x, sy + p(10), r.w, r.y + r.h - sy - p(10)), rows, m, t, dotted=False)
     return True
 
 
 @widget("timeline")
 def _timeline(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
     series = o.get("series", ["solar_forecast", "price"])
-    axis = axis_for(snap, r, int(o.get("hours", 24)))
-    label_h = 24
+    p = t.px
+    axis = axis_for(snap, r, int(o.get("hours", 24)), p(42))
+    label_h = p(24)
     drawable = {"solar_forecast": bool(snap.solar and snap.solar.hours),
                 "price": bool(snap.prices and snap.prices.points)}
     present = [s for s in series if drawable.get(s)]
@@ -217,16 +224,16 @@ def _timeline(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
     top, avail = r.y, r.h - label_h
     if o.get("night", "dots") == "dots":
         night_shading(svg, snap, t, axis, top, top + avail, snap.lang)
-    y = top + 14
+    y = top + p(14)
     for name in present:
-        h = (avail - 14) * weights[name] / total
-        box = Rect(r.x, y, r.w, h - 6)
+        h = (avail - p(14)) * weights[name] / total
+        box = Rect(r.x, y, r.w, h - p(6))
         if name == "solar_forecast":
             solar_chart(svg, box, snap, m, t, axis)
         else:
             price_chart(svg, box, snap, m, t, axis, int(o.get("cheapest_hours", 2)))
         y += h
-    now_marker(svg, axis, top + 14, top + avail)
+    now_marker(svg, axis, top + p(14), top + avail)
     axis_labels(svg, axis, top + avail, t, snap.lang, int(o.get("tick_every", 3)))
     return True
 
@@ -289,18 +296,19 @@ def _footer(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
     right = f"{snap.now:%Y-%m-%d %H:%M}"
     if snap.battery is not None:
         right = f"{'batteri' if lang == 'sv' else 'battery'} {snap.battery} % · {right}"
-    base = r.y + r.h / 2 + 4
+    p = t.px
+    base = r.y + r.h / 2 + p(4)
     x = r.x
     if snap.stale_since:
         tag = f"{LABELS[lang]['stale']} {snap.stale_since}"
-        tw = m.width(tag, t.text("xs", bold=True)) + 8
-        svg.rect(x, r.y + 2, tw, r.h - 4, t.ink)
-        svg.text(x + 4, base, tag, t.text("xs", bold=True), color=t.paper)
-        x += tw + 8
+        tw = m.width(tag, t.text("xs", bold=True)) + p(8)
+        svg.rect(x, r.y + p(2), tw, r.h - p(4), t.ink)
+        svg.text(x + p(4), base, tag, t.text("xs", bold=True), color=t.paper)
+        x += tw + p(8)
     rw = m.width(right, small)
     svg.text(r.x + r.w, base, right, small, "end")
     if left:
-        svg.text(x, base, m.truncate(left, small, r.x + r.w - rw - 12 - x), small)
+        svg.text(x, base, m.truncate(left, small, r.x + r.w - rw - p(12) - x), small)
     return True
 
 
@@ -376,22 +384,23 @@ def _now_grid(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
                           fmt.with_unit(item.get("temperature"), "°", 1, lang)))
     if temp is None and not cells:
         return False
+    p = t.px
     hero = t.numeral("xxl")
-    hero_w = m.width("−00,0°", hero) + 12
-    svg.text(r.x, r.y + 12, LABELS[lang]["now"], t.text("xs", bold=True))
-    svg.text(r.x - 2, r.y + 18 + hero.size * 0.9, fmt.with_unit(temp, "°", 1, lang), hero)
+    hero_w = m.width("−00,0°", hero) + p(12)
+    svg.text(r.x, r.y + p(12), LABELS[lang]["now"], t.text("xs", bold=True))
+    svg.text(r.x - p(2), r.y + p(18) + hero.size * 0.9, fmt.with_unit(temp, "°", 1, lang), hero)
     cond = CONDITION[lang].get(str((snap.role_state("weather") or {}).get("state", "")), "")
     if cond:
-        svg.text(r.x, r.y + r.h - 4, cond, t.text("s"))
-    svg.line(r.x + hero_w, r.y + 4, r.x + hero_w, r.y + r.h - 4, 1)
+        svg.text(r.x, r.y + r.h - p(4), cond, t.text("s"))
+    svg.line(r.x + hero_w, r.y + p(4), r.x + hero_w, r.y + r.h - p(4), 1)
     cols = 4
-    gx, gw = r.x + hero_w + 12, r.w - hero_w - 12
-    cw, rh = gw / cols, (r.h - 4) / max(1, -(-len(cells) // cols))
+    gx, gw = r.x + hero_w + p(12), r.w - hero_w - p(12)
+    cw, rh = gw / cols, (r.h - p(4)) / max(1, -(-len(cells) // cols))
     for i, (label, value) in enumerate(cells):
         cx, cy = gx + (i % cols) * cw, r.y + (i // cols) * rh
-        svg.text(cx, cy + 14, m.truncate(label.upper(), t.text("xs", bold=True), cw - 6),
+        svg.text(cx, cy + p(14), m.truncate(label.upper(), t.text("xs", bold=True), cw - p(6)),
                  t.text("xs", bold=True))
-        vstyle = t.text("m", bold=True) if m.fits(value, t.text("m", bold=True), cw - 6) \
+        vstyle = t.text("m", bold=True) if m.fits(value, t.text("m", bold=True), cw - p(6)) \
             else t.text("s", bold=True)
-        svg.text(cx, cy + 34, m.truncate(value, vstyle, cw - 6), vstyle)
+        svg.text(cx, cy + p(34), m.truncate(value, vstyle, cw - p(6)), vstyle)
     return True

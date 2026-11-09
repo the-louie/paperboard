@@ -70,6 +70,7 @@ def sun_moon(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
     t = TEXT.get(lang, TEXT["en"])
     label, big, small = theme.text("xs", bold=True), theme.text("m", bold=True), theme.text("xs")
     half = r.w / 2
+    p = theme.px
     sun_ok = bool(snap.sun) and show in ("both", "sun")
     if show == "sun" and not snap.sun:
         return False
@@ -81,20 +82,20 @@ def sun_moon(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
             dt.datetime.fromisoformat(snap.sun["rise_y"])
         delta = round((length - prev).total_seconds() / 60)
         hours, mins = divmod(round(length.total_seconds() / 60), 60)
-        svg.text(r.x, r.y + 12, t["sun"], label)
-        svg.text(r.x, r.y + 36, f"{rise:%H:%M}–{sset:%H:%M}", big)
+        svg.text(r.x, r.y + p(12), t["sun"], label)
+        svg.text(r.x, r.y + p(36), f"{rise:%H:%M}–{sset:%H:%M}", big)
         sign = "−" if delta < 0 else "+"
-        svg.text(r.x, r.y + 54, f"{hours} h {mins:02d} min ({sign}{abs(delta)} min)", small)
+        svg.text(r.x, r.y + p(54), f"{hours} h {mins:02d} min ({sign}{abs(delta)} min)", small)
     if show == "sun":
         return True
     age, lit = moon(snap.now)
     mx = r.x + (half if sun_ok else 0)
-    svg.text(mx, r.y + 12, t["moon"], label)
-    _moon_glyph(svg, mx + 10, r.y + 29, 10, age)
-    svg.text(mx + 26, r.y + 36, f"{round(lit * 100)} %", big)
+    svg.text(mx, r.y + p(12), t["moon"], label)
+    _moon_glyph(svg, mx + p(10), r.y + p(29), p(10), age)
+    svg.text(mx + p(26), r.y + p(36), f"{round(lit * 100)} %", big)
     upcoming = min((next_phase(snap.now, 0.0), t["new"]), (next_phase(snap.now, SYNODIC / 2),
                                                           t["full"]), key=lambda p: p[0])
     when = upcoming[0].astimezone(tz)
-    svg.text(mx, r.y + 54, f"{upcoming[1]} {WEEKDAYS[lang][when.weekday()]} {when.day}/"
+    svg.text(mx, r.y + p(54), f"{upcoming[1]} {WEEKDAYS[lang][when.weekday()]} {when.day}/"
              f"{when.month}", small)
     return True

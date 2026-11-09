@@ -11,14 +11,10 @@ from dataclasses import dataclass
 from typing import Any
 
 from . import fmt
-from .fonts import PIXEL_SEMIBOLD
 from .layouts import Snapshot
+from .style import Theme
 from .svg import BLACK, Svg
-from .text import Measurer, TextStyle
-
-B12, R12 = TextStyle("TRMNL12", 700, 12), TextStyle("TRMNL12", PIXEL_SEMIBOLD, 12)
-B16, R16 = TextStyle("TRMNL16", 700, 16), TextStyle("TRMNL16", PIXEL_SEMIBOLD, 16)
-BIG = TextStyle("Inter", 700, 74)
+from .text import Measurer
 
 CONDITION = {
     "sv": {"clear-night": "Klart", "cloudy": "Mulet", "fog": "Dimma", "hail": "Hagel",
@@ -63,8 +59,11 @@ def _ms(value: object, unit: str | None) -> float | None:
     return {"km/h": v / 3.6, "mph": v * 0.44704, "kn": v * 0.514444}.get(unit or "m/s", v)
 
 
-def now_block(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, lang: str = "sv") -> bool:
+def now_block(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, lang: str = "sv",
+              theme: Theme | None = None) -> bool:
     """Outdoor now: big temperature, condition, and a key/value list. Every field optional."""
+    t = theme or Theme()
+    p = t.px
     condition, attrs = _weather(snap)
     temp = attrs.get("temperature")
     rows = [
@@ -76,18 +75,19 @@ def now_block(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, lang: str = 
     rows = [(k, v) for k, v in rows if v != fmt.MISSING]
     if fmt.to_float(temp) is None and condition is None and not rows:
         return False
-    svg.text(r.x, r.y + 12, LABELS[lang]["now"], B12)
-    svg.text(r.x - 4, r.y + 82, fmt.with_unit(temp, "°"), BIG)
+    b12, r16, b16 = t.text("xs", bold=True), t.text("s"), t.text("s", bold=True)
+    svg.text(r.x, r.y + p(12), LABELS[lang]["now"], b12)
+    svg.text(r.x - p(4), r.y + p(82), fmt.with_unit(temp, "°"), t.numeral("hero"))
     label = CONDITION[lang].get(condition or "", "")
     if label:
-        svg.text(r.x, r.y + 110, measure.truncate(label, R16, r.w), R16)
-    y = r.y + 140
+        svg.text(r.x, r.y + p(110), measure.truncate(label, r16, r.w), r16)
+    y = r.y + p(140)
     for key, value in rows:
-        if y > r.y + r.h - 4:
+        if y > r.y + r.h - p(4):
             break
-        svg.text(r.x, y, key, R16)
-        svg.text(r.x + r.w, y, measure.truncate(value, B16, r.w * 0.6), B16, "end")
-        y += 21
+        svg.text(r.x, y, key, r16)
+        svg.text(r.x + r.w, y, measure.truncate(value, b16, r.w * 0.6), b16, "end")
+        y += p(21)
     return True
 
 
@@ -103,23 +103,27 @@ def _wind(attrs: dict[str, Any], lang: str) -> str:
 
 
 def footer(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, lang: str = "sv",
-           left: str = "") -> bool:
+           left: str = "", theme: Theme | None = None) -> bool:
     """Status line. The render time is always shown, so a stale screen is visible (O4)."""
+    t = theme or Theme()
+    p = t.px
+    b12, r12 = t.text("xs", bold=True), t.text("xs")
     svg.line(r.x, r.y, r.x + r.w, r.y, 2)
     right = f"{LABELS[lang]['updated']} {snap.now:%Y-%m-%d %H:%M}"
     if snap.battery is not None:
         right = f"{LABELS[lang]['battery']} {snap.battery} % · " + right
-    base = r.y + r.h - 7
+    base = r.y + r.h - p(7)
     if snap.stale_since:
         tag = f"{LABELS[lang]['stale']} {snap.stale_since}"
-        tw = measure.width(tag, B12) + 8
-        svg.rect(r.x, r.y + 3, tw, r.h - 5, BLACK)
-        svg.text(r.x + 4, base, tag, B12, color="#fff")
-        left_x = r.x + tw + 8
+        tw = measure.width(tag, b12) + p(8)
+        svg.rect(r.x, r.y + p(3), tw, r.h - p(5), BLACK)
+        svg.text(r.x + p(4), base, tag, b12, color="#fff")
+        left_x = r.x + tw + p(8)
     else:
         left_x = r.x
-    rw = measure.width(right, R12)
-    svg.text(r.x + r.w, base, right, R12, "end")
+    rw = measure.width(right, r12)
+    svg.text(r.x + r.w, base, right, r12, "end")
     if left:
-        svg.text(left_x, base, measure.truncate(left, R12, r.x + r.w - rw - 12 - left_x), R12)
+        svg.text(left_x, base, measure.truncate(left, r12, r.x + r.w - rw - p(12) - left_x),
+                 r12)
     return True

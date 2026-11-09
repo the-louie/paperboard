@@ -24,9 +24,9 @@ TOMORROW_NOTE = {"sv": ("morgondagens pris", "kommer ~{at}"),
 
 def _label(svg: Svg, r: Rect, title: str, unit: str, theme: Theme) -> None:
     """Series label in the left gutter: bold title, unit below."""
-    svg.text(r.x, r.y + 12, title, theme.text("xs", bold=True))
+    svg.text(r.x, r.y + theme.px(12), title, theme.text("xs", bold=True))
     if unit:
-        svg.text(r.x, r.y + 25, unit, theme.text("xs"))
+        svg.text(r.x, r.y + theme.px(25), unit, theme.text("xs"))
 
 
 def price_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
@@ -38,7 +38,8 @@ def price_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
     currency = series.unit.split("/")[0] if series.unit else ""
     unit = {"SEK": "kr", "NOK": "kr", "DKK": "kr", "EUR": "€"}.get(currency, currency.lower())
     _label(svg, r, label, unit, theme)
-    top, bottom = r.y + 16, r.y + r.h
+    px = theme.px
+    top, bottom = r.y + px(16), r.y + r.h
     vmin, vmax = min(p.value for p in hourly), max(p.value for p in hourly)
     # Baseline below the minimum (not at zero) so the day's variation is readable; bars
     # still never touch the floor, so the cheapest hours keep a visible height.
@@ -62,23 +63,24 @@ def price_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
                      stroke=theme.ink, stroke_width=1.5)
     if best:
         bx0, bx1 = axis.x(best[0]), axis.x(best[0] + dt.timedelta(hours=cheapest_hours))
-        by = min(y(p.value) for p in hourly if p.start in cheap) - 8
-        svg.path(f"M{bx0 + 1:.1f},{by + 5:.1f}V{by:.1f}H{bx1 - 1:.1f}V{by + 5:.1f}", width=2)
+        by = min(y(p.value) for p in hourly if p.start in cheap) - px(8)
+        svg.path(f"M{bx0 + 1:.1f},{by + px(5):.1f}V{by:.1f}H{bx1 - 1:.1f}V{by + px(5):.1f}",
+                 width=2)
         text = f"{best[0]:%H}–{(best[0] + dt.timedelta(hours=cheapest_hours)):%H} " \
                f"{fmt.number(best[1], 2, snap.lang)}"
         tw = measure.width(text, theme.text("xs", bold=True))
-        svg.rect((bx0 + bx1) / 2 - tw / 2 - 2, by - 15, tw + 4, 13, theme.paper)
-        svg.text((bx0 + bx1) / 2, by - 4, text, theme.text("xs", bold=True), "middle")
+        svg.rect((bx0 + bx1) / 2 - tw / 2 - px(2), by - px(15), tw + px(4), px(13), theme.paper)
+        svg.text((bx0 + bx1) / 2, by - px(4), text, theme.text("xs", bold=True), "middle")
     last_end = max(p.end for p in hourly)
     line1, line2 = TOMORROW_NOTE.get(snap.lang, TOMORROW_NOTE["en"])
     w = max(measure.width(line1, theme.text("xs")),
             measure.width(line2.format(at=series.tomorrow_expected_at or ""), theme.text("xs")))
     free = axis.x1 - axis.x(last_end)
-    if last_end < axis.end and series.tomorrow_expected_at and free >= w + 10:
-        nx = axis.x1 - 2
-        svg.rect(nx - w - 4, top - 2, w + 6, 30, theme.paper)
-        svg.text(nx, top + 10, line1, theme.text("xs"), "end")
-        svg.text(nx, top + 24, line2.format(at=series.tomorrow_expected_at), theme.text("xs"),
+    if last_end < axis.end and series.tomorrow_expected_at and free >= w + px(10):
+        nx = axis.x1 - px(2)
+        svg.rect(nx - w - px(4), top - px(2), w + px(6), px(30), theme.paper)
+        svg.text(nx, top + px(10), line1, theme.text("xs"), "end")
+        svg.text(nx, top + px(24), line2.format(at=series.tomorrow_expected_at), theme.text("xs"),
                  "end")
     svg.line(axis.x0, bottom, axis.x1, bottom, 2)
     return True
@@ -88,9 +90,9 @@ def axis_labels(svg: Svg, axis: TimeAxis, y: float, theme: Theme, lang: str,
                 every: int = 3) -> None:
     """Hour ticks under the stack; the first one reads 'nu'/'now'."""
     for x, t in axis.ticks(every):
-        svg.line(x, y, x, y + 5, 2)
+        svg.line(x, y, x, y + theme.px(5), 2)
         first = t == axis.start
-        svg.text(x, y + 18, ("nu" if lang == "sv" else "now") if first else f"{t:%H}",
+        svg.text(x, y + theme.px(18), ("nu" if lang == "sv" else "now") if first else f"{t:%H}",
                  theme.text("xs", bold=first), "middle")
 
 
@@ -110,7 +112,8 @@ def solar_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
     if not shown:
         return False
     _label(svg, r, label, "kWh", theme)
-    top, bottom = r.y + 18, r.y + r.h
+    p = theme.px
+    top, bottom = r.y + p(18), r.y + r.h
     peak = max(max(shown.values()), 200.0)  # flat days do not blow up to full height
     for t, wh in shown.items():
         x0, x1 = axis.x(t), axis.x(t + dt.timedelta(hours=1))
@@ -129,8 +132,8 @@ def solar_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
                 left=fmt.number(left_wh / 1000, 1, snap.lang))
         style = theme.text("xs", bold=True)
         w = measure.width(caption, style)
-        svg.rect(axis.x1 - w - 6, r.y, w + 6, 15, theme.paper)
-        svg.text(axis.x1 - 2, r.y + 11, caption, style, "end")
+        svg.rect(axis.x1 - w - p(6), r.y, w + p(6), p(15), theme.paper)
+        svg.text(axis.x1 - p(2), r.y + p(11), caption, style, "end")
     svg.line(axis.x0, bottom, axis.x1, bottom, 1)
     return True
 
@@ -154,19 +157,20 @@ def night_shading(svg: Svg, snap: Snapshot, theme: Theme, axis: TimeAxis, top: f
                   bottom: float, lang: str) -> None:
     """Dotted tint behind the stack where the sun is down, with set/rise times."""
     style = theme.text("xs")
+    p = theme.px
     tz = snap.now.tzinfo
     for x0, x1 in axis.spans(nights(snap)):
         svg.rect(x0, top, x1 - x0, bottom - top, theme.tint)
     for a, b in nights(snap):
         if axis.contains(a):
             text = f"{'sol ned' if lang == 'sv' else 'sunset'} {a.astimezone(tz):%H:%M}"
-            if axis.x(a) + 76 <= axis.x1:
-                svg.rect(axis.x(a) + 1, top + 1, 74, 14, theme.paper)
-                svg.text(axis.x(a) + 4, top + 12, text, style)
+            if axis.x(a) + p(76) <= axis.x1:
+                svg.rect(axis.x(a) + p(1), top + p(1), p(74), p(14), theme.paper)
+                svg.text(axis.x(a) + p(4), top + p(12), text, style)
             else:  # too close to the right edge: label on the day side, as for sunrise
-                svg.rect(axis.x(a) - 76, top + 1, 74, 14, theme.paper)
-                svg.text(axis.x(a) - 3, top + 12, text, style, "end")
+                svg.rect(axis.x(a) - p(76), top + p(1), p(74), p(14), theme.paper)
+                svg.text(axis.x(a) - p(3), top + p(12), text, style, "end")
         if axis.contains(b):
             text = f"{'upp' if lang == 'sv' else 'sunrise'} {b.astimezone(tz):%H:%M}"
-            svg.rect(axis.x(b) - 72, top + 1, 70, 14, theme.paper)
-            svg.text(axis.x(b) - 3, top + 12, text, style, "end")
+            svg.rect(axis.x(b) - p(72), top + p(1), p(70), p(14), theme.paper)
+            svg.text(axis.x(b) - p(3), top + p(12), text, style, "end")

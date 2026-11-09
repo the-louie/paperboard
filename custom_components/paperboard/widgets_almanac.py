@@ -26,20 +26,21 @@ def date_block(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Them
                flag: str = "") -> bool:
     """Day-of-month as a giant numeral with weekday, month/year, week and today's flag."""
     lang = snap.lang
+    p = theme.px
     big = theme.numeral("hero")
     day = str(snap.now.day)
-    svg.text(r.x - 3, r.y + r.h / 2 + big.size * 0.36, day, big)
-    x = r.x + measure.width(day, big) + 10
+    svg.text(r.x - p(3), r.y + r.h / 2 + big.size * 0.36, day, big)
+    x = r.x + measure.width(day, big) + p(10)
     lines = [(WEEKDAY[lang][snap.now.weekday()], theme.text("m", bold=True)),
              (f"{MONTH[lang][snap.now.month - 1]} {snap.now.year}", theme.text("s")),
              (f"{'vecka' if lang == 'sv' else 'week'} {snap.now.isocalendar().week}",
               theme.text("s"))]
     if flag:
         lines.append((flag, theme.text("s", bold=True)))
-    y = r.y + r.h / 2 - len(lines) * 9 + 12
+    y = r.y + r.h / 2 - len(lines) * p(9) + p(12)
     for text, style in lines:
         svg.text(x, y, measure.truncate(text, style, r.x + r.w - x), style)
-        y += 19
+        y += p(19)
     return True
 
 
@@ -70,6 +71,7 @@ def week(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
         return False
     cw = r.w / days
     lang = snap.lang
+    p = theme.px
     head, small, body = theme.text("s", bold=True), theme.text("xs"), theme.text("xs")
     for i in range(days):
         day = snap.now.date() + dt.timedelta(days=i)
@@ -78,29 +80,31 @@ def week(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
             svg.line(x, r.y, x, r.y + r.h, 1)
         ink = theme.ink
         if i == 0:
-            svg.rect(x, r.y, cw, 22, theme.ink)
+            svg.rect(x, r.y, cw, p(22), theme.ink)
             ink = theme.paper
         name = TODAY[lang] if i == 0 else DAYS[lang][day.weekday()]
-        svg.text(x + 6, r.y + 16, name.upper(), head, color=ink)
-        svg.text(x + cw - 6, r.y + 16, str(day.day), theme.text("m", bold=True), "end", ink)
-        y = r.y + 30
+        svg.text(x + p(6), r.y + p(16), name.upper(), head, color=ink)
+        svg.text(x + cw - p(6), r.y + p(16), str(day.day), theme.text("m", bold=True), "end",
+                 ink)
+        y = r.y + p(30)
         if (item := forecast.get(day)) is not None:
-            weather_icon(svg, item.get("condition"), x + 6, y, 24)
-            svg.text(x + 36, y + 13, fmt.with_unit(item.get("temperature"), "°", 0, lang),
+            weather_icon(svg, item.get("condition"), x + p(6), y, p(24))
+            svg.text(x + p(36), y + p(13), fmt.with_unit(item.get("temperature"), "°", 0, lang),
                      theme.text("s", bold=True))
-            svg.text(x + 36, y + 26, fmt.with_unit(item.get("templow"), "°", 0, lang), small)
+            svg.text(x + p(36), y + p(26), fmt.with_unit(item.get("templow"), "°", 0, lang),
+                     small)
             rain = fmt.to_float(item.get("precipitation"))
-            svg.text(x + 6, y + 42, f"{fmt.number(rain, 1, lang)} mm" if rain else
+            svg.text(x + p(6), y + p(42), f"{fmt.number(rain, 1, lang)} mm" if rain else
                      ("uppehåll" if lang == "sv" else "dry"), small)
-            y += 50
-        svg.line(x + 4, y, x + cw - 4, y, 1, dash="1 2")
-        y += 4
+            y += p(50)
+        svg.line(x + p(4), y, x + cw - p(4), y, 1, dash="1 2")
+        y += p(4)
         for when, summary in events.get(day, []):
-            if y + 26 > r.y + r.h:
+            if y + p(26) > r.y + r.h:
                 break
             if when:
-                svg.text(x + 6, y + 11, when, theme.text("xs", bold=True))
-                y += 12
-            svg.text(x + 6, y + 12, measure.truncate(summary, body, cw - 10), body)
-            y += 16
+                svg.text(x + p(6), y + p(11), when, theme.text("xs", bold=True))
+                y += p(12)
+            svg.text(x + p(6), y + p(12), measure.truncate(summary, body, cw - p(10)), body)
+            y += p(16)
     return True

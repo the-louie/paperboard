@@ -135,12 +135,24 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-084 · Area frames: rounded boxes and an inverted hero**~~ — CLOSED 2026-11-08 (Sprint 03 T-03): see commit "T-03: Area frames: rounded boxes and an inverted hero"
 - ~~**B-085 · Header variants: masthead and title bar**~~ — CLOSED 2026-11-08 (Sprint 03 T-04): see commit "T-04: Header variants: masthead and title bar"
 - ~~**B-086 · Inverted now panel (Tavlan)**~~ — CLOSED 2026-11-08 (Sprint 03 T-05): see commit "T-05: Inverted now panel (Tavlan)"
-- [ ] **B-087 · Widget-internal offsets scale with the panel** · 6h · prio P3 · src: Sprint 03 T-15 (returned part of B-083)
+- [x] **B-087 · Widget-internal offsets scale with the panel** · 6h · prio P3 · src: Sprint 03 T-15 (returned part of B-083) · done 2026-11-09
       Grid geometry and type now scale (T-15). Widgets still place baselines with fixed px
       offsets (e.g. `r.y + 12`), so on TRMNL X (1872×1404) the now block's summary line
       overlaps the numeral and rows sit too tight (golden `tidslinjen_trmnl_x`). Route every
       widget offset through `theme.px()` and line heights through the type scale; verify with
       the TRMNL X golden of every layout.
+      **Done 2026-11-09:** about 150 widget offsets, gaps, row heights and icon sizes go
+      through `theme.px()`. The fixed TextStyle constants in widgets.py now come from the
+      theme. Every 800×480 golden is pixel-identical (only `tidslinjen_trmnl_x` changed), and
+      all 7 layouts were checked by eye at 1872×1404: no overlaps. The agenda's time column is
+      sized to "heldag" too. Left unscaled on purpose: stroke widths, hairlines, 1–2 px bar
+      insets, frame chrome, and the zero-config `build_now` screen (no theme).
+- [ ] **B-096 · Type scale on big panels: pixel fonts stop at 21 px** · 3h · prio P3 · src: B-087 review 2026-11-09
+      On TRMNL X (scale 1.8) spacing grows but the TRMNL pixel fonts cap at 21 px, so small and
+      medium text looks sparse and the "Imorgon" badge is a 56 px box around 21 px text.
+      Option: above a scale threshold, map xs/s/m to Inter at scaled sizes (Inter is crisp at
+      any size), keeping pixel fonts at 1.0. Verify with every TRMNL X layout; 800×480 goldens
+      must stay identical.
 - ~~**B-088 · First render after an HA start is 2–3.5 s**~~ — CLOSED 2026-11-08. Cause: resvg-py 0.5.0 **holds the GIL** for the whole render. Every render therefore froze HA's event loop (ha-host: 35 renders in 28 min, the slowest 5.1 s; HA logged Frigate "Updating state took" warnings at 18:04 and 18:10). Font loading is not the cost (0 ms); ha-host renders about 10× slower than dev-host and is loaded (load 3.7 on 4 cores, AppDaemon at 44 % CPU). Fix: resvg runs in one spawned worker process (`raster_worker.py`), started at setup. Main-thread stall on ha-host went from 560 ms to 22 ms per render (`scripts/check_worker_stall.py`). The budget is now 2,000 ms and the first render is not judged.
 - ~~**B-089 · Device button steps through layouts**~~ — CLOSED 2026-11-08: a short press steps through all 7 layouts with a 30-minute hold; a double click resumes the schedule. Optional `cycle:`/`hold_minutes:` keys in the schedule file. Owner: "go, all 7, 30 minutes is fine".
 - [x] **B-090 · Upstream: resvg-py releases the GIL** · 1h · prio P3 · src: B-088 · drafted 2026-11-09

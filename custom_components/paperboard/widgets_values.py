@@ -30,15 +30,18 @@ def kilowatts(value: float | None, unit: str) -> float | None:
 
 def kv_list(svg: Svg, r: Rect, rows: list[tuple[str, str]], measure: Measurer, theme: Theme,
             row_h: float = 21, dotted: bool = True) -> float:
-    """Label left, value right-aligned; returns the height used. Rows past r are dropped."""
+    """Label left, value right-aligned; returns the height used. Rows past r are dropped.
+    row_h is in design pixels (800x480) and scales with the theme."""
+    p = theme.px
+    row_h = p(row_h)
     label, value = theme.text("s"), theme.text("s", bold=True)
     y = r.y
     for i, (k, v) in enumerate(rows):
-        if y + row_h > r.y + r.h + 2:
+        if y + row_h > r.y + r.h + p(2):
             break
-        base = y + row_h - 6
+        base = y + row_h - p(6)
         vw = measure.width(v, value)
-        svg.text(r.x, base, measure.truncate(k, label, r.w - vw - 8), label)
+        svg.text(r.x, base, measure.truncate(k, label, r.w - vw - p(8)), label)
         svg.text(r.x + r.w, base, v, value, "end")
         if dotted and i < len(rows) - 1:
             svg.line(r.x, y + row_h, r.x + r.w, y + row_h, 1, dash="1 2")
@@ -53,8 +56,9 @@ def stat(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme, rol
     if snap.roles.get(role) is None:
         return False  # role not bound in this home: collapse
     text = fmt.with_unit(value, unit if unit is not None else native_unit, decimals, snap.lang)
-    svg.text(r.x, r.y + 12, label.upper(), theme.text("xs", bold=True))
-    svg.text(r.x - 2, r.y + 14 + theme.numeral(size).size * 0.9,
+    p = theme.px
+    svg.text(r.x, r.y + p(12), label.upper(), theme.text("xs", bold=True))
+    svg.text(r.x - p(2), r.y + p(14) + theme.numeral(size).size * 0.9,
              measure.truncate(text, theme.numeral(size), r.w), theme.numeral(size))
     return True
 
@@ -103,10 +107,11 @@ def energy(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
     shown = [(labels[k], values[k]) for k in rows if k in values]
     if not shown:
         return False
+    p = theme.px
     y = r.y
     if title:
-        svg.text(r.x, r.y + 12, labels["title"], theme.text("xs", bold=True))
-        y += 18
+        svg.text(r.x, r.y + p(12), labels["title"], theme.text("xs", bold=True))
+        y += p(18)
     kv_list(svg, Rect(r.x, y, r.w, r.h - (y - r.y)), shown, measure, theme)
     return True
 
@@ -136,13 +141,14 @@ def rooms(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
         st = snap.states.get(eid)
         label = labels[i] if labels and i < len(labels) and labels[i] else room_name(st, eid)
         rows.append((label, fmt.with_unit((st or {}).get("state"), "°", 1, snap.lang)))
+    p = theme.px
     y = r.y
     if title:
-        svg.text(r.x, r.y + 12, title, theme.text("xs", bold=True))
-        y += 18
+        svg.text(r.x, r.y + p(12), title, theme.text("xs", bold=True))
+        y += p(18)
     columns = max(1, min(3, columns))
     per = -(-len(rows) // columns)
-    gap = 14
+    gap = p(14)
     cw = (r.w - gap * (columns - 1)) / columns
     for c in range(columns):
         chunk = rows[c * per:(c + 1) * per]

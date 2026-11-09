@@ -56,32 +56,35 @@ def agenda(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme, d
                     summary = HOLIDAY_SV.get(summary, summary)
                 items.append((start, bool(ev.get("all_day")), summary))
     items.sort(key=lambda i: (i[0].date(), not i[1], i[0]))
+    p = theme.px
     y = r.y
     head, body, bold = theme.text("xs", bold=True), theme.text("s"), theme.text("s", bold=True)
     if title:
-        svg.text(r.x, y + 12, words["title"], head)
-        y += 20
+        svg.text(r.x, y + p(12), words["title"], head)
+        y += p(20)
     if not items:
-        svg.text(r.x, y + 14, words["none"], body)
+        svg.text(r.x, y + p(14), words["none"], body)
         return True
     current = None
     for start, all_day, summary in items:
         day = start.date()
         if day != current:
-            if y + 34 > r.y + r.h:
+            if y + p(34) > r.y + r.h:
                 break
             current = day
             delta = (day - snap.now.date()).days
             label = words["today"] if delta == 0 else words["tomorrow"] if delta == 1 else \
                 f"{DAY[snap.lang][day.weekday()]} {day.day}/{day.month}"
-            svg.text(r.x, y + 13, label, head)
-            svg.line(r.x, y + 16, r.x + r.w, y + 16, 1)
-            y += 20
-        if y + 18 > r.y + r.h:
+            svg.text(r.x, y + p(13), label, head)
+            svg.line(r.x, y + p(16), r.x + r.w, y + p(16), 1)
+            y += p(20)
+        if y + p(18) > r.y + r.h:
             break
         when = words["all_day"] if all_day else f"{start:%H:%M}"
-        tw = measure.width("00:00 ", bold)
-        svg.text(r.x, y + 13, when, bold if not all_day else theme.text("xs"))
-        svg.text(r.x + tw, y + 13, measure.truncate(summary, body, r.w - tw), body)
-        y += 18
+        # "heldag" is in xs, which on big panels snaps to the same pixel size as s.
+        tw = max(measure.width("00:00 ", bold),
+                 measure.width(f"{words['all_day']} ", theme.text("xs")))
+        svg.text(r.x, y + p(13), when, bold if not all_day else theme.text("xs"))
+        svg.text(r.x + tw, y + p(13), measure.truncate(summary, body, r.w - tw), body)
+        y += p(18)
     return True
