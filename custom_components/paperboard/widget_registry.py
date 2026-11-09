@@ -385,10 +385,10 @@ def _now_grid(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
             cells.append((i18n.t(lang, "now_rows.pressure"),
                           fmt.with_unit(attrs.get("pressure"), "hPa", 0, lang)))
         elif key == "rain_today" and snap.roles.get("rain_today"):
-            cells.append((i18n.t(lang, "now_rows.rain_today"),
+            cells.append((i18n.t(lang, "now_grid.rain_today"),
                           fmt.with_unit(role_value(snap, "rain_today")[0], "mm", 1, lang)))
         elif key == "tomorrow_07" and (item := _hourly_at(snap, target)) is not None:
-            cells.append((i18n.t(lang, "date.tomorrow_07_short"),
+            cells.append((i18n.t(lang, "now_grid.tomorrow_07"),
                           fmt.with_unit(item.get("temperature"), "°", 1, lang)))
     if temp is None and not cells:
         return False

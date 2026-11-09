@@ -195,5 +195,12 @@
     "bundled": "bundled",
     "own_layout": "your layout file",
     "own_schedule": "your schedule file"
+  },
+  "energy_short": {
+    "solar_expected_today": "Solar today"
+  },
+  "now_grid": {
+    "rain_today": "Rain",
+    "tomorrow_07": "Tmrw 07"
   }
 }

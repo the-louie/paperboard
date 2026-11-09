@@ -103,3 +103,12 @@ def test_readme_image_is_the_english_golden(name: str) -> None:
     image = root / "docs" / "images" / f"{name}.png"
     golden = root / "tests" / "golden" / f"{name}_owner_en.png"
     assert image.read_bytes() == golden.read_bytes(), f"stale {name}: run scripts/readme_images.py"
+
+
+@pytest.mark.parametrize("name", BUNDLED)
+def test_english_labels_are_not_cut(name: str) -> None:
+    """B-118: English is the default, so no label may end in an ellipsis. Long data lines (the
+    footer's room list, the weather summary, a title bar's date line) may still be cut."""
+    texts = _texts(render_spec(LAYOUTS[name], english_owner_snapshot(), MEASURE, Theme()))
+    cut = [t for t in texts if "…" in t and " · " not in t]
+    assert not cut, (name, cut)

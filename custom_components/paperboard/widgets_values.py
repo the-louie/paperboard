@@ -96,10 +96,22 @@ def energy(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
            rows: tuple[str, ...] | list[str] = DEFAULT_ENERGY_ROWS, title: bool = True) -> bool:
     values = energy_rows(snap)
     labels: dict[str, Any] = i18n.group(snap.lang, "energy")
-    shown = [(labels[k], values[k]) for k in rows if k in values]
+    short = i18n.group(snap.lang, "energy_short")
+    p = theme.px
+    room = r.w - p(8)
+    label_style, value_style = theme.text("s"), theme.text("s", bold=True)
+
+    def label(key: str) -> str:
+        """The full label, or the language's short form when the full one would be cut."""
+        full = labels[key]
+        if key in short and not measure.fits(full, label_style,
+                                             room - measure.width(values[key], value_style)):
+            return short[key]
+        return full
+
+    shown = [(label(k), values[k]) for k in rows if k in values]
     if not shown:
         return False
-    p = theme.px
     y = r.y
     if title:
         svg.text(r.x, r.y + p(12), labels["title"], theme.text("xs", bold=True))

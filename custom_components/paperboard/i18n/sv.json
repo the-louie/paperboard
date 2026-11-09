@@ -195,5 +195,12 @@
     "bundled": "medföljer",
     "own_layout": "din layoutfil",
     "own_schedule": "din schemafil"
+  },
+  "energy_short": {
+    "solar_expected_today": "Sol idag"
+  },
+  "now_grid": {
+    "rain_today": "Regn idag",
+    "tomorrow_07": "Imorgon 07"
   }
 }
