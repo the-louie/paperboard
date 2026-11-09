@@ -53,3 +53,20 @@ def test_layout_pin_accepts_any_language_code() -> None:
         except Exception:
             continue
         raise AssertionError(bad)
+
+
+def test_layout_text_from_a_catalog_key() -> None:
+    from custom_components.paperboard.widget_registry import layout_text
+
+    assert layout_text({"key": "section.home"}, "en") == "Home"
+    assert layout_text({"key": "section.home"}, "sv") == "Hemmet"
+    assert layout_text({"key": "section.home"}, "de") == "Home"
+    assert layout_text({"key": "no.such"}, "en") == "no.such"  # visible, never an exception
+
+
+def test_every_bundled_layout_has_a_display_name() -> None:
+    from custom_components.paperboard.layout_file import load_all
+
+    for name in load_all(None).layouts:
+        for lang in i18n.available():
+            assert i18n.t(lang, f"layout.{name}") != f"layout.{name}", (lang, name)

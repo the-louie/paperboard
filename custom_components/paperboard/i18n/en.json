@@ -174,5 +174,26 @@
     "wind": "WIND",
     "price": "POWER /KWH",
     "now": "Now"
+  },
+  "layout": {
+    "tidslinjen": "Timeline",
+    "tidningen": "Newspaper",
+    "bento": "Bento",
+    "tavlan": "Board",
+    "trmnl": "TRMNL",
+    "almanackan": "Almanac",
+    "energi": "Energy"
+  },
+  "section": {
+    "weather": "Weather",
+    "power_and_sun": "Power & sun",
+    "home": "Home",
+    "home_caps": "HOME",
+    "indoor_caps": "INDOOR"
+  },
+  "ui": {
+    "bundled": "bundled",
+    "own_layout": "your layout file",
+    "own_schedule": "your schedule file"
   }
 }

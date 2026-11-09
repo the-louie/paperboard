@@ -34,8 +34,11 @@ def _month(lang: str, snap: Snapshot) -> str:
     return i18n.tl(lang, "date.month")[snap.now.month - 1]
 
 def layout_text(value: Any, lang: str) -> Any:
-    """A text from a layout file: a plain string, or one per language ({sv: Vädret, en:
-    Weather}) picked by the screen's language, falling back to English, then to any."""
+    """A text from a layout file: a plain string, a catalog key ({key: section.home}, what the
+    bundled layouts use, so a new language needs only its catalog), or one string per
+    language ({en: Weather, sv: Vädret}) with English, then any, as the fallback."""
+    if isinstance(value, dict) and "key" in value:
+        return i18n.t(lang, f"{value['key']}")
     if isinstance(value, dict):
         return str(value.get(lang) or value.get("en") or next(iter(value.values()), ""))
     return value

@@ -32,6 +32,7 @@ from homeassistant.helpers.selector import (
     TextSelectorType,
 )
 
+from . import i18n
 from .const import (
     CONF_BASE_URL,
     CONF_IMAGE_TOKEN,
@@ -163,11 +164,14 @@ async def _layout_choices(hass: HomeAssistant, entry: ConfigEntry) -> list[Selec
     result = getattr(getattr(hub, "layouts", None), "result", None)
     if result is None:
         result = await hass.async_add_executor_job(load_all, Path(hass.config.path(DOMAIN)))
+    await hass.async_add_executor_job(i18n.load_catalogs)  # file reads off the loop
+    lang = i18n.resolve(hass.config.language)
     bundled, own = [], []
     for name, spec in sorted(result.layouts.items()):
         is_bundled = Path(spec.source).parent == BUNDLED_DIR
-        kind = "schedule" if hasattr(spec, "entries") else "layout"
-        label = f"{name} (bundled)" if is_bundled else f"{name} (your {kind} file)"
+        kind = "own_schedule" if hasattr(spec, "entries") else "own_layout"
+        label = f"{i18n.t(lang, f'layout.{name}')} ({i18n.t(lang, 'ui.bundled')})" \
+            if is_bundled else f"{name} ({i18n.t(lang, f'ui.{kind}')})"
         (bundled if is_bundled else own).append(SelectOptionDict(value=name, label=label))
     return bundled + own
 

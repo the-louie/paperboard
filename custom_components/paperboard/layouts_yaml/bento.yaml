@@ -24,6 +24,6 @@ widgets:
     options: {hours: 14, series: [price], cheapest_hours: 2, night: none, tick_every: 4}
   - {type: energy, area: en, options: {rows: [solar_expected_today, solar_now, house_now, battery]}}
   - {type: sun_moon, area: sky, options: {show: sun}}
-  - {type: rooms, area: rooms, options: {title: {sv: INNE, en: INDOOR}, columns: 2}}
+  - {type: rooms, area: rooms, options: {title: {key: section.indoor_caps}, columns: 2}}
   - {type: agenda, area: cal, options: {days: 5}}
   - {type: daily, area: days, options: {days: 6}}

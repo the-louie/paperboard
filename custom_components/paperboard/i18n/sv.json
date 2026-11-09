@@ -174,5 +174,26 @@
     "wind": "VIND",
     "price": "EL KR/KWH",
     "now": "Nu"
+  },
+  "layout": {
+    "tidslinjen": "Tidslinjen",
+    "tidningen": "Tidningen",
+    "bento": "Bento",
+    "tavlan": "Tavlan",
+    "trmnl": "TRMNL",
+    "almanackan": "Almanackan",
+    "energi": "Energi"
+  },
+  "section": {
+    "weather": "Vädret",
+    "power_and_sun": "Elen & solen",
+    "home": "Hemmet",
+    "home_caps": "HEMMET",
+    "indoor_caps": "INNE"
+  },
+  "ui": {
+    "bundled": "medföljer",
+    "own_layout": "din layoutfil",
+    "own_schedule": "din schemafil"
   }
 }

@@ -121,7 +121,8 @@ async def test_layout_is_a_dropdown_with_bundled_and_own_files(hass: HomeAssista
     assert bundled <= set(values)
     assert values[-1] == "hallen"  # own files after the bundled ones
     assert labels["hallen"] == "hallen (your schedule file)"
-    assert labels["tavlan"] == "tavlan (bundled)"
+    assert labels["tavlan"] == "Board (bundled)"  # English display name; the id is unchanged
+    assert labels["tidslinjen"] == "Timeline (bundled)"
     # Free text is still accepted (a file added a second ago).
     done = await hass.config_entries.subentries.async_configure(
         result["flow_id"], {**SCREEN, CONF_LAYOUT: "not_yet_written"})
