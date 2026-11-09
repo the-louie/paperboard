@@ -44,6 +44,13 @@ from the ink shift between a start-anchored and an end-anchored copy) with Pillo
 | TRMNL12/16/21, Regular and Bold | 12, 16, 21 | **0.0 px** |
 | Inter Medium/Bold/ExtraBold | 26, 38, 58, 74 | **≤ 0.8 px** |
 
+**Regular text weight (B-095, owner 2026-11-09):** "the normal thin text is hard to read". Normal
+text is now halfway to bold:
+- Inter: SemiBold (600) instead of Medium (500).
+- TRMNL pixel fonts (no middle weight exists): `PIXEL_SEMIBOLD`, Regular drawn twice 1 px apart.
+  Vertical strokes become 2 px, horizontal stay 1 px (Bold: 2 px both), all on the pixel grid.
+  The Measurer adds 1 px to the advance. Label ink in Tidslinjen's now-panel: 630 → 1098 px.
+
 **Decision:**
 - Widgets measure with `FontRegistry.pillow(...).getlength(text)`, i.e. advance widths. That
   is what `text-anchor="end"` and column layout depend on.

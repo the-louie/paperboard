@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .fonts import PIXEL_SEMIBOLD
 from .svg import BLACK, WHITE
 from .text import TextStyle
 
@@ -16,7 +17,9 @@ SCALE: dict[str, tuple[str, int]] = {
     "xs": ("TRMNL12", 12), "s": ("TRMNL16", 16), "m": ("TRMNL21", 21),
     "l": ("Inter", 26), "xl": ("Inter", 38), "xxl": ("Inter", 58), "hero": ("Inter", 74),
 }
-INTER_WEIGHTS = {"regular": 500, "bold": 700, "heavy": 800}
+# "regular" is SemiBold and PIXEL_SEMIBOLD since 2026-11-09: Medium and the 1 px pixel-font
+# strokes read too thin on the panel (owner: "halfway" to bold).
+INTER_WEIGHTS = {"regular": 600, "bold": 700, "heavy": 800}
 
 
 @dataclass(frozen=True)
@@ -31,7 +34,7 @@ class Theme:
         if family.startswith("TRMNL"):
             target = px * self.scale_factor
             native = min(PIXEL_SIZES, key=lambda n: abs(n - target))
-            return TextStyle(f"TRMNL{native}", 700 if bold else 400, native)
+            return TextStyle(f"TRMNL{native}", 700 if bold else PIXEL_SEMIBOLD, native)
         return TextStyle(family, INTER_WEIGHTS["bold" if bold else "regular"],
                          round(px * self.scale_factor))
 

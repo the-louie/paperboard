@@ -164,6 +164,11 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       A unit test cannot catch this: the `hass` test fixture never runs HA's process exit.
       Also during the outage the old code answered `/api/display` with 500, which unpairs the
       panel; 8fc7be2 now answers 202.
+- [x] **B-095 · Normal text halfway to bold** · 1h · prio P1 · src: owner 2026-11-09 · done 2026-11-09
+      Owner: "the normal thin test is hard to read ... can you increase the weight of normal
+      text? not as much as bold text, but halfway there maybe". Inter Medium → SemiBold; pixel
+      fonts drawn twice 1 px apart. See docs/design/rendering.md. Goldens and README images
+      regenerated.
 - [x] **B-094 · A known panel re-pairs without the window** · 1h · prio P1 · src: owner 2026-11-08 19:40 · done 2026-11-08
       Owner: "when i tried to reset (reboot) it factory reset, i do not like this process".
       `/api/setup` from a MAC the hub already paired, outside a window, re-binds it to its

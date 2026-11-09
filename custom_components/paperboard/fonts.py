@@ -23,9 +23,15 @@ FONT_FILES: dict[tuple[str, int], str] = {
     ("TRMNL21", 400): "TRMNL21-Regular.ttf",
     ("TRMNL21", 700): "TRMNL21-Bold.ttf",
     ("Inter", 500): "Inter-Medium.ttf",
+    ("Inter", 600): "Inter-SemiBold.ttf",
     ("Inter", 700): "Inter-Bold.ttf",
     ("Inter", 800): "Inter-ExtraBold.ttf",
 }
+
+# The pixel fonts have no weight between Regular (1 px strokes) and Bold (2 px). PIXEL_SEMIBOLD
+# is Regular drawn twice, 1 px apart: vertical strokes become 2 px, horizontal ones stay 1 px,
+# and every edge stays on the pixel grid (owner 2026-11-09: regular text read too thin).
+PIXEL_SEMIBOLD = 500
 
 # Pixel fonts are only crisp at their design size.
 PIXEL_FONT_SIZE = {"TRMNL12": 12, "TRMNL16": 16, "TRMNL21": 21}
@@ -40,6 +46,8 @@ class FontRegistry:
 
     def pillow(self, family: str, weight: int, size: int) -> ImageFont.FreeTypeFont:
         """A Pillow font; cheap enough to call per measurement (no file I/O)."""
+        if weight == PIXEL_SEMIBOLD and family.startswith("TRMNL"):
+            weight = 400  # same advances; Measurer adds the 1 px offset
         return ImageFont.truetype(BytesIO(self.data[(family, weight)]), size)
 
 

@@ -11,12 +11,13 @@ from dataclasses import dataclass
 from typing import Any
 
 from . import fmt
+from .fonts import PIXEL_SEMIBOLD
 from .layouts import Snapshot
 from .svg import BLACK, Svg
 from .text import Measurer, TextStyle
 
-B12, R12 = TextStyle("TRMNL12", 700, 12), TextStyle("TRMNL12", 400, 12)
-B16, R16 = TextStyle("TRMNL16", 700, 16), TextStyle("TRMNL16", 400, 16)
+B12, R12 = TextStyle("TRMNL12", 700, 12), TextStyle("TRMNL12", PIXEL_SEMIBOLD, 12)
+B16, R16 = TextStyle("TRMNL16", 700, 16), TextStyle("TRMNL16", PIXEL_SEMIBOLD, 16)
 BIG = TextStyle("Inter", 700, 74)
 
 CONDITION = {

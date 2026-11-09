@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from xml.sax.saxutils import escape
 
+from .fonts import PIXEL_SEMIBOLD
 from .text import TextStyle
 
 BLACK, WHITE = "#000", "#fff"
@@ -68,6 +69,13 @@ class Svg:
     def text(self, x: float, y: float, content: str, style: TextStyle, anchor: str = "start",
              color: str = BLACK) -> None:
         if not content:
+            return
+        if style.weight == PIXEL_SEMIBOLD and style.family.startswith("TRMNL"):
+            # Regular twice, 1 px apart, kept inside the measured box (fonts.PIXEL_SEMIBOLD).
+            regular = TextStyle(style.family, 400, style.size)
+            x0 = x - 1 if anchor == "end" else x
+            self.text(x0, y, content, regular, anchor, color)
+            self.text(x0 + 1, y, content, regular, anchor, color)
             return
         self._parts.append(
             f'<text x="{_num(x)}" y="{_num(y)}" font-family="{style.family}" '

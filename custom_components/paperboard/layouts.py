@@ -11,6 +11,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
+from .fonts import PIXEL_SEMIBOLD
 from .svg import Svg
 from .text import Measurer, TextStyle
 
@@ -62,7 +63,8 @@ def build_status(snap: Snapshot, measure: Measurer) -> str:
     """Minimal screen: name and render time. Proves the pipeline end to end."""
     svg = Svg(snap.width, snap.height)
     svg.text(16, 40, snap.screen_name, TextStyle("TRMNL21", 700, 21))
-    svg.text(16, snap.height - 12, f"{snap.now:%Y-%m-%d %H:%M}", TextStyle("TRMNL12", 400, 12))
+    svg.text(16, snap.height - 12, f"{snap.now:%Y-%m-%d %H:%M}",
+             TextStyle("TRMNL12", PIXEL_SEMIBOLD, 12))
     return str(svg)
 
 

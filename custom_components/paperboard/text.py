@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .fonts import FontRegistry
+from .fonts import PIXEL_SEMIBOLD, FontRegistry
 
 ELLIPSIS = "…"
 SAFETY = 1.0
@@ -35,7 +35,10 @@ class Measurer:
         if font is None:
             font = self._fonts.pillow(style.family, style.weight, style.size)
             self._cache[style] = font
-        return font.getlength(text)  # type: ignore[attr-defined]
+        width = font.getlength(text)  # type: ignore[attr-defined]
+        if text and style.weight == PIXEL_SEMIBOLD and style.family.startswith("TRMNL"):
+            width += 1  # the second, offset copy (fonts.PIXEL_SEMIBOLD)
+        return width
 
     def fits(self, text: str, style: TextStyle, max_width: float) -> bool:
         return self.width(text, style) <= max_width - SAFETY
