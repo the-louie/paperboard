@@ -56,6 +56,26 @@
           "calendars": "Kalendrar",
           "feels_like": "Känns som-temperatur",
           "grid_export_positive": "Nätmätaren visar export som positivt (t.ex. Huawei)"
+        },
+        "data_description": {
+          "weather": "En väderentitet med prognoser (t.ex. weather.home, SMHI eller Met.no). Ger aktuellt väder, dagens högsta och lägsta samt prognos per timme och dag.",
+          "outdoor_temp": "Givare för utetemperatur (°C), t.ex. din egen väderstation. Visas som den stora siffran; utan den används väderentitetens temperatur.",
+          "indoor_temp": "Valfri annan temperaturgivare (°C), visas som en rad bredvid utetemperaturen, t.ex. uterum eller farstu.",
+          "outdoor_humidity": "Givare för relativ luftfuktighet ute (%).",
+          "rain_today": "Regn hittills idag (mm): en dagssumma som nollställs vid midnatt, oftast från en väderstation.",
+          "price": "Elpriset nu per kWh, med timpriserna i attributen: Nord Pool (inbyggd eller HACS), ENTSO-e eller Tibber. Prisdiagrammet behöver dagens priser, och morgondagens när de publiceras (runt 13:00 för Nord Pool).",
+          "solar_forecast_today": "Förväntad solenergi idag (kWh) från en prognosintegration: Forecast.Solar, Solcast eller Open-Meteo Solar Forecast. Timkurvan läses från samma integration.",
+          "solar_power": "Solproduktion just nu (W eller kW), PV-effekten från växelriktaren.",
+          "grid_power": "Effekt till eller från elnätet just nu (W eller kW). Förväntat: import (köp) är positivt. Om din mätare visar export som positivt, kryssa i rutan längst ned.",
+          "house_power": "Hela husets förbrukning just nu (W eller kW).",
+          "house_energy_today": "Husets förbrukning hittills idag (kWh): en dagssumma som nollställs vid midnatt.",
+          "battery_soc": "Hembatteriets laddnivå (%, 0–100).",
+          "battery_power": "Hembatteriets effekt just nu (W eller kW), laddning eller urladdning. Båda teckenkonventionerna fungerar: storleken visas.",
+          "sun": "Solentiteten (normalt sun.sun): soluppgång, solnedgång och nattskuggningen på tidsaxeln.",
+          "rooms": "Inomhustemperaturgivare (°C), en per rum, visas som lista eller statusrad.",
+          "calendars": "Kalenderentiteter vars händelser visas i agendan och veckovyn.",
+          "feels_like": "Givare för känns som-temperatur (°C), oftast från en väderstation.",
+          "grid_export_positive": "Kryssa i om nätgivaren ovan visar export (försäljning) som ett positivt tal, som Huawei-mätare gör. Lämna tom om import är positivt."
         }
       }
     }
@@ -76,7 +96,7 @@
             "refresh_rate": "Uppdateringsintervall"
           },
           "data_description": {
-            "layout": "Namnet på en layoutfil i /config/paperboard/ eller en medföljande layout."
+            "layout": "Välj en medföljande layout eller en av dina egna filer i /config/paperboard/, eller skriv ett namn. En schemafil byter layout efter tid på dygnet."
           }
         },
         "reconfigure": {
@@ -88,7 +108,7 @@
             "refresh_rate": "Uppdateringsintervall"
           },
           "data_description": {
-            "layout": "Namnet på en layoutfil i /config/paperboard/ eller en medföljande layout."
+            "layout": "Välj en medföljande layout eller en av dina egna filer i /config/paperboard/, eller skriv ett namn. En schemafil byter layout efter tid på dygnet."
           }
         }
       },

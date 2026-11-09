@@ -147,6 +147,16 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       all 7 layouts were checked by eye at 1872×1404: no overlaps. The agenda's time column is
       sized to "heldag" too. Left unscaled on purpose: stroke widths, hairlines, 1–2 px bar
       insets, frame chrome, and the zero-config `build_now` screen (no theme).
+- [x] **B-097 · Layout field: dropdown of bundled layouts and own files, free text allowed** · 1h · prio P2 · src: owner 2026-11-09 · done 2026-11-09
+      Owner: "can we make "layout" a dropdown that shows the bundled layouts and a option to
+      freetext?". SelectSelector with `custom_value: true`: bundled layouts first, then the
+      user's layout and schedule files from /config/paperboard/, labelled. Test in
+      test_subentry_flow.py.
+- [x] **B-098 · Every role explains the value it expects** · 1h · prio P2 · src: owner 2026-11-09 · done 2026-11-09
+      Owner: "each headline (Electricy price, solar power now, house power now etc) should have
+      a info-circle that explain what type of value is expected". HA's config forms have no
+      info-circle; the native mechanism is `data_description`, shown as help text under each
+      field. All 18 roles, en + sv. A test fails if a role lacks a description in any language.
 - [ ] **B-096 · Type scale on big panels: pixel fonts stop at 21 px** · 3h · prio P3 · src: B-087 review 2026-11-09
       On TRMNL X (scale 1.8) spacing grows but the TRMNL pixel fonts cap at 21 px, so small and
       medium text looks sparse and the "Imorgon" badge is a 56 px box around 21 px text.
@@ -162,6 +172,9 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       **Drafted 2026-11-09:** `docs/upstream/resvg-py-release-gil.md`, ready to paste. Checked
       `master`: there is still no `allow_threads`/`detach` in `svg_to_bytes`. **Waiting on the owner
       to post it.**
+      **Parked 2026-11-09 (owner):** "lets park the image-library upstreaming ... i think we
+      should do it, but other things are priotized now". It is an issue (a request), not a patch:
+      we have no fork or changes to resvg-py.
 - [x] **B-091 · Research: AppDaemon at 44 % CPU on ha-host** · 1h · prio P2 · src: B-088 (2026-11-08 18:30, `docker stats`) · done 2026-11-09
       Move to `<the maintainer's HA repo>` HASS-BACKLOG if confirmed: it is not paperboard's.
       **Done 2026-11-09, moved to hass H-58:** AppDaemon re-checks its app files every 1 s

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import secrets
+from pathlib import Path
 from typing import Any
 
 from homeassistant.config_entries import (
@@ -13,7 +14,7 @@ from homeassistant.config_entries import (
     OptionsFlow,
     SubentryFlowResult,
 )
-from homeassistant.core import callback
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.network import NoURLAvailableError, get_url
 from homeassistant.helpers.selector import (
     BooleanSelector,
@@ -22,6 +23,7 @@ from homeassistant.helpers.selector import (
     NumberSelector,
     NumberSelectorConfig,
     NumberSelectorMode,
+    SelectOptionDict,
     SelectSelector,
     SelectSelectorConfig,
     SelectSelectorMode,
@@ -50,6 +52,7 @@ from .const import (
     ROLE_FILTERS,
     SUBENTRY_SCREEN,
 )
+from .layout_file import BUNDLED_DIR, load_all
 from .profiles import names as profile_names
 from .schema import vol
 
@@ -150,7 +153,27 @@ class PaperboardOptionsFlow(OptionsFlow):
         return self.async_show_form(step_id="roles", data_schema=_roles_schema(current))
 
 
-def _screen_schema(defaults: dict[str, Any], hub_refresh: int) -> vol.Schema:
+async def _layout_choices(hass: HomeAssistant, entry: ConfigEntry) -> list[SelectOptionDict]:
+    """Bundled layouts, then the user's own files and schedules from /config/paperboard/.
+
+    Uses the hub's already-loaded layouts when it runs; otherwise reads the files (executor).
+    The dropdown also accepts free text, so a file added a second ago can still be named.
+    """
+    hub = getattr(entry, "runtime_data", None)
+    result = getattr(getattr(hub, "layouts", None), "result", None)
+    if result is None:
+        result = await hass.async_add_executor_job(load_all, Path(hass.config.path(DOMAIN)))
+    bundled, own = [], []
+    for name, spec in sorted(result.layouts.items()):
+        is_bundled = Path(spec.source).parent == BUNDLED_DIR
+        kind = "schedule" if hasattr(spec, "entries") else "layout"
+        label = f"{name} (bundled)" if is_bundled else f"{name} (your {kind} file)"
+        (bundled if is_bundled else own).append(SelectOptionDict(value=name, label=label))
+    return bundled + own
+
+
+def _screen_schema(defaults: dict[str, Any], hub_refresh: int,
+                   layouts: list[SelectOptionDict]) -> vol.Schema:
     return vol.Schema({
         vol.Required(CONF_NAME, default=defaults.get(CONF_NAME, "")): TextSelector(),
         vol.Required(CONF_PROFILE, default=defaults.get(CONF_PROFILE, DEFAULT_PROFILE)):
@@ -158,7 +181,8 @@ def _screen_schema(defaults: dict[str, Any], hub_refresh: int) -> vol.Schema:
                                                 mode=SelectSelectorMode.DROPDOWN,
                                                 translation_key="profile")),
         vol.Required(CONF_LAYOUT, default=defaults.get(CONF_LAYOUT, DEFAULT_LAYOUT)):
-            TextSelector(),
+            SelectSelector(SelectSelectorConfig(options=layouts, custom_value=True,
+                                                mode=SelectSelectorMode.DROPDOWN)),
         vol.Required(CONF_REFRESH_RATE, default=defaults.get(CONF_REFRESH_RATE, hub_refresh)):
             NumberSelector(NumberSelectorConfig(min=MIN_REFRESH_RATE, max=MAX_REFRESH_RATE,
                                                 step=60, unit_of_measurement="s",
@@ -189,9 +213,10 @@ class ScreenSubentryFlow(ConfigSubentryFlow):
                 data[CONF_IMAGE_TOKEN] = secrets.token_urlsafe(32)
                 return self.async_create_entry(title=data[CONF_NAME], data=data)
         await self.hass.async_add_executor_job(profile_names)  # file read off the loop
+        layouts = await _layout_choices(self.hass, self._get_entry())
         return self.async_show_form(step_id="user", errors=errors,
                                     data_schema=_screen_schema(user_input or {},
-                                                               self._hub_refresh()))
+                                                               self._hub_refresh(), layouts))
 
     async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None
                                      ) -> SubentryFlowResult:
@@ -204,6 +229,7 @@ class ScreenSubentryFlow(ConfigSubentryFlow):
                                                    title=data[CONF_NAME],
                                                    data={**subentry.data, **data})
         await self.hass.async_add_executor_job(profile_names)  # file read off the loop
+        layouts = await _layout_choices(self.hass, self._get_entry())
         return self.async_show_form(step_id="reconfigure",
                                     data_schema=_screen_schema(dict(subentry.data),
-                                                               self._hub_refresh()))
+                                                               self._hub_refresh(), layouts))

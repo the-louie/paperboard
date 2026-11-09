@@ -56,6 +56,26 @@
           "calendars": "Calendars",
           "feels_like": "Feels-like temperature",
           "grid_export_positive": "Grid meter reports export as positive (e.g. Huawei)"
+        },
+        "data_description": {
+          "weather": "A weather entity with forecasts (for example weather.home, SMHI or Met.no). Gives the current condition, today's high and low, and the hourly and daily forecasts.",
+          "outdoor_temp": "Outdoor temperature sensor (°C), for example your own weather station. Shown as the big number; without it the weather entity's temperature is used.",
+          "indoor_temp": "Any other temperature sensor (°C), shown as one row next to the outdoor temperature, for example a conservatory or a porch.",
+          "outdoor_humidity": "Outdoor relative humidity sensor (%).",
+          "rain_today": "Rain so far today (mm): a daily total that resets at midnight, usually from a weather station.",
+          "price": "Electricity price now, per kWh, whose attributes hold the hourly prices: Nord Pool (core or HACS), ENTSO-e or Tibber. The price chart needs today's prices, and tomorrow's once they are published (around 13:00 for Nord Pool).",
+          "solar_forecast_today": "Expected solar energy today (kWh) from a forecast integration: Forecast.Solar, Solcast or Open-Meteo Solar Forecast. The hourly curve is read from the same integration.",
+          "solar_power": "Solar production right now (W or kW), the PV power from your inverter.",
+          "grid_power": "Power to or from the grid right now (W or kW). Expected: import (buying) is positive. If your meter shows export as positive, tick the box at the bottom.",
+          "house_power": "The whole house's consumption right now (W or kW).",
+          "house_energy_today": "The house's consumption so far today (kWh): a daily total that resets at midnight.",
+          "battery_soc": "Home battery state of charge (%, 0–100).",
+          "battery_power": "Home battery power right now (W or kW), charging or discharging. Either sign convention works: the size is shown.",
+          "sun": "The sun entity (normally sun.sun): sunrise, sunset and the night shading on the time axis.",
+          "rooms": "Indoor temperature sensors (°C), one per room, shown as a list or a status line.",
+          "calendars": "Calendar entities whose events are shown in the agenda and the week view.",
+          "feels_like": "Feels-like (apparent) temperature sensor (°C), usually from a weather station.",
+          "grid_export_positive": "Tick if the grid sensor above shows export (selling) as a positive number, as Huawei meters do. Leave unticked if import is positive."
         }
       }
     }
@@ -76,7 +96,7 @@
             "refresh_rate": "Refresh interval"
           },
           "data_description": {
-            "layout": "Name of a layout file in /config/paperboard/ or a bundled layout."
+            "layout": "Pick a bundled layout or one of your own files from /config/paperboard/, or type a name. A schedule file switches layouts by time of day."
           }
         },
         "reconfigure": {
@@ -88,7 +108,7 @@
             "refresh_rate": "Refresh interval"
           },
           "data_description": {
-            "layout": "Name of a layout file in /config/paperboard/ or a bundled layout."
+            "layout": "Pick a bundled layout or one of your own files from /config/paperboard/, or type a name. A schedule file switches layouts by time of day."
           }
         }
       },
