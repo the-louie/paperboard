@@ -1,6 +1,6 @@
 # Backlog — paperboard
 
-Next ID: **B-088**
+Next ID: **B-117**
 
 **Sources:**
       Measured 18:05 on ha-host: a **warm** render takes **1,149 ms** (the max was 3,674 ms
@@ -142,6 +142,45 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       fallback". For the next release.
 - [ ] **B-072 · Upstream offer to cryptomilk** · 1h · prio P3 · needs: B-071 · src: R §build new
       Claude drafts an issue offering the device-API views; the owner posts it.
+
+## 0.2.0 — Internationalisation (goal: English default, optional Swedish, contributable languages)
+
+Plan and test plan: `docs/design/i18n.md`. Owner 2026-11-09: "we ship with english default and
+optional swedish", "we need this in next version, it can be 0.2.0".
+
+- [ ] **B-105 · i18n core: catalogs, resolution, lookup** · 3h · prio P1 · src: i18n.md §Design 1–4
+      `i18n/en.json` + `sv.json`, `i18n.py` (`load_catalogs` in the executor, `resolve`, `t`,
+      `tl`), `Snapshot.lang` default `en`, renderer and layout `lang:` pin use `resolve`.
+      Accept: tests 2, 3, 8, 11.
+- [ ] **B-106 · Move date and agenda vocabulary** · 4h · prio P1 · needs: B-105 · src: i18n.md inventory
+      Weekday/month/short names, today/tomorrow, week, agenda words, holiday names; remove the 5
+      duplicate tables. Accept: `*_owner` goldens identical; test 9.
+- [ ] **B-107 · Move weather conditions and prose** · 4h · prio P1 · needs: B-105 · src: i18n.md §Design 6
+      `CONDITION`, `HEADLINE` and the and/och grammar as templates; "low", "dry". Accept:
+      goldens identical.
+- [ ] **B-108 · Move labels (now block, energy, flow, charts, sky, footer)** · 4h · prio P1 · needs: B-105
+      Every remaining `lang == "sv"` branch and label table, including chart labels and the
+      `Uterum` bug (sv "indoor" becomes "Inne"). Accept: no `== "sv"` left in widget code;
+      goldens identical except the Uterum label.
+- [ ] **B-109 · Layout texts: section keys and layout display names** · 3h · prio P1 · needs: B-105
+      `title: {key: …}` in bundled layouts, `layout_text()` handles string/dict/key; layout
+      dropdown shows `layout.<id>`; ids unchanged. Accept: subentry flow test shows "Timeline"
+      in en.
+- [ ] **B-110 · Numbers follow the language** · 2h · prio P1 · needs: B-105 · src: i18n.md §Design 8
+      `fmt` default `en`; every caller passes `snap.lang`. Accept: test 10.
+- [ ] **B-111 · Test suite for i18n** · 5h · prio P1 · needs: B-106, B-107, B-108, B-109, B-110
+      Tests 1, 4, 5, 7, 12 and an `*_owner_en` golden per bundled layout; `*_owner` goldens
+      pinned `lang="sv"`.
+- [ ] **B-112 · HA UI texts audit** · 1h · prio P2 · src: i18n.md §Design 9
+      `strings.json` English first and complete, sv complete, no Swedish in English strings.
+- [ ] **B-113 · Docs: add-a-language guide, README language section** · 2h · prio P2 · needs: B-105, B-109
+      CONTRIBUTING, README, layout-schema (keys), CHANGELOG.
+- [ ] **B-114 · README images from the English default** · 1h · prio P2 · needs: B-111
+      `scripts/readme_images.py` renders with the default language; images regenerated.
+- [ ] **B-115 · End-to-end language check in a throwaway HA** · 2h · prio P1 · needs: B-111
+      Test 13: en, sv, de on HA 2026.11.0 in a container; no errors.
+- [ ] **B-116 · decision: release 0.2.0** · 1h · prio P1 · needs: B-115 · src: owner
+      Version bump and tag by Claude; push, release and HACS check by the owner.
 
 ## Cross-cutting
 
