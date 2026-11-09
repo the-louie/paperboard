@@ -114,7 +114,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-068 · Brand assets**~~ — CLOSED 2026-11-08 (Sprint 03 T-22): see commit "T-22: Brand assets"
 - ~~**B-069 · CI workflow**~~ — CLOSED 2026-11-08 (Sprint 03 T-21): see commit "T-21: CI workflow"
 - ~~**B-070 · Research: aarch64 verification**~~ — CLOSED 2026-11-08 (Sprint 03 T-20): see commit "T-20: Research: aarch64 verification"
-- [ ] **B-071 · decision: release and HACS default PR** · 1h · prio P3 · needs: B-067, B-069, B-070 · src: N HACS rules
+- [x] **B-071 · decision: release and HACS default PR** · done 2026-11-09: v0.1.0 released, hacs/default PR #13762 ready for review · 1h · prio P3 · needs: B-067, B-069, B-070 · src: N HACS rules
       The owner pushes, tags the release, and opens a PR to hacs/default.
 - [ ] **B-072 · Upstream offer to cryptomilk** · 1h · prio P3 · needs: B-071 · src: R §build new
       Claude drafts an issue offering the device-API views; the owner posts it.
