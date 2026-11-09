@@ -179,11 +179,11 @@ optional swedish", "we need this in next version, it can be 0.2.0".
       `scripts/readme_images.py` renders with the default language; images regenerated.
 - ~~**B-115 · End-to-end language check in a throwaway HA**~~ — CLOSED 2026-11-09 (Sprint 04 T-11 6fffaba)
       Test 13: en, sv, de on HA 2026.11.0 in a container; no errors.
-- [ ] **B-118 · English labels cut off in narrow cells** · 2h · prio P1 · src: Sprint 04 T-07 English goldens
+- ~~**B-118 · English labels cut off in narrow cells**~~ — CLOSED 2026-11-09 (Sprint 05 T-01 48b6191)
       Almanac now-grid: "TOMORR…", "RAIN TO…"; Newspaper and Bento energy: "Solar expected
       to…". English is the default now, so the labels need short forms that fit (catalog keys
       for compact labels, e.g. `now_rows_short`), checked on the `*_owner_en` goldens.
-- [ ] **B-117 · Flaky: an intermittent ERROR in the full suite** · 1h · prio P2 · src: Sprint 04 T-02 (seen twice 2026-11-09)
+- ~~**B-117 · Flaky: an intermittent ERROR in the full suite**~~ — CLOSED 2026-11-09 (Sprint 05 T-02, not reproduced in 16 runs)
       Once as `test_subentry_flow::test_layout_is_a_dropdown_with_bundled_and_own_files`
       (error, not failure: setup/teardown), once unnamed; reruns pass. Find the leaking timer
       or task.
