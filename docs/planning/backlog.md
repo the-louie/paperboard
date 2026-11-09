@@ -148,36 +148,36 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 Plan and test plan: `docs/design/i18n.md`. Owner 2026-11-09: "we ship with english default and
 optional swedish", "we need this in next version, it can be 0.2.0".
 
-- [ ] **B-105 · i18n core: catalogs, resolution, lookup** · 3h · prio P1 · src: i18n.md §Design 1–4
+- ~~**B-105 · i18n core: catalogs, resolution, lookup**~~ — CLOSED 2026-11-09 (Sprint 04 T-01 317952a)
       `i18n/en.json` + `sv.json`, `i18n.py` (`load_catalogs` in the executor, `resolve`, `t`,
       `tl`), `Snapshot.lang` default `en`, renderer and layout `lang:` pin use `resolve`.
       Accept: tests 2, 3, 8, 11.
-- [ ] **B-106 · Move date and agenda vocabulary** · 4h · prio P1 · needs: B-105 · src: i18n.md inventory
+- ~~**B-106 · Move date and agenda vocabulary**~~ — CLOSED 2026-11-09 (Sprint 04 T-02 d862d02)
       Weekday/month/short names, today/tomorrow, week, agenda words, holiday names; remove the 5
       duplicate tables. Accept: `*_owner` goldens identical; test 9.
-- [ ] **B-107 · Move weather conditions and prose** · 4h · prio P1 · needs: B-105 · src: i18n.md §Design 6
+- ~~**B-107 · Move weather conditions and prose**~~ — CLOSED 2026-11-09 (Sprint 04 T-03 972651d)
       `CONDITION`, `HEADLINE` and the and/och grammar as templates; "low", "dry". Accept:
       goldens identical.
-- [ ] **B-108 · Move labels (now block, energy, flow, charts, sky, footer)** · 4h · prio P1 · needs: B-105
+- ~~**B-108 · Move labels (now block, energy, flow, charts, sky, footer)**~~ — CLOSED 2026-11-09 (Sprint 04 T-04 60100dc)
       Every remaining `lang == "sv"` branch and label table, including chart labels and the
       `Uterum` bug (sv "indoor" becomes "Inne"). Accept: no `== "sv"` left in widget code;
       goldens identical except the Uterum label.
-- [ ] **B-109 · Layout texts: section keys and layout display names** · 3h · prio P1 · needs: B-105
+- ~~**B-109 · Layout texts: section keys and layout display names**~~ — CLOSED 2026-11-09 (Sprint 04 T-05 b74a7a4)
       `title: {key: …}` in bundled layouts, `layout_text()` handles string/dict/key; layout
       dropdown shows `layout.<id>`; ids unchanged. Accept: subentry flow test shows "Timeline"
       in en.
-- [ ] **B-110 · Numbers follow the language** · 2h · prio P1 · needs: B-105 · src: i18n.md §Design 8
+- ~~**B-110 · Numbers follow the language**~~ — CLOSED 2026-11-09 (Sprint 04 T-06 18643a2)
       `fmt` default `en`; every caller passes `snap.lang`. Accept: test 10.
-- [ ] **B-111 · Test suite for i18n** · 5h · prio P1 · needs: B-106, B-107, B-108, B-109, B-110
+- ~~**B-111 · Test suite for i18n**~~ — CLOSED 2026-11-09 (Sprint 04 T-07 35cee33)
       Tests 1, 4, 5, 7, 12 and an `*_owner_en` golden per bundled layout; `*_owner` goldens
       pinned `lang="sv"`.
-- [ ] **B-112 · HA UI texts audit** · 1h · prio P2 · src: i18n.md §Design 9
+- ~~**B-112 · HA UI texts audit**~~ — CLOSED 2026-11-09 (Sprint 04 T-08 d77e938)
       `strings.json` English first and complete, sv complete, no Swedish in English strings.
-- [ ] **B-113 · Docs: add-a-language guide, README language section** · 2h · prio P2 · needs: B-105, B-109
+- ~~**B-113 · Docs: add-a-language guide, README language section**~~ — CLOSED 2026-11-09 (Sprint 04 T-09 e4a02f1)
       CONTRIBUTING, README, layout-schema (keys), CHANGELOG.
-- [ ] **B-114 · README images from the English default** · 1h · prio P2 · needs: B-111
+- ~~**B-114 · README images from the English default**~~ — CLOSED 2026-11-09 (Sprint 04 T-10 e0883e7)
       `scripts/readme_images.py` renders with the default language; images regenerated.
-- [ ] **B-115 · End-to-end language check in a throwaway HA** · 2h · prio P1 · needs: B-111
+- ~~**B-115 · End-to-end language check in a throwaway HA**~~ — CLOSED 2026-11-09 (Sprint 04 T-11 6fffaba)
       Test 13: en, sv, de on HA 2026.11.0 in a container; no errors.
 - [ ] **B-118 · English labels cut off in narrow cells** · 2h · prio P1 · src: Sprint 04 T-07 English goldens
       Almanac now-grid: "TOMORR…", "RAIN TO…"; Newspaper and Bento energy: "Solar expected

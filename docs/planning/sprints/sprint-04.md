@@ -1,5 +1,5 @@
 # Sprint 04 — Internationalisation (0.2.0)
-**Status:** active (opened 2026-11-09)
+**Status:** done (closed 2026-11-09)
 **Current ticket:** —
 **Last completed:** T-11
 **Budget:** 31h estimated (band 80–120h). **Below the band on purpose:** the owner scoped this
@@ -36,3 +36,18 @@ language with two JSON files. Plan and test plan: `docs/design/i18n.md`.
 - Seen in T-11: on a live language change HA core logs "Failed to load integration for translation: Invalid domain paperboard.sensor" (HA reloads translations for `hass.config.components`, which holds platform entries). Not Paperboard's code; no action.
 
 ## Retro
+**Shipped (11/11 tickets, 312 tests, ruff clean):**
+- Every drawn text comes from `i18n/<lang>.json`: British English (default) and Swedish, with a
+  per-key English fallback; any HA language code resolves (exact, base, English).
+- Swedish output is pixel-identical to 0.1.x (all `*_owner` goldens unchanged); 7 new
+  `*_owner_en` goldens equal the README images (guarded).
+- Tests both ways for stray words (mutation-checked), catalog parity incl. placeholders,
+  British-spelling guard, every layout renders empty in every language, renderer follows HA.
+- Docs: add-a-language guide, README language section, layout schema, changelog.
+- Real HA 2026.11.0: en/sv/de switch verified.
+
+**Found and filed:** B-118 English labels cut off in narrow cells (P1, i18n section), B-117
+flaky suite error (P2).
+
+**Retro changes:** estimates held (31h planned, all closed). Below the 80–120h band by the
+owner's scope; no recalibration.
