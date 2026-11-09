@@ -15,7 +15,7 @@ from .layouts import Snapshot
 from .style import Theme
 from .svg import Svg
 from .text import Measurer
-from .widgets import LABELS, Rect, _ms
+from .widgets import Rect, _ms
 from .widgets_agenda import agenda
 from .widgets_almanac import date_block, week
 from .widgets_flow import energy_flow
@@ -146,12 +146,7 @@ def _titlebar(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
     return True
 
 
-NOW_ROWS = {"sv": {"indoor": "Uterum", "feels_like": "Känns som", "humidity": "Fukt",
-                   "wind": "Vind", "dew_point": "Daggpunkt", "pressure": "Tryck",
-                   "rain_today": "Regn idag"},
-            "en": {"indoor": "Indoor", "feels_like": "Feels like", "humidity": "Humidity",
-                   "wind": "Wind", "dew_point": "Dew point", "pressure": "Pressure",
-                   "rain_today": "Rain today"}}
+
 
 
 @widget("now")
@@ -162,7 +157,7 @@ def _now(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> b
     temp, _u = role_value(snap, "outdoor_temp")
     if temp is None:
         temp = fmt.to_float(attrs.get("temperature"))
-    indoor_label = NOW_ROWS[lang]["indoor"]
+    indoor_label = i18n.t(lang, "now_rows.indoor")
     if snap.roles.get("indoor_temp"):
         indoor_label = room_name(snap.role_state("indoor_temp"), snap.roles["indoor_temp"]) \
             if o.get("indoor_label") is None else o["indoor_label"]
@@ -190,12 +185,12 @@ def _now(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> b
                           + (f" ({fmt.number(gust, 1, lang)})" if gust is not None else "")
                           + " m/s")
     wanted = o.get("rows", ["indoor", "feels_like", "humidity", "wind", "rain_today"])
-    rows = [(indoor_label if k == "indoor" else NOW_ROWS[lang].get(k, k), values[k])
+    rows = [(indoor_label if k == "indoor" else i18n.group(lang, "now_rows").get(k, k), values[k])
             for k in wanted if values.get(k) not in (None, fmt.MISSING)]
     if temp is None and weather_state is None and not rows:
         return False
     p = t.px
-    svg.text(r.x, r.y + p(12), LABELS[lang]["now"], t.text("xs", bold=True))
+    svg.text(r.x, r.y + p(12), i18n.t(lang, "now.now"), t.text("xs", bold=True))
     hero = t.numeral("hero")
     svg.text(r.x - p(4), r.y + p(14) + hero.size * 0.92, fmt.with_unit(temp, "°", 1, lang),
              hero)
@@ -298,18 +293,18 @@ def _footer(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
             st = snap.states.get(eid)
             value = fmt.with_unit((st or {}).get("state"), "°", 1, lang)
             parts.append(f"{room_name(st, eid)} {value}")
-        left = ("Inne: " if lang == "sv" else "Inside: ") + " · ".join(parts)
+        left = i18n.t(lang, "footer.inside") + " · ".join(parts)
     elif o.get("left") == "name":
         left = snap.screen_name
     small = t.text("xs")
     right = f"{snap.now:%Y-%m-%d %H:%M}"
     if snap.battery is not None:
-        right = f"{'batteri' if lang == 'sv' else 'battery'} {snap.battery} % · {right}"
+        right = f"{i18n.t(lang, 'now.battery')} {snap.battery} % · {right}"
     p = t.px
     base = r.y + r.h / 2 + p(4)
     x = r.x
     if snap.stale_since:
-        tag = f"{LABELS[lang]['stale']} {snap.stale_since}"
+        tag = f"{i18n.t(lang, "now.stale")} {snap.stale_since}"
         tw = m.width(tag, t.text("xs", bold=True)) + p(8)
         svg.rect(x, r.y + p(2), tw, r.h - p(4), t.ink)
         svg.text(x + p(4), base, tag, t.text("xs", bold=True), color=t.paper)
@@ -375,19 +370,19 @@ def _now_grid(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
                                                        snap.roles["indoor_temp"])
             cells.append((label, fmt.with_unit(role_value(snap, "indoor_temp")[0], "°", 1, lang)))
         elif key == "feels_like" and snap.roles.get("feels_like"):
-            cells.append((NOW_ROWS[lang]["feels_like"],
+            cells.append((i18n.t(lang, "now_rows.feels_like"),
                           fmt.with_unit(role_value(snap, "feels_like")[0], "°", 1, lang)))
         elif key == "humidity" and (snap.roles.get("outdoor_humidity") or "humidity" in attrs):
             value = role_value(snap, "outdoor_humidity")[0] if snap.roles.get(
                 "outdoor_humidity") else attrs.get("humidity")
-            cells.append((NOW_ROWS[lang]["humidity"], fmt.with_unit(value, "%", 0, lang)))
+            cells.append((i18n.t(lang, "now_rows.humidity"), fmt.with_unit(value, "%", 0, lang)))
         elif key == "wind" and (speed := _ms(attrs.get("wind_speed"), unit)) is not None:
-            cells.append((NOW_ROWS[lang]["wind"], f"{fmt.number(speed, 1, lang)} m/s"))
+            cells.append((i18n.t(lang, "now_rows.wind"), f"{fmt.number(speed, 1, lang)} m/s"))
         elif key == "pressure" and "pressure" in attrs:
-            cells.append((NOW_ROWS[lang]["pressure"],
+            cells.append((i18n.t(lang, "now_rows.pressure"),
                           fmt.with_unit(attrs.get("pressure"), "hPa", 0, lang)))
         elif key == "rain_today" and snap.roles.get("rain_today"):
-            cells.append((NOW_ROWS[lang]["rain_today"],
+            cells.append((i18n.t(lang, "now_rows.rain_today"),
                           fmt.with_unit(role_value(snap, "rain_today")[0], "mm", 1, lang)))
         elif key == "tomorrow_07" and (item := _hourly_at(snap, target)) is not None:
             cells.append((i18n.t(lang, "date.tomorrow_07_short"),
@@ -397,7 +392,7 @@ def _now_grid(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
     p = t.px
     hero = t.numeral("xxl")
     hero_w = m.width("−00,0°", hero) + p(12)
-    svg.text(r.x, r.y + p(12), LABELS[lang]["now"], t.text("xs", bold=True))
+    svg.text(r.x, r.y + p(12), i18n.t(lang, "now.now"), t.text("xs", bold=True))
     svg.text(r.x - p(2), r.y + p(18) + hero.size * 0.9, fmt.with_unit(temp, "°", 1, lang), hero)
     cond = i18n.group(lang, "weather.condition").get(
         str((snap.role_state("weather") or {}).get("state", "")), "")

@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from . import fmt
+from . import fmt, i18n
 from .layouts import Snapshot
 from .style import Theme
 from .svg import Svg
@@ -63,14 +63,6 @@ def stat(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme, rol
     return True
 
 
-ENERGY_LABELS = {
-    "sv": {"price_now": "El nu", "solar_expected_today": "Sol idag förväntat",
-           "solar_now": "Sol nu", "house_now": "Huset nu", "house_today": "Huset idag",
-           "grid_now": "Nät nu", "battery": "Batteri", "title": "ENERGI"},
-    "en": {"price_now": "Power price", "solar_expected_today": "Solar expected today",
-           "solar_now": "Solar now", "house_now": "House now", "house_today": "House today",
-           "grid_now": "Grid now", "battery": "Battery", "title": "ENERGY"},
-}
 DEFAULT_ENERGY_ROWS = ("price_now", "solar_expected_today", "solar_now", "house_now", "battery")
 
 
@@ -103,7 +95,7 @@ def energy_rows(snap: Snapshot) -> dict[str, str]:
 def energy(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
            rows: tuple[str, ...] | list[str] = DEFAULT_ENERGY_ROWS, title: bool = True) -> bool:
     values = energy_rows(snap)
-    labels: dict[str, Any] = ENERGY_LABELS.get(snap.lang, ENERGY_LABELS["en"])
+    labels: dict[str, Any] = i18n.group(snap.lang, "energy")
     shown = [(labels[k], values[k]) for k in rows if k in values]
     if not shown:
         return False

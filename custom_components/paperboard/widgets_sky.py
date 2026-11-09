@@ -17,8 +17,7 @@ from .widgets import Rect
 
 SYNODIC = 29.530588853
 NEW_MOON = dt.datetime(2000, 1, 6, 18, 14, tzinfo=dt.UTC)
-TEXT = {"sv": {"sun": "SOLEN", "moon": "MÅNEN", "new": "nymåne", "full": "fullmåne"},
-        "en": {"sun": "SUN", "moon": "MOON", "new": "new moon", "full": "full moon"}}
+
 
 
 def moon(now: dt.datetime) -> tuple[float, float]:
@@ -66,7 +65,7 @@ def sun_moon(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
              show: str = "both") -> bool:
     """show: both (side by side), sun or moon (narrow tiles)."""
     lang, tz = snap.lang, snap.now.tzinfo
-    t = TEXT.get(lang, TEXT["en"])
+    t = i18n.group(lang, "sky")
     label, big, small = theme.text("xs", bold=True), theme.text("m", bold=True), theme.text("xs")
     half = r.w / 2
     p = theme.px

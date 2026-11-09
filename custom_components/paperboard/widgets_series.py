@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 
-from . import fmt
+from . import fmt, i18n
 from .layouts import Snapshot
 from .prices import PriceSeries
 from .style import Theme
@@ -17,9 +17,6 @@ from .svg import Svg
 from .text import Measurer
 from .timeaxis import TimeAxis
 from .widgets import Rect
-
-TOMORROW_NOTE = {"sv": ("morgondagens pris", "kommer ~{at}"),
-                 "en": ("tomorrow's prices", "due ~{at}")}
 
 
 def _label(svg: Svg, r: Rect, title: str, unit: str, theme: Theme) -> None:
@@ -37,7 +34,7 @@ def price_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
         return False
     currency = series.unit.split("/")[0] if series.unit else ""
     unit = {"SEK": "kr", "NOK": "kr", "DKK": "kr", "EUR": "€"}.get(currency, currency.lower())
-    _label(svg, r, label or ("EL" if snap.lang == "sv" else "PRICE"), unit, theme)
+    _label(svg, r, label or i18n.t(snap.lang, "chart.price"), unit, theme)
     px = theme.px
     top, bottom = r.y + px(16), r.y + r.h
     vmin, vmax = min(p.value for p in hourly), max(p.value for p in hourly)
@@ -72,7 +69,8 @@ def price_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
         svg.rect((bx0 + bx1) / 2 - tw / 2 - px(2), by - px(15), tw + px(4), px(13), theme.paper)
         svg.text((bx0 + bx1) / 2, by - px(4), text, theme.text("xs", bold=True), "middle")
     last_end = max(p.end for p in hourly)
-    line1, line2 = TOMORROW_NOTE.get(snap.lang, TOMORROW_NOTE["en"])
+    line1 = i18n.t(snap.lang, "chart.tomorrow_prices")
+    line2 = i18n.t(snap.lang, "chart.tomorrow_due")  # unformatted: {at} is filled below
     w = max(measure.width(line1, theme.text("xs")),
             measure.width(line2.format(at=series.tomorrow_expected_at or ""), theme.text("xs")))
     free = axis.x1 - axis.x(last_end)
@@ -92,7 +90,7 @@ def axis_labels(svg: Svg, axis: TimeAxis, y: float, theme: Theme, lang: str,
     for x, t in axis.ticks(every):
         svg.line(x, y, x, y + theme.px(5), 2)
         first = t == axis.start
-        svg.text(x, y + theme.px(18), ("nu" if lang == "sv" else "now") if first else f"{t:%H}",
+        svg.text(x, y + theme.px(18), i18n.t(lang, "chart.now") if first else f"{t:%H}",
                  theme.text("xs", bold=first), "middle")
 
 
@@ -100,8 +98,7 @@ def now_marker(svg: Svg, axis: TimeAxis, y0: float, y1: float) -> None:
     svg.line(axis.x0 + 1, y0, axis.x0 + 1, y1, 2, dash="3 3")
 
 
-SOLAR_CAPTION = {"sv": "förväntat idag {total}", "en": "expected today {total}"}
-SOLAR_LEFT = {"sv": " · kvar {left}", "en": " · {left} to go"}
+
 
 
 def solar_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
@@ -111,7 +108,7 @@ def solar_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
     shown = {t: wh for t, wh in hours.items() if axis.contains(t) and wh > 0}
     if not shown:
         return False
-    _label(svg, r, label or ("SOL" if snap.lang == "sv" else "SOLAR"), "kWh", theme)
+    _label(svg, r, label or i18n.t(snap.lang, "chart.solar"), "kWh", theme)
     p = theme.px
     top, bottom = r.y + p(18), r.y + r.h
     peak = max(max(shown.values()), 200.0)  # flat days do not blow up to full height
@@ -122,14 +119,14 @@ def solar_chart(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
                  stroke_width=1)
     total = snap.solar.today_kwh if snap.solar else None
     if total is not None:
-        caption = SOLAR_CAPTION.get(snap.lang, SOLAR_CAPTION["en"]).format(
-            total=fmt.with_unit(total, "kWh", 1, snap.lang))
+        caption = i18n.t(snap.lang, "chart.solar_caption",
+                         total=fmt.with_unit(total, "kWh", 1, snap.lang))
         today = snap.now.date()
         left_wh = sum(wh for t, wh in hours.items() if t >= snap.now and t.astimezone(
             snap.now.tzinfo).date() == today)
         if hours:
-            caption += SOLAR_LEFT.get(snap.lang, SOLAR_LEFT["en"]).format(
-                left=fmt.number(left_wh / 1000, 1, snap.lang))
+            caption += i18n.t(snap.lang, "chart.solar_left",
+                              left=fmt.number(left_wh / 1000, 1, snap.lang))
         style = theme.text("xs", bold=True)
         w = measure.width(caption, style)
         svg.rect(axis.x1 - w - p(6), r.y, w + p(6), p(15), theme.paper)
@@ -163,7 +160,7 @@ def night_shading(svg: Svg, snap: Snapshot, theme: Theme, axis: TimeAxis, top: f
         svg.rect(x0, top, x1 - x0, bottom - top, theme.tint)
     for a, b in nights(snap):
         if axis.contains(a):
-            text = f"{'sol ned' if lang == 'sv' else 'sunset'} {a.astimezone(tz):%H:%M}"
+            text = f"{i18n.t(lang, 'chart.sunset')} {a.astimezone(tz):%H:%M}"
             if axis.x(a) + p(76) <= axis.x1:
                 svg.rect(axis.x(a) + p(1), top + p(1), p(74), p(14), theme.paper)
                 svg.text(axis.x(a) + p(4), top + p(12), text, style)
@@ -171,6 +168,6 @@ def night_shading(svg: Svg, snap: Snapshot, theme: Theme, axis: TimeAxis, top: f
                 svg.rect(axis.x(a) - p(76), top + p(1), p(74), p(14), theme.paper)
                 svg.text(axis.x(a) - p(3), top + p(12), text, style, "end")
         if axis.contains(b):
-            text = f"{'upp' if lang == 'sv' else 'sunrise'} {b.astimezone(tz):%H:%M}"
+            text = f"{i18n.t(lang, 'chart.sunrise')} {b.astimezone(tz):%H:%M}"
             svg.rect(axis.x(b) - p(72), top + p(1), p(70), p(14), theme.paper)
             svg.text(axis.x(b) - p(3), top + p(12), text, style, "end")

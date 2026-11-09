@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import math
 
-from . import fmt
+from . import fmt, i18n
 from .icons import icon
 from .layouts import Snapshot
 from .style import Theme
@@ -17,9 +17,6 @@ from .svg import Svg
 from .text import Measurer
 from .widgets import Rect
 from .widgets_values import kilowatts, role_value
-
-LABELS = {"sv": {"sun": "SOL", "grid": "NÄT", "battery": "BATTERI", "title": "JUST NU · kW"},
-          "en": {"sun": "SOLAR", "grid": "GRID", "battery": "BATTERY", "title": "NOW · kW"}}
 
 
 def _arrow(svg: Svg, x1: float, y1: float, x2: float, y2: float, width: float,
@@ -40,7 +37,7 @@ def _arrow(svg: Svg, x1: float, y1: float, x2: float, y2: float, width: float,
 
 def energy_flow(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme) -> bool:
     lang = snap.lang
-    lab = LABELS.get(lang, LABELS["en"])
+    lab = i18n.group(lang, "flow")
     sun = kilowatts(*role_value(snap, "solar_power")) if snap.roles.get("solar_power") else None
     grid = kilowatts(*role_value(snap, "grid_power")) if snap.roles.get("grid_power") else None
     if grid is not None and snap.roles.get("grid_export_positive"):
