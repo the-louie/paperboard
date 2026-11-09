@@ -236,6 +236,19 @@ LOG_FIELDS = ("created_at", "message", "level", "source_path", "source_line", "w
               "free_heap_size", "refresh_rate", "sleep_duration", "retry")
 
 
+MAX_LOG_FIELD = 500  # characters; firmware lines are far shorter
+_DROP = object()
+
+
+def _log_value(value: object) -> object:
+    """Plain values only (the firmware sends nothing else); long text is cut."""
+    if isinstance(value, str):
+        return value[:MAX_LOG_FIELD]
+    if value is None or isinstance(value, (bool, int, float)):
+        return value
+    return _DROP
+
+
 class LogView(HomeAssistantView):
     """POST /api/log: keep the device's recent log lines for diagnostics."""
 
@@ -252,12 +265,22 @@ class LogView(HomeAssistantView):
             return web.Response(status=HTTPStatus.FORBIDDEN)
         if (request.content_length or 0) > MAX_LOG_BODY:
             return web.Response(status=HTTPStatus.REQUEST_ENTITY_TOO_LARGE)
+        # Content-Length is absent on a chunked body: read at most the limit from the stream.
+        body = b""
+        while len(body) <= MAX_LOG_BODY and (chunk := await request.content.read(
+                MAX_LOG_BODY + 1 - len(body))):
+            body += chunk
+        if len(body) > MAX_LOG_BODY:
+            return web.Response(status=HTTPStatus.REQUEST_ENTITY_TOO_LARGE)
         try:
-            payload = json.loads(await request.read())
-            entries = payload.get("logs", []) if isinstance(payload, dict) else []
+            payload = json.loads(body)
         except ValueError:
+            return web.Response(status=HTTPStatus.BAD_REQUEST)
+        entries = payload.get("logs", []) if isinstance(payload, dict) else []
+        if not isinstance(entries, list):
             return web.Response(status=HTTPStatus.BAD_REQUEST)
         for entry in entries[:50]:
             if isinstance(entry, dict):
-                screen.logs.append({k: entry[k] for k in LOG_FIELDS if k in entry})
+                screen.logs.append({k: _log_value(entry[k]) for k in LOG_FIELDS
+                                    if k in entry and _log_value(entry[k]) is not _DROP})
         return web.Response(status=HTTPStatus.NO_CONTENT)
