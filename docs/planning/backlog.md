@@ -116,6 +116,15 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-070 · Research: aarch64 verification**~~ — CLOSED 2026-11-08 (Sprint 03 T-20): see commit "T-20: Research: aarch64 verification"
 - [x] **B-071 · decision: release and HACS default PR** · done 2026-11-09: v0.1.0 released, hacs/default PR #13762 ready for review · 1h · prio P3 · needs: B-067, B-069, B-070 · src: N HACS rules
       The owner pushes, tags the release, and opens a PR to hacs/default.
+- [x] **B-101 · HACS review: token out of entity state, no re-pair without the window** · 2h · prio P0 · src: hacs/default #13762 review (frenck) 2026-11-09 · done 2026-11-09
+      Review: (1) `png_path`/`bmp_path` attributes put the image token where every user and
+      the recorder see it; (2) a known MAC re-paired outside the window, and any LAN device
+      sees MACs. Owner 2026-11-09: "yes fix both first, then we'll do our own security qa".
+      Fix: attributes removed, links shown in the screen's Reconfigure dialog (admin-only);
+      `/api/setup` needs the window for every MAC. This reverses B-094. Changelog tells 0.1.0
+      users to rotate the image link. Tests: test_generic_clients.py (token not in any state),
+      test_setup_view.py (spoofed known MAC refused, real key kept), test_subentry_flow.py.
+      Next: the owner's own security QA, then release 0.1.1 and re-request review.
 - [ ] **B-072 · Upstream offer to cryptomilk** · 1h · prio P3 · needs: B-071 · src: R §build new
       Claude drafts an issue offering the device-API views; the owner posts it.
 
@@ -241,7 +250,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       text? not as much as bold text, but halfway there maybe". Inter Medium → SemiBold; pixel
       fonts drawn twice 1 px apart. See docs/design/rendering.md. Goldens and README images
       regenerated.
-- [x] **B-094 · A known panel re-pairs without the window** · 1h · prio P1 · src: owner 2026-11-08 19:40 · done 2026-11-08
+- [x] **B-094 · A known panel re-pairs without the window** · REVERSED 2026-11-09 by B-101 (HACS security review) · 1h · prio P1 · src: owner 2026-11-08 19:40 · done 2026-11-08
       Owner: "when i tried to reset (reboot) it factory reset, i do not like this process".
       `/api/setup` from a MAC the hub already paired, outside a window, re-binds it to its
       own screen with a fresh key (LAN-only). Trade-off in device-api.md setup case 4.

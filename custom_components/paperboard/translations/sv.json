@@ -101,6 +101,7 @@
         },
         "reconfigure": {
           "title": "Skärm",
+          "description": "Bildlänk för andra klienter (ESPHome, Kindle, BYOS-servrar). Den fungerar utan inloggning, så behandla den som ett lösenord; **Byt bildlänk** ersätter den.\n\nPNG: `{png_url}`\n\nBMP: `{bmp_url}`",
           "data": {
             "name": "Namn",
             "profile": "Panel",

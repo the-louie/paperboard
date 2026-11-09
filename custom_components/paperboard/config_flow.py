@@ -230,6 +230,21 @@ class ScreenSubentryFlow(ConfigSubentryFlow):
                                                    data={**subentry.data, **data})
         await self.hass.async_add_executor_job(profile_names)  # file read off the loop
         layouts = await _layout_choices(self.hass, self._get_entry())
+        png_url, bmp_url = self._image_urls(subentry.subentry_id, subentry.data[CONF_IMAGE_TOKEN])
         return self.async_show_form(step_id="reconfigure",
+                                    description_placeholders={"png_url": png_url,
+                                                              "bmp_url": bmp_url},
                                     data_schema=_screen_schema(dict(subentry.data),
                                                                self._hub_refresh(), layouts))
+
+    def _image_urls(self, screen_id: str, token: str) -> tuple[str, str]:
+        """The image link for generic clients. Shown only here: config flows are admin-only,
+        while entity attributes are visible to every user and kept in the recorder."""
+        base = self._get_entry().options.get(CONF_BASE_URL, "")
+        if not base:
+            try:
+                base = get_url(self.hass, allow_external=False, allow_cloud=False)
+            except NoURLAvailableError:
+                base = ""
+        path = f"{base.rstrip('/')}/api/paperboard/image/{screen_id}/{token}/latest"
+        return f"{path}.png", f"{path}.bmp"

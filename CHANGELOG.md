@@ -6,6 +6,15 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Security
+- The image link's token is no longer in the image entity's attributes (`png_path`,
+  `bmp_path`), which every Home Assistant user can read and the recorder keeps. The links are
+  now shown in the screen's **Reconfigure** dialog, for admins only. **If you used 0.1.0,
+  press Rotate image link once:** the old token is in your recorder history.
+- A panel that was paired before no longer re-pairs without the pairing window. Its MAC address
+  was enough, and any device on the local network can see a MAC, take a key, read the
+  dashboard and lock the real panel out. After a factory reset, press **Pair device** once.
+
 ## [0.1.0] - 2026-11-09
 
 First public version.
@@ -32,7 +41,6 @@ First public version.
 ### Fixed
 - Rendering no longer stalls Home Assistant: resvg runs in a separate process, without threads
   that could block Home Assistant's shutdown.
-- A panel that was paired once re-pairs by itself after a factory reset.
 - The last check-in survives a restart. The missed-check-in alert follows the poll interval
   actually given to the device, so night schedules no longer trigger it.
 - Widget spacing scales on large panels such as the TRMNL X.

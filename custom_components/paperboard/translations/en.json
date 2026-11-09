@@ -101,6 +101,7 @@
         },
         "reconfigure": {
           "title": "Screen",
+          "description": "Image link for other clients (ESPHome, Kindle, BYOS servers). It works without a login, so treat it like a password; **Rotate image link** replaces it.\n\nPNG: `{png_url}`\n\nBMP: `{bmp_url}`",
           "data": {
             "name": "Name",
             "profile": "Panel",

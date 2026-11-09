@@ -80,25 +80,24 @@ async def test_pairing_refused_from_outside_lan(hass: HomeAssistant, hub_entry,
     assert (await FakeTrmnl(client).setup())["status"] == 200
 
 
-async def test_known_device_repairs_without_window(hass: HomeAssistant, hub_entry,
-                                                   hass_client_no_auth) -> None:
-    """B-094: a factory-reset panel the hub already knows pairs again with no button press."""
+async def test_known_device_needs_the_window(hass: HomeAssistant, hub_entry,
+                                            hass_client_no_auth) -> None:
+    """A paired MAC proves nothing (every LAN device sees it): re-pairing needs the window too,
+    so a spoofer cannot take a key and lock the real panel out (HACS review 2026-11-09)."""
     hub = hub_entry.runtime_data
     client = await hass_client_no_auth()
     await _press_pair(hass)
-    dev = FakeTrmnl(client, mac="02:00:00:00:00:aa")
-    first = await dev.setup()
-    assert hub.pairing_target() is None
+    first = await FakeTrmnl(client, mac="02:00:00:00:00:aa").setup()
+    assert first["status"] == 200 and hub.pairing_target() is None
 
-    again = FakeTrmnl(client, mac="02:00:00:00:00:aa")  # same panel, key wiped
-    data = await again.setup()
-    assert data["status"] == 200
-    assert data["api_key"] != first["api_key"]  # the old key is revoked
-    assert hub.devices.devices["screen1"].api_key == data["api_key"]
+    spoof = await FakeTrmnl(client, mac="02:00:00:00:00:aa").setup()
+    assert spoof["status"] == 404 and "api_key" not in spoof
+    assert hub.devices.devices["screen1"].api_key == first["api_key"]  # the real panel keeps it
 
-    assert (await FakeTrmnl(client, mac="02:00:00:00:00:bb").setup())["status"] == 404
-    with patch("custom_components.paperboard.views.is_local", return_value=False):
-        assert (await FakeTrmnl(client, mac="02:00:00:00:00:aa").setup())["status"] == 404
+    await _press_pair(hass)  # the owner re-pairs after a factory reset
+    again = await FakeTrmnl(client, mac="02:00:00:00:00:aa").setup()
+    assert again["status"] == 200 and again["api_key"] != first["api_key"]
+    assert hub.devices.devices["screen1"].api_key == again["api_key"]
 
 
 async def test_open_window_beats_known_device(hass: HomeAssistant, hub_entry,

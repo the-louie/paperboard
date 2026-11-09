@@ -10,6 +10,7 @@ from homeassistant.helpers import device_registry as dr
 from pytest_homeassistant.common import MockConfigEntry
 
 from custom_components.paperboard.const import (
+    CONF_IMAGE_TOKEN,
     CONF_LAYOUT,
     CONF_MAC,
     CONF_NAME,
@@ -68,6 +69,11 @@ async def test_reconfigure_keeps_pairing_data(hass: HomeAssistant) -> None:
     result = await hass.config_entries.subentries.async_init(
         (entry.entry_id, SUBENTRY_SCREEN),
         context={"source": SOURCE_RECONFIGURE, "subentry_id": subentry.subentry_id})
+    token = subentry.data[CONF_IMAGE_TOKEN]
+    links = result["description_placeholders"]  # admin-only: config flows need admin
+    path = f"/api/paperboard/image/{subentry.subentry_id}/{token}/latest.png"
+    assert links["png_url"].endswith(path)
+    assert links["bmp_url"].endswith("/latest.bmp")
     result = await hass.config_entries.subentries.async_configure(
         result["flow_id"], {**SCREEN, CONF_NAME: "Köket", CONF_REFRESH_RATE: 300})
     assert result["type"] is FlowResultType.ABORT

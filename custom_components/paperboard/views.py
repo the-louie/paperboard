@@ -110,14 +110,9 @@ class SetupView(HomeAssistantView):
         mac = request.headers.get("ID", "").strip()
         if hub is None or not mac:
             return _json({"status": 404, "message": "Missing device ID"})
+        # Pairing needs the window, also for a MAC this hub already knows: the MAC is visible to
+        # every device on the LAN, so it proves nothing (HACS review 2026-11-09).
         screen_id = hub.pairing_target()
-        known = False
-        if screen_id is None:
-            # B-094: a panel this hub already paired (factory reset, lost key) re-pairs to its
-            # own screen without a window, so the owner never has to press Pair again. It gets
-            # a fresh key; the old one stops working. LAN-only like every pairing.
-            screen_id = hub.devices.screen_for_mac(mac)
-            known = screen_id is not None
         screen = hub.screens.get(screen_id) if screen_id else None
         if screen is not None and not from_local_network(self.hass, request):
             # The views are reachable through every HA URL (Nabu Casa, proxies). Pairing hands
@@ -129,8 +124,7 @@ class SetupView(HomeAssistantView):
                                                     "screen in Home Assistant."})
         device = new_device(mac)
         hub.devices.bind(screen.subentry_id, device)
-        if not known:
-            hub.close_pairing()
+        hub.close_pairing()
         return _json({"status": 200, "api_key": device.api_key,
                       "friendly_id": device.friendly_id,
                       "image_url": base_url(hub, request) + image_path(screen, "bmp"),

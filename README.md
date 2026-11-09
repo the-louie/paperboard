@@ -77,8 +77,8 @@ short version:
 3. **Pair:** press the screen's **Pair device** button. You then have **5 minutes**.
    - On the device's setup portal, choose **Custom server** and enter the base URL.
    - Pairing only works from your local network, never through the cloud URL.
-   - A panel that was paired once re-pairs by itself after a factory reset: only its Wi-Fi
-     setup is needed, no button press in Home Assistant.
+   - After a factory reset, press **Pair device** again: a MAC address proves nothing, so a
+     panel is never re-paired without the window.
 
 Each screen gets:
 - an **image entity**, which previews in a *picture-entity* card;

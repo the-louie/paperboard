@@ -102,13 +102,11 @@ Sources: research notes (firmware `5246feb`, 1.8.19) and the owner's working trm
 3. **Setup outside the window:** `{"status": 404, "message": "Pairing is closed. Press
    Pair on the screen in Home Assistant."}` with HTTP 200. The firmware treats it as a failed
    setup and retries later, so a device can be paired *after* it starts polling.
-4. **Known MAC, no window (B-094, owner 2026-11-08):** a MAC already bound to a screen that
-   calls setup again (factory reset, lost key) is re-paired to that same screen without the
-   window, LAN-only. It gets a **new** key; the old key stops working. The owner chose this
-   after a button reset wiped the hall panel: re-pairing must not need a button press in HA.
-   Trade-off: a LAN device spoofing a paired MAC gets a key for that screen's image and
-   kicks the real panel off (it then re-pairs, and the two take turns). Accepted: it needs
-   LAN access plus the MAC, and yields only the dashboard image.
+4. **Known MAC, no window:** treated like any other setup outside the window (case 3). A MAC
+   is visible to every device on the LAN, so it is not a credential. From 2026-11-08 to
+   2026-11-09 (B-094) a known MAC re-paired without the window; the HACS review showed that
+   any LAN device could then take a key, read the dashboard and lock the real panel out, so
+   it was removed (B-101). After a factory reset the owner presses Pair device once.
 4. **`/api/display` with a missing, unknown or wrong `Access-Token` for that `ID`:** HTTP 200
    `{"status": 500, "message": "unknown device, re-running setup"}`, **without**
    `reset_firmware`. The device then re-runs setup, which works only inside a window. This is
@@ -149,8 +147,10 @@ service do.
     with the image URL sees it.
   - The token sits in the URL path, so it can appear in reverse-proxy access logs. HA itself
     does not log request paths at INFO.
-  - **Rotate:** delete and re-add the screen (a new token is minted), or re-pair (a new device
-    key). A "rotate image token" button is worth adding in phase 5 (B-082).
+  - **Rotate:** the screen's **Rotate image link** button mints a new token (B-082).
+  - **Where the token is shown:** only in the screen's Reconfigure dialog, which needs admin.
+    It is never an entity attribute: those are visible to every user and kept in the
+    recorder (B-101).
 - **Logging hygiene:** the integration logs only render failures (screen name + error). It
   never logs headers, keys, tokens or MACs. Diagnostics redact keys and tokens and reduce MACs
   to their last two octets (T-27).
@@ -166,4 +166,5 @@ service do.
   - A hostile LAN device inside an open pairing window: it can take the pairing, and the
     owner sees the wrong friendly ID on the panel. The window is 5 minutes, single use, and
     opened by an admin action.
-  - A hostile LAN device spoofing an already-paired MAC: see setup case 4 (B-094).
+  - A hostile LAN device spoofing an already-paired MAC outside a window gets nothing: setup
+    case 4 (B-101).
