@@ -40,7 +40,33 @@ def test_sv_and_en_tables_match() -> None:
                 else:
                     assert isinstance(sv, str) and isinstance(en, str), name
                 checked += 1
-    assert checked >= 15
+    assert checked >= 0  # tables left in code; the catalogs are checked below
+
+
+def _shape(node, path=""):
+    if isinstance(node, dict):
+        out = {}
+        for k, v in node.items():
+            out.update(_shape(v, f"{path}{k}."))
+        return out
+    return {path[:-1]: len(node) if isinstance(node, list) else "text"}
+
+
+def test_every_catalog_has_the_english_keys() -> None:
+    """Test plan 1: same keys, same list lengths, same placeholders as en.json."""
+    import re
+
+    from custom_components.paperboard import i18n
+
+    catalogs = i18n.load_catalogs()
+    english = _shape(catalogs["en"])
+    for lang, catalog in catalogs.items():
+        assert _shape(catalog) == english, lang
+        for key in english:
+            en_text, text = i18n.get("en", key), i18n.get(lang, key)
+            if isinstance(en_text, str):
+                assert set(re.findall(r"{(\w+)}", text)) == set(re.findall(r"{(\w+)}", en_text)), \
+                    f"{lang}: {key}"
 
 
 def test_layout_can_pin_language() -> None:

@@ -4,27 +4,12 @@ from __future__ import annotations
 
 import datetime as dt
 
+from . import i18n
 from .layouts import Snapshot
 from .style import Theme
 from .svg import Svg
 from .text import Measurer
 from .widgets import Rect
-
-DAY = {"sv": ["mån", "tis", "ons", "tor", "fre", "lör", "sön"],
-       "en": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
-HOLIDAY_SV = {"Father's Day": "Fars dag", "Mother's Day": "Mors dag",
-              "Christmas Eve": "Julafton", "Christmas Day": "Juldagen",
-              "New Year's Eve": "Nyårsafton", "New Year's Day": "Nyårsdagen",
-              "Midsummer Eve": "Midsommarafton", "Midsummer Day": "Midsommardagen",
-              "Easter Sunday": "Påskdagen", "Good Friday": "Långfredagen",
-              "National Day of Sweden": "Sveriges nationaldag",
-              "All Saints' Day": "Alla helgons dag"}
-
-
-WORDS = {"sv": {"today": "Idag", "tomorrow": "Imorgon", "none": "Inga händelser",
-                "title": "KALENDER", "all_day": "heldag"},
-         "en": {"today": "Today", "tomorrow": "Tomorrow", "none": "No events",
-                "title": "CALENDAR", "all_day": "all day"}}
 
 
 def _start(ev: dict, tz: dt.tzinfo) -> dt.datetime | None:
@@ -43,7 +28,8 @@ def agenda(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme, d
     if not cals:
         return False
     tz = snap.now.tzinfo
-    words = WORDS.get(snap.lang, WORDS["en"])
+    words = {**i18n.group(snap.lang, "agenda"), "today": i18n.t(snap.lang, "date.today"),
+             "tomorrow": i18n.t(snap.lang, "date.tomorrow")}
     end = snap.now + dt.timedelta(days=days)
     items = []
     for cal in cals:
@@ -52,8 +38,7 @@ def agenda(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme, d
                 continue
             if start.date() >= snap.now.date() and start < end:
                 summary = str(ev.get("summary", ""))
-                if snap.lang == "sv":
-                    summary = HOLIDAY_SV.get(summary, summary)
+                summary = i18n.holiday(snap.lang, summary)
                 items.append((start, bool(ev.get("all_day")), summary))
     items.sort(key=lambda i: (i[0].date(), not i[1], i[0]))
     p = theme.px
@@ -73,8 +58,9 @@ def agenda(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme, d
                 break
             current = day
             delta = (day - snap.now.date()).days
+            short = i18n.tl(snap.lang, "date.weekday_abbr_lower")[day.weekday()]
             label = words["today"] if delta == 0 else words["tomorrow"] if delta == 1 else \
-                f"{DAY[snap.lang][day.weekday()]} {day.day}/{day.month}"
+                f"{short} {day.day}/{day.month}"
             svg.text(r.x, y + p(13), label, head)
             svg.line(r.x, y + p(16), r.x + r.w, y + p(16), 1)
             y += p(20)

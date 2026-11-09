@@ -8,6 +8,7 @@ import datetime as dt
 import math
 from typing import Any
 
+from . import i18n
 from .layouts import Snapshot
 from .style import Theme
 from .svg import Svg
@@ -16,8 +17,6 @@ from .widgets import Rect
 
 SYNODIC = 29.530588853
 NEW_MOON = dt.datetime(2000, 1, 6, 18, 14, tzinfo=dt.UTC)
-WEEKDAYS = {"sv": ["mån", "tis", "ons", "tor", "fre", "lör", "sön"],
-            "en": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
 TEXT = {"sv": {"sun": "SOLEN", "moon": "MÅNEN", "new": "nymåne", "full": "fullmåne"},
         "en": {"sun": "SUN", "moon": "MOON", "new": "new moon", "full": "full moon"}}
 
@@ -96,6 +95,6 @@ def sun_moon(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
     upcoming = min((next_phase(snap.now, 0.0), t["new"]), (next_phase(snap.now, SYNODIC / 2),
                                                           t["full"]), key=lambda p: p[0])
     when = upcoming[0].astimezone(tz)
-    svg.text(mx, r.y + p(54), f"{upcoming[1]} {WEEKDAYS[lang][when.weekday()]} {when.day}/"
-             f"{when.month}", small)
+    short = i18n.tl(lang, "date.weekday_abbr_lower")[when.weekday()]
+    svg.text(mx, r.y + p(54), f"{upcoming[1]} {short} {when.day}/{when.month}", small)
     return True

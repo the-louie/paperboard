@@ -9,14 +9,14 @@ from __future__ import annotations
 import datetime as dt
 from typing import Any
 
-from . import fmt
+from . import fmt, i18n
 from .compose import axis_for, widget
 from .layouts import Snapshot
 from .style import Theme
 from .svg import Svg
 from .text import Measurer
 from .widgets import CONDITION, LABELS, Rect, _ms
-from .widgets_agenda import HOLIDAY_SV, agenda
+from .widgets_agenda import agenda
 from .widgets_almanac import date_block, week
 from .widgets_flow import energy_flow
 from .widgets_series import axis_labels, night_shading, now_marker, price_chart, solar_chart
@@ -25,14 +25,13 @@ from .widgets_text import text_slot
 from .widgets_values import energy, kv_list, role_value, room_name, rooms, stat
 from .widgets_weather import _weather_attrs, daily, hourly_strip, hourly_table, tomorrow_at
 
-WEEKDAY = {"sv": ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"],
-           "en": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
-MONTH = {"sv": ["januari", "februari", "mars", "april", "maj", "juni", "juli", "augusti",
-                "september", "oktober", "november", "december"],
-         "en": ["January", "February", "March", "April", "May", "June", "July", "August",
-                "September", "October", "November", "December"]}
+
+def _weekday(lang: str, snap: Snapshot) -> str:
+    return i18n.tl(lang, "date.weekday")[snap.now.weekday()]
 
 
+def _month(lang: str, snap: Snapshot) -> str:
+    return i18n.tl(lang, "date.month")[snap.now.month - 1]
 
 def layout_text(value: Any, lang: str) -> Any:
     """A text from a layout file: a plain string, or one per language ({sv: Vädret, en:
@@ -47,7 +46,7 @@ def _flag(snap: Snapshot) -> str:
         for ev in snap.events.get(cal, []):
             if ev.get("all_day") and ev.get("date") == snap.now.date().isoformat():
                 name = ev.get("summary", "")
-                return HOLIDAY_SV.get(name, name) if snap.lang == "sv" else name
+                return i18n.holiday(snap.lang, name)
     return ""
 
 
@@ -71,7 +70,7 @@ def _header(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
     if style == "titlebar":
         return _titlebar(svg, r, snap, m, t, o)
     lang = snap.lang
-    title = f"{WEEKDAY[lang][snap.now.weekday()]} {snap.now.day} {MONTH[lang][snap.now.month - 1]}"
+    title = f"{_weekday(lang, snap)} {snap.now.day} {_month(lang, snap)}"
     p = t.px
     big, rest = t.text("m", bold=True), t.text("m")
     base = r.y + r.h / 2 + p(7)
@@ -84,7 +83,7 @@ def _header(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
         if item is not None:
             value = fmt.with_unit(item.get("temperature"), "°", 1, lang)
             vstyle, lstyle = t.text("s", bold=True), t.text("s")
-            label = "Imorgon kl 07" if lang == "sv" else "Tomorrow 07:00"
+            label = i18n.t(lang, "date.tomorrow_07")
             bw = m.width(value, vstyle) + p(14)
             svg.rect(r.x + r.w - bw, r.y + r.h / 2 - p(12), bw, p(24), t.ink, rx=p(3))
             svg.text(r.x + r.w - bw / 2, base - p(1), value, vstyle, "middle", t.paper)
@@ -92,7 +91,7 @@ def _header(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
             right_edge = r.x + r.w - bw - p(16) - m.width(label, lstyle)
     extra = []
     if o.get("show_week", True):
-        extra.append(f"{'v.' if lang == 'sv' else 'wk'} {snap.now.isocalendar().week}")
+        extra.append(f"{i18n.t(lang, 'date.week_short')} {snap.now.isocalendar().week}")
     if o.get("show_flag", True) and (flag := _flag(snap)):
         extra.append(flag)
     x = r.x + m.width(title + " ", big)
@@ -105,12 +104,12 @@ def _header(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
 
 def _date_line(snap: Snapshot, o: dict, with_year: bool = False) -> tuple[str, str]:
     lang = snap.lang
-    first = f"{WEEKDAY[lang][snap.now.weekday()]} {snap.now.day} {MONTH[lang][snap.now.month - 1]}"
+    first = f"{_weekday(lang, snap)} {snap.now.day} {_month(lang, snap)}"
     if with_year:
         first += f" {snap.now.year}"
     second = []
     if o.get("show_week", True):
-        second.append(f"{'vecka' if lang == 'sv' else 'week'} {snap.now.isocalendar().week}")
+        second.append(f"{i18n.t(lang, 'date.week')} {snap.now.isocalendar().week}")
     if o.get("show_flag", True) and (flag := _flag(snap)):
         second.append(flag)
     return first, " · ".join(second)
@@ -390,7 +389,7 @@ def _now_grid(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
             cells.append((NOW_ROWS[lang]["rain_today"],
                           fmt.with_unit(role_value(snap, "rain_today")[0], "mm", 1, lang)))
         elif key == "tomorrow_07" and (item := _hourly_at(snap, target)) is not None:
-            cells.append(("Imorgon 07" if lang == "sv" else "Tomorrow 07",
+            cells.append((i18n.t(lang, "date.tomorrow_07_short"),
                           fmt.with_unit(item.get("temperature"), "°", 1, lang)))
     if temp is None and not cells:
         return False

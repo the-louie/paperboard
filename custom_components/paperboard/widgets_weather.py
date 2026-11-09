@@ -5,17 +5,13 @@ from __future__ import annotations
 import datetime as dt
 from typing import Any
 
-from . import fmt
+from . import fmt, i18n
 from .icons import weather_icon
 from .layouts import Snapshot
 from .style import Theme
 from .svg import Svg
 from .text import Measurer
 from .widgets import Rect, _ms
-
-DAYS = {"sv": ["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"],
-        "en": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
-TODAY = {"sv": "Idag", "en": "Today"}
 
 
 def _weather_attrs(snap: Snapshot) -> dict[str, Any]:
@@ -59,8 +55,8 @@ def daily(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme, da
             svg.rect(x + p(2), r.y + p(2), cw - p(4), r.h - p(4), theme.ink, rx=p(4))
         elif i:
             svg.line(x, r.y + p(4), x, r.y + r.h - p(4), 1)
-        name = TODAY[snap.lang] if when and when.date() == snap.now.date() else \
-            DAYS[snap.lang][when.weekday()] if when else ""
+        name = i18n.t(snap.lang, "date.today") if when and when.date() == snap.now.date() else \
+            i18n.tl(snap.lang, "date.weekday_abbr")[when.weekday()] if when else ""
         cx = x + cw / 2
         svg.text(cx, r.y + p(18), name, theme.text("s", bold=True), "middle", ink)
         weather_icon(svg, item.get("condition"), cx - icon / 2, r.y + p(26), icon, ink)
@@ -79,10 +75,7 @@ def daily(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme, da
     return True
 
 
-HOURLY_HEAD = {"sv": {"time": "TID", "temp": "TEMP", "rain": "REGN", "wind": "VIND",
-                      "price": "EL KR/KWH", "now": "Nu"},
-               "en": {"time": "TIME", "temp": "TEMP", "rain": "RAIN", "wind": "WIND",
-                      "price": "POWER /KWH", "now": "Now"}}
+
 
 
 def hourly_table(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
@@ -98,7 +91,7 @@ def hourly_table(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Th
     prices = {p.start: p.value for p in snap.prices.series().hourly()} if snap.prices else {}
     has_rain = any("precipitation" in i for i in items)
     has_price = any(_when(i, snap) in prices for i in items)
-    head = HOURLY_HEAD.get(snap.lang, HOURLY_HEAD["en"])
+    head = i18n.group(snap.lang, "hourly")
     cols: list[tuple[str, float, str]] = [("time", 0.13, "start"), ("icon", 0.08, "middle"),
                                           ("temp", 0.13, "end")]
     if has_rain:
@@ -196,7 +189,7 @@ def hourly_strip(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Th
     return True
 
 
-TOMORROW = {"sv": "IMORGON {hh}", "en": "TOMORROW {hh}"}
+
 
 
 def tomorrow_at(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
@@ -208,7 +201,7 @@ def tomorrow_at(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: The
     if item is None:
         return False
     p = theme.px
-    svg.text(r.x, r.y + p(12), TOMORROW.get(snap.lang, TOMORROW["en"]).format(hh=f"{hour:02d}"),
+    svg.text(r.x, r.y + p(12), i18n.t(snap.lang, "date.tomorrow_hh", hh=f"{hour:02d}"),
              theme.text("xs", bold=True))
     big = theme.numeral("xl")
     svg.text(r.x - p(2), r.y + p(18) + big.size * 0.9,

@@ -1,3 +1,178 @@
 {
-  "language": {"name": "Svenska"}
+  "language": {
+    "name": "Svenska"
+  },
+  "date": {
+    "weekday": [
+      "Måndag",
+      "Tisdag",
+      "Onsdag",
+      "Torsdag",
+      "Fredag",
+      "Lördag",
+      "Söndag"
+    ],
+    "weekday_abbr": [
+      "Mån",
+      "Tis",
+      "Ons",
+      "Tor",
+      "Fre",
+      "Lör",
+      "Sön"
+    ],
+    "weekday_abbr_lower": [
+      "mån",
+      "tis",
+      "ons",
+      "tor",
+      "fre",
+      "lör",
+      "sön"
+    ],
+    "month": [
+      "januari",
+      "februari",
+      "mars",
+      "april",
+      "maj",
+      "juni",
+      "juli",
+      "augusti",
+      "september",
+      "oktober",
+      "november",
+      "december"
+    ],
+    "today": "Idag",
+    "tomorrow": "Imorgon",
+    "tomorrow_hh": "IMORGON {hh}",
+    "tomorrow_07": "Imorgon kl 07",
+    "tomorrow_07_short": "Imorgon 07",
+    "week": "vecka",
+    "week_short": "v."
+  },
+  "agenda": {
+    "none": "Inga händelser",
+    "title": "KALENDER",
+    "all_day": "heldag"
+  },
+  "holiday": {
+    "Father's Day": "Fars dag",
+    "Mother's Day": "Mors dag",
+    "Christmas Eve": "Julafton",
+    "Christmas Day": "Juldagen",
+    "New Year's Eve": "Nyårsafton",
+    "New Year's Day": "Nyårsdagen",
+    "Midsummer Eve": "Midsommarafton",
+    "Midsummer Day": "Midsommardagen",
+    "Easter Sunday": "Påskdagen",
+    "Good Friday": "Långfredagen",
+    "National Day of Sweden": "Sveriges nationaldag",
+    "All Saints' Day": "Alla helgons dag"
+  },
+  "weather": {
+    "condition": {
+      "clear-night": "Klart",
+      "cloudy": "Mulet",
+      "fog": "Dimma",
+      "hail": "Hagel",
+      "lightning": "Åska",
+      "lightning-rainy": "Åska och regn",
+      "partlycloudy": "Halvklart",
+      "pouring": "Skyfall",
+      "rainy": "Regn",
+      "snowy": "Snö",
+      "snowy-rainy": "Snöblandat regn",
+      "sunny": "Sol",
+      "windy": "Blåsigt",
+      "windy-variant": "Blåsigt",
+      "exceptional": "Extremt"
+    },
+    "prose": {
+      "condition": {
+        "cloudy": "Grått",
+        "partlycloudy": "Växlande molnighet",
+        "sunny": "Soligt",
+        "clear-night": "Klart",
+        "rainy": "Regnigt",
+        "pouring": "Skyfall",
+        "snowy": "Snö",
+        "snowy-rainy": "Snöblandat",
+        "fog": "Dimmigt",
+        "windy": "Blåsigt",
+        "lightning": "Åska",
+        "lightning-rainy": "Åska och regn"
+      },
+      "dry": "uppehåll",
+      "rain": "{mm} mm regn",
+      "degrees": "{lo}–{hi} grader",
+      "join": "{a} och {b}"
+    },
+    "low": "natt",
+    "dry_day": "uppehåll"
+  },
+  "now": {
+    "now": "UTE NU",
+    "humidity": "Fukt",
+    "wind": "Vind",
+    "pressure": "Tryck",
+    "dew": "Daggpunkt",
+    "updated": "uppdaterad",
+    "stale": "GAMMAL BILD",
+    "battery": "batteri"
+  },
+  "now_rows": {
+    "indoor": "Inne",
+    "feels_like": "Känns som",
+    "humidity": "Fukt",
+    "wind": "Vind",
+    "dew_point": "Daggpunkt",
+    "pressure": "Tryck",
+    "rain_today": "Regn idag"
+  },
+  "footer": {
+    "inside": "Inne: "
+  },
+  "energy": {
+    "price_now": "El nu",
+    "solar_expected_today": "Sol idag förväntat",
+    "solar_now": "Sol nu",
+    "house_now": "Huset nu",
+    "house_today": "Huset idag",
+    "grid_now": "Nät nu",
+    "battery": "Batteri",
+    "title": "ENERGI"
+  },
+  "flow": {
+    "sun": "SOL",
+    "grid": "NÄT",
+    "battery": "BATTERI",
+    "title": "JUST NU · kW"
+  },
+  "chart": {
+    "tomorrow_prices": "morgondagens pris",
+    "tomorrow_due": "kommer ~{at}",
+    "solar_caption": "förväntat idag {total}",
+    "solar_left": " · kvar {left}",
+    "price": "EL",
+    "solar": "SOL",
+    "now": "nu",
+    "sunset": "sol ned",
+    "sunrise": "upp"
+  },
+  "sky": {
+    "sun": "SOLEN",
+    "moon": "MÅNEN",
+    "new": "nymåne",
+    "full": "fullmåne"
+  },
+  "hourly": {
+    "time": "TID",
+    "temp": "TEMP",
+    "rain": "REGN",
+    "wind": "VIND",
+    "price": "EL KR/KWH",
+    "now": "Nu"
+  }
 }

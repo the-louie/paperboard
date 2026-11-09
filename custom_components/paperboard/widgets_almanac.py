@@ -4,22 +4,15 @@ from __future__ import annotations
 
 import datetime as dt
 
-from . import fmt
+from . import fmt, i18n
 from .icons import weather_icon
 from .layouts import Snapshot
 from .style import Theme
 from .svg import Svg
 from .text import Measurer
 from .widgets import Rect
-from .widgets_agenda import HOLIDAY_SV, _start
-from .widgets_weather import DAYS, TODAY, _when
-
-WEEKDAY = {"sv": ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"],
-           "en": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
-MONTH = {"sv": ["januari", "februari", "mars", "april", "maj", "juni", "juli", "augusti",
-                "september", "oktober", "november", "december"],
-         "en": ["January", "February", "March", "April", "May", "June", "July", "August",
-                "September", "October", "November", "December"]}
+from .widgets_agenda import _start
+from .widgets_weather import _when
 
 
 def date_block(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
@@ -31,9 +24,10 @@ def date_block(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Them
     day = str(snap.now.day)
     svg.text(r.x - p(3), r.y + r.h / 2 + big.size * 0.36, day, big)
     x = r.x + measure.width(day, big) + p(10)
-    lines = [(WEEKDAY[lang][snap.now.weekday()], theme.text("m", bold=True)),
-             (f"{MONTH[lang][snap.now.month - 1]} {snap.now.year}", theme.text("s")),
-             (f"{'vecka' if lang == 'sv' else 'week'} {snap.now.isocalendar().week}",
+    lines = [(i18n.tl(lang, "date.weekday")[snap.now.weekday()], theme.text("m", bold=True)),
+             (f"{i18n.tl(lang, 'date.month')[snap.now.month - 1]} {snap.now.year}",
+              theme.text("s")),
+             (f"{i18n.t(lang, 'date.week')} {snap.now.isocalendar().week}",
               theme.text("s"))]
     if flag:
         lines.append((flag, theme.text("s", bold=True)))
@@ -52,8 +46,7 @@ def _events_by_day(snap: Snapshot) -> dict[dt.date, list[tuple[str, str]]]:
             if not isinstance(ev, dict) or (start := _start(ev, tz)) is None:
                 continue
             summary = str(ev.get("summary", ""))
-            if snap.lang == "sv":
-                summary = HOLIDAY_SV.get(summary, summary)
+            summary = i18n.holiday(snap.lang, summary)
             out.setdefault(start.date(), []).append(
                 ("" if ev.get("all_day") else f"{start:%H:%M}", summary))
     for items in out.values():
@@ -82,7 +75,8 @@ def week(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
         if i == 0:
             svg.rect(x, r.y, cw, p(22), theme.ink)
             ink = theme.paper
-        name = TODAY[lang] if i == 0 else DAYS[lang][day.weekday()]
+        name = i18n.t(lang, "date.today") if i == 0 else \
+            i18n.tl(lang, "date.weekday_abbr")[day.weekday()]
         svg.text(x + p(6), r.y + p(16), name.upper(), head, color=ink)
         svg.text(x + cw - p(6), r.y + p(16), str(day.day), theme.text("m", bold=True), "end",
                  ink)

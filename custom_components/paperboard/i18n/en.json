@@ -1,3 +1,178 @@
 {
-  "language": {"name": "English"}
+  "language": {
+    "name": "English"
+  },
+  "date": {
+    "weekday": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "weekday_abbr": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "weekday_abbr_lower": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "month": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "tomorrow_hh": "TOMORROW {hh}",
+    "tomorrow_07": "Tomorrow 07:00",
+    "tomorrow_07_short": "Tomorrow 07",
+    "week": "week",
+    "week_short": "wk"
+  },
+  "agenda": {
+    "none": "No events",
+    "title": "CALENDAR",
+    "all_day": "all day"
+  },
+  "holiday": {
+    "Father's Day": "Father's Day",
+    "Mother's Day": "Mother's Day",
+    "Christmas Eve": "Christmas Eve",
+    "Christmas Day": "Christmas Day",
+    "New Year's Eve": "New Year's Eve",
+    "New Year's Day": "New Year's Day",
+    "Midsummer Eve": "Midsummer Eve",
+    "Midsummer Day": "Midsummer Day",
+    "Easter Sunday": "Easter Sunday",
+    "Good Friday": "Good Friday",
+    "National Day of Sweden": "National Day of Sweden",
+    "All Saints' Day": "All Saints' Day"
+  },
+  "weather": {
+    "condition": {
+      "clear-night": "Clear",
+      "cloudy": "Cloudy",
+      "fog": "Fog",
+      "hail": "Hail",
+      "lightning": "Thunder",
+      "lightning-rainy": "Thunder, rain",
+      "partlycloudy": "Partly cloudy",
+      "pouring": "Pouring",
+      "rainy": "Rain",
+      "snowy": "Snow",
+      "snowy-rainy": "Sleet",
+      "sunny": "Sunny",
+      "windy": "Windy",
+      "windy-variant": "Windy",
+      "exceptional": "Exceptional"
+    },
+    "prose": {
+      "condition": {
+        "cloudy": "Grey",
+        "partlycloudy": "Mixed clouds",
+        "sunny": "Sunny",
+        "clear-night": "Clear",
+        "rainy": "Rainy",
+        "pouring": "Downpours",
+        "snowy": "Snow",
+        "snowy-rainy": "Sleet",
+        "fog": "Foggy",
+        "windy": "Windy",
+        "lightning": "Thunder",
+        "lightning-rainy": "Thunder and rain"
+      },
+      "dry": "dry",
+      "rain": "{mm} mm of rain",
+      "degrees": "{lo} to {hi} degrees",
+      "join": "{a} and {b}"
+    },
+    "low": "low",
+    "dry_day": "dry"
+  },
+  "now": {
+    "now": "OUTSIDE",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "pressure": "Pressure",
+    "dew": "Dew point",
+    "updated": "updated",
+    "stale": "STALE IMAGE",
+    "battery": "battery"
+  },
+  "now_rows": {
+    "indoor": "Indoor",
+    "feels_like": "Feels like",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "dew_point": "Dew point",
+    "pressure": "Pressure",
+    "rain_today": "Rain today"
+  },
+  "footer": {
+    "inside": "Inside: "
+  },
+  "energy": {
+    "price_now": "Power price",
+    "solar_expected_today": "Solar expected today",
+    "solar_now": "Solar now",
+    "house_now": "House now",
+    "house_today": "House today",
+    "grid_now": "Grid now",
+    "battery": "Battery",
+    "title": "ENERGY"
+  },
+  "flow": {
+    "sun": "SOLAR",
+    "grid": "GRID",
+    "battery": "BATTERY",
+    "title": "NOW · kW"
+  },
+  "chart": {
+    "tomorrow_prices": "tomorrow's prices",
+    "tomorrow_due": "due ~{at}",
+    "solar_caption": "expected today {total}",
+    "solar_left": " · {left} to go",
+    "price": "PRICE",
+    "solar": "SOLAR",
+    "now": "now",
+    "sunset": "sunset",
+    "sunrise": "sunrise"
+  },
+  "sky": {
+    "sun": "SUN",
+    "moon": "MOON",
+    "new": "new moon",
+    "full": "full moon"
+  },
+  "hourly": {
+    "time": "TIME",
+    "temp": "TEMP",
+    "rain": "RAIN",
+    "wind": "WIND",
+    "price": "POWER /KWH",
+    "now": "Now"
+  }
 }

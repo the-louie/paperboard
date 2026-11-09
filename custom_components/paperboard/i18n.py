@@ -80,3 +80,19 @@ def tl(lang: str, key: str) -> list[str]:
         return [str(v) for v in value]
     english = _lookup(load_catalogs().get(DEFAULT_LANG, {}), key)
     return [str(v) for v in english] if isinstance(english, list) else []
+
+
+def group(lang: str, key: str) -> dict[str, Any]:
+    """A group of texts (a table of labels) as a dict: English, overlaid with the language's
+    entries, so a partial translation still has every key."""
+    catalogs = load_catalogs()
+    english = _lookup(catalogs.get(DEFAULT_LANG, {}), key)
+    own = _lookup(catalogs.get(lang, {}), key)
+    return {**(english if isinstance(english, dict) else {}),
+            **(own if isinstance(own, dict) else {})}
+
+
+def holiday(lang: str, name: str) -> str:
+    """A holiday calendar's (English) event name in the language, or unchanged."""
+    value = _lookup(load_catalogs().get(lang, {}), "holiday")
+    return str(value.get(name, name)) if isinstance(value, dict) else name
