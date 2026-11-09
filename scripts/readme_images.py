@@ -24,7 +24,7 @@ from custom_components.paperboard.pipeline import PanelProfile, render  # noqa: 
 from custom_components.paperboard.style import Theme  # noqa: E402
 from custom_components.paperboard.text import Measurer  # noqa: E402
 from tests.test_empty_house import EMPTY  # noqa: E402
-from tests.test_layout_tidslinjen import english_owner_snapshot  # noqa: E402
+from tests.test_layout_tidslinjen import english_owner_snapshot, for_layout  # noqa: E402
 
 LAYOUTS = ["tidslinjen", "tidningen", "bento", "tavlan", "trmnl", "almanackan", "energi"]
 
@@ -38,7 +38,7 @@ def main() -> None:
     specs = load_all(None).layouts
     measure = Measurer(load_fonts())
     snap = english_owner_snapshot(lang=args.lang)
-    jobs = [(name, specs[name], snap) for name in LAYOUTS]
+    jobs = [(name, specs[name], for_layout(name, snap)) for name in LAYOUTS]
     jobs.append(("empty_house", specs["tidslinjen"],
                  dataclasses.replace(EMPTY, lang=args.lang, screen_name="Empty")))
     for name, spec, s in jobs:

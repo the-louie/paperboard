@@ -78,6 +78,18 @@ EN_NAMES = {
     "sensor.ecowitt_tempin": "Sunroom",
 }
 EN_SUMMARIES = {"Jobb": "Work"}
+# The energy layout also reads the grid meter and the house's energy today (Sprint 03 T-13).
+ENERGY_ROLES = {"grid_power": "sensor.power_meter_active_power",
+                "house_energy_today": "sensor.house_load_today", "grid_export_positive": True}
+
+
+def for_layout(name: str, snap: Snapshot) -> Snapshot:
+    """The owner snapshot as each bundled layout's golden uses it."""
+    import dataclasses
+
+    if name == "energi":
+        return dataclasses.replace(snap, roles={**snap.roles, **ENERGY_ROLES})
+    return snap
 
 
 def english_owner_snapshot(**kw) -> Snapshot:

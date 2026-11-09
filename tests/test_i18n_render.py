@@ -17,7 +17,7 @@ from custom_components.paperboard.style import Theme
 from custom_components.paperboard.text import Measurer
 from tests.golden_util import assert_golden
 from tests.test_empty_house import EMPTY, GARBAGE
-from tests.test_layout_tidslinjen import english_owner_snapshot, owner_snapshot
+from tests.test_layout_tidslinjen import english_owner_snapshot, for_layout, owner_snapshot
 
 MEASURE = Measurer(load_fonts())
 LAYOUTS = load_all(None).layouts
@@ -36,6 +36,14 @@ ENGLISH = {"today", "tomorrow", "week", "wk", "now", "solar", "price", "prices",
            "feels", "updated", "indoor", "energy", "power", "due", "monday", "sunday"}
 
 
+def _en(name: str):
+    return for_layout(name, english_owner_snapshot())
+
+
+def _sv(name: str):
+    return for_layout(name, owner_snapshot(lang="sv"))
+
+
 def _texts(svg: str) -> list[str]:
     return [html.unescape(t) for t in re.findall(r"<text[^>]*>(.*?)</text>", svg, re.S)]
 
@@ -46,7 +54,7 @@ def _words(texts: list[str]) -> set[str]:
 
 @pytest.mark.parametrize("name", BUNDLED)
 def test_english_has_no_swedish(name: str) -> None:
-    texts = _texts(render_spec(LAYOUTS[name], english_owner_snapshot(), MEASURE, Theme()))
+    texts = _texts(render_spec(LAYOUTS[name], _en(name), MEASURE, Theme()))
     words = _words(texts)
     assert not (words & SWEDISH), (name, sorted(words & SWEDISH))
     assert not any(c in t for t in texts for c in "åäöÅÄÖ"), (name, texts)
@@ -55,7 +63,7 @@ def test_english_has_no_swedish(name: str) -> None:
 
 @pytest.mark.parametrize("name", BUNDLED)
 def test_swedish_has_no_english(name: str) -> None:
-    texts = _texts(render_spec(LAYOUTS[name], owner_snapshot(lang="sv"), MEASURE, Theme()))
+    texts = _texts(render_spec(LAYOUTS[name], _sv(name), MEASURE, Theme()))
     stray = _words(texts) & ENGLISH
     assert not stray, (name, sorted(stray))
 
@@ -63,7 +71,7 @@ def test_swedish_has_no_english(name: str) -> None:
 @pytest.mark.parametrize("name", BUNDLED)
 def test_english_golden(name: str) -> None:
     notes: list[str] = []
-    frame = render(render_spec(LAYOUTS[name], english_owner_snapshot(), MEASURE, Theme(), notes),
+    frame = render(render_spec(LAYOUTS[name], _en(name), MEASURE, Theme(), notes),
                    PanelProfile(), FONT_DIR)
     assert notes == [] and len(frame.png) < 90_000
     assert_golden(f"{name}_owner_en", frame.png)
@@ -109,6 +117,6 @@ def test_readme_image_is_the_english_golden(name: str) -> None:
 def test_english_labels_are_not_cut(name: str) -> None:
     """B-118: English is the default, so no label may end in an ellipsis. Long data lines (the
     footer's room list, the weather summary, a title bar's date line) may still be cut."""
-    texts = _texts(render_spec(LAYOUTS[name], english_owner_snapshot(), MEASURE, Theme()))
+    texts = _texts(render_spec(LAYOUTS[name], _en(name), MEASURE, Theme()))
     cut = [t for t in texts if "…" in t and " · " not in t]
     assert not cut, (name, cut)
