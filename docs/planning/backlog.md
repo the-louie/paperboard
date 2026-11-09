@@ -187,7 +187,7 @@ optional swedish", "we need this in next version, it can be 0.2.0".
       Once as `test_subentry_flow::test_layout_is_a_dropdown_with_bundled_and_own_files`
       (error, not failure: setup/teardown), once unnamed; reruns pass. Find the leaking timer
       or task.
-- [ ] **B-116 · decision: release 0.2.0** · 1h · prio P1 · needs: B-115 · src: owner
+- [x] **B-116 · decision: release 0.2.0** · owner 2026-11-09: "0.1.2 was never pushed, merge it into 0.2.0"; bumped and tagged locally, owner pushes · 1h · prio P1 · needs: B-115 · src: owner
       Version bump and tag by Claude; push, release and HACS check by the owner.
 
 ## Cross-cutting

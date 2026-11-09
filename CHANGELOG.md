@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-09
+
+British English by default, Swedish optional, more languages by contribution. Paperboard is
+now in the HACS default list.
+
 ### Added
 - **British English is the default language**, Swedish is optional, and more languages can be
   contributed with two JSON files ([Add a language](CONTRIBUTING.md#add-a-language)). Every
@@ -16,21 +21,17 @@ All notable changes to this project are documented here. The format follows
 - Layout names follow the language: Timeline, Newspaper, Board, Almanac and Energy in English.
   The ids (`tidslinjen` …) are unchanged, so existing screens keep their layout.
 - Numbers use a decimal point in English (2.8°) and a comma in Swedish (2,8°).
-
-### Fixed
-- The Swedish "indoor" label said "Uterum" (one home's sunroom); it now says "Inne".
-
-## [0.1.2] - 2026-11-09
-
-Paperboard is now in the HACS default list.
-
-### Changed
 - Bundled layouts follow Home Assistant's language everywhere: the chart labels and the
   section titles of Tidningen, Bento and TRMNL were Swedish in English too. A layout `title`
   option can now be one string per language (`{en: Weather, sv: Vädret}`).
+- Where a full English label does not fit a narrow cell, a short form is used ("Solar today",
+  "Tmrw 07").
 - README images are in English (`scripts/readme_images.py`).
 - README: install by searching for Paperboard in HACS (with a one-click button); the custom
   repository route stays as a fallback.
+
+### Fixed
+- The Swedish "indoor" label said "Uterum" (one home's sunroom); it now says "Inne".
 
 ## [0.1.1] - 2026-11-09
 
@@ -96,7 +97,7 @@ First public version.
   actually given to the device, so night schedules no longer trigger it.
 - Widget spacing scales on large panels such as the TRMNL X.
 
-[Unreleased]: https://github.com/the-louie/paperboard/compare/v0.1.2...HEAD
-[0.1.2]: https://github.com/the-louie/paperboard/compare/v0.1.1...v0.1.2
+[Unreleased]: https://github.com/the-louie/paperboard/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/the-louie/paperboard/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/the-louie/paperboard/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/the-louie/paperboard/releases/tag/v0.1.0
