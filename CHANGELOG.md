@@ -6,6 +6,20 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- **British English is the default language**, Swedish is optional, and more languages can be
+  contributed with two JSON files ([Add a language](CONTRIBUTING.md#add-a-language)). Every
+  text on the screen comes from `i18n/<lang>.json`; anything missing falls back to English.
+- A layout's `lang:` accepts any language code; `title` options accept catalog keys.
+
+### Changed
+- Layout names follow the language: Timeline, Newspaper, Board, Almanac and Energy in English.
+  The ids (`tidslinjen` …) are unchanged, so existing screens keep their layout.
+- Numbers use a decimal point in English (2.8°) and a comma in Swedish (2,8°).
+
+### Fixed
+- The Swedish "indoor" label said "Uterum" (one home's sunroom); it now says "Inne".
+
 ## [0.1.2] - 2026-11-09
 
 Paperboard is now in the HACS default list.

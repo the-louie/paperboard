@@ -35,17 +35,20 @@ Seven layouts are bundled. Each is a YAML file, and you can write your own.
 
 | | |
 |---|---|
-| **Tidslinjen** — now, expected solar and price on one 24-hour axis, six days, energy | **Tidningen** — a newspaper page with a written headline; warning days invert |
+| **Timeline** (`tidslinjen`) — now, expected solar and price on one 24-hour axis, six days, energy | **Newspaper** (`tidningen`) — a newspaper page with a written headline; warning days invert |
 | ![](docs/images/tidslinjen.png) | ![](docs/images/tidningen.png) |
-| **Bento** — tiles with a black hero | **Tavlan** — the morning board: hour by hour with price |
+| **Bento** (`bento`) — tiles with a black hero | **Board** (`tavlan`) — the morning board: hour by hour with price |
 | ![](docs/images/bento.png) | ![](docs/images/tavlan.png) |
-| **TRMNL** — TRMNL's own visual language | **Almanackan** — calendar first: the week with weather and events |
+| **TRMNL** (`trmnl`) — TRMNL's own visual language | **Almanac** (`almanackan`) — calendar first: the week with weather and events |
 | ![](docs/images/trmnl.png) | ![](docs/images/almanackan.png) |
-| **Energi** — energy flow, price and expected solar stacked on one axis | **The same Tidslinjen in a house with no entities at all** |
+| **Energy** (`energi`) — energy flow, price and expected solar stacked on one axis | **The same Timeline in a house with no entities at all** |
 | ![](docs/images/energi.png) | ![](docs/images/empty_house.png) |
 
-**Language:** Swedish and English, following Home Assistant's language unless a layout pins
-one.
+**Language:** British English by default, and Swedish. The screen follows Home Assistant's
+language (Settings → System → General); a language Paperboard does not have yet falls back to
+English, and a layout can pin one with `lang:`. The name in brackets is the layout's id, used
+in files and settings; it is the same in every language. Want your language? See
+[Add a language](CONTRIBUTING.md#add-a-language).
 
 ## Install
 

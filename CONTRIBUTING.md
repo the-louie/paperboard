@@ -15,9 +15,31 @@ By taking part you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 - **Share a layout:** a layout is one YAML file
   ([format](docs/design/layout-schema.md)). Open a pull request that adds it to
   `custom_components/paperboard/layouts_yaml/` together with a golden image (see below).
-- **Translate:** copy `custom_components/paperboard/translations/en.json` to your language
-  code (e.g. `de.json`) and translate the values, not the keys.
+- **Translate:** see [Add a language](#add-a-language) below.
 - **Security issues:** do **not** open a public issue; see [SECURITY.md](SECURITY.md).
+
+## Add a language
+
+Paperboard has two sets of texts, and a language needs both. English (British) is the source.
+
+1. **What the screen shows** (weekdays, labels, weather words, layout names):
+   copy `custom_components/paperboard/i18n/en.json` to `i18n/<code>.json`.
+2. **Home Assistant's dialogs** (setup, options, Repairs):
+   copy `custom_components/paperboard/translations/en.json` to `translations/<code>.json`.
+
+Use Home Assistant's language code as the file name (`de`, `nb`, `pt-BR`). Then:
+
+- **Translate the values, never the keys.** Keep every `{placeholder}` as it is, and keep each
+  list's length (7 weekdays, 12 months).
+- **`holiday`** maps the English names Home Assistant's holiday calendar uses to your
+  language; leave a name as it is if your language uses the English one.
+- **Short labels matter:** the screen is 800×480 and some cells are narrow. Render your
+  language and look at it: `python scripts/readme_images.py` writes the README images in the
+  default language; change `lang=` in it to see yours.
+- **Check:** `python -m pytest tests/test_i18n.py tests/test_i18n_core.py tests/test_i18n_render.py`.
+  The parity test fails on a missing or extra key or a lost placeholder.
+- Open a pull request. A partial translation still works: anything missing falls back to
+  English, so you can start small.
 
 ## AI-assisted contributions
 

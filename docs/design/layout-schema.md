@@ -36,7 +36,7 @@ works in every home.
 | `grid` | map, required | See below. |
 | `widgets` | list, required | See below. |
 | `clock_resolution` | seconds, default 300 | How often the visible clock may change the image. |
-| `lang` | `auto`/`sv`/`en`, default `auto` | `auto` follows HA's language. |
+| `lang` | `auto` or a language code (`en`, `sv`, `pt-BR`), default `auto` | `auto` follows HA's language; a language without a catalog falls back to English. |
 
 ### Grid
 
@@ -73,8 +73,9 @@ widgets:
     collapse: none
 ```
 
-A `title` option may be a plain string or one string per language, picked by Home Assistant's
-language, with English as the fallback: `title: {en: Weather, sv: Vädret}`.
+A `title` option may be a plain string, a catalog key (`title: {key: section.home}`, what the
+bundled layouts use, so a translator only touches `i18n/<code>.json`), or one string per
+language for your own layouts (`title: {en: Weather, sv: Vädret}`, English as the fallback).
 
 | Type | Roles read | Key options |
 |---|---|---|
