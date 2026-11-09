@@ -120,3 +120,34 @@ async def test_long_id_is_capped_and_still_authenticates(hass: HomeAssistant, hu
     assert (await dev.setup())["status"] == 200
     assert hub_entry.runtime_data.devices.devices["screen1"].mac == "X" * 64
     assert (await dev.display())["status"] in (0, 202)
+
+
+async def _setup_with(client, headers: dict[str, str]) -> dict:
+    resp = await client.get("/api/setup", headers={"ID": "02:00:00:00:00:cc", **headers})
+    return await resp.json()
+
+
+async def test_proxy_naming_an_outside_client_cannot_pair(hass: HomeAssistant, hub_entry,
+                                                          hass_client_no_auth) -> None:
+    """A proxy HA is not configured for hides the caller behind its own LAN address; the
+    client address it forwards must be local too."""
+    client = await hass_client_no_auth()
+    await _press_pair(hass)
+    for headers in ({"X-Real-IP": "203.0.113.7"},
+                    {"CF-Connecting-IP": "203.0.113.7"},
+                    {"True-Client-IP": "2001:db8::7"},
+                    {"Forwarded": 'for=203.0.113.7;proto=https'},
+                    {"Forwarded": 'for="[2001:db8::7]:443"'},
+                    {"Forwarded": "for=_hidden"}):
+        data = await _setup_with(client, headers)
+        assert data["status"] == 404 and "local network" in data["message"], headers
+    assert hub_entry.runtime_data.pairing_target() == "screen1"  # still open for the panel
+
+
+async def test_proxy_naming_a_lan_client_still_pairs(hass: HomeAssistant, hub_entry,
+                                                     hass_client_no_auth) -> None:
+    client = await hass_client_no_auth()
+    await _press_pair(hass)
+    assert (await _setup_with(client, {"X-Real-IP": "192.168.1.50:4321"}))["status"] == 200
+    await _press_pair(hass)
+    assert (await _setup_with(client, {"Forwarded": "for=10.0.0.5"}))["status"] == 200

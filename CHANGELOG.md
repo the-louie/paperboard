@@ -11,6 +11,9 @@ All notable changes to this project are documented here. The format follows
   `bmp_path`), which every Home Assistant user can read and the recorder keeps. The links are
   now shown in the screen's **Reconfigure** dialog, for admins only. **If you used 0.1.0,
   press Rotate image link once:** the old token is in your recorder history.
+- Pairing also checks the client address a reverse proxy forwards (`X-Forwarded-For`,
+  `X-Real-IP`, `Forwarded`, `CF-Connecting-IP`, `True-Client-IP`): a proxy Home Assistant is
+  not configured for could otherwise make an internet caller look local.
 - A panel that was paired before no longer re-pairs without the pairing window. Its MAC address
   was enough, and any device on the local network can see a MAC, take a key, read the
   dashboard and lock the real panel out. After a factory reset, press **Pair device** once.

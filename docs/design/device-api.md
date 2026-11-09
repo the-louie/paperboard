@@ -157,6 +157,10 @@ service do.
 - **Nabu Casa / internet exposure:** the device endpoints are reachable wherever HA is. After
   pairing that is harmless (keys required). Pairing itself is LAN-only. The README must say:
   point devices at the LAN URL.
+  - **Proxies:** a reverse proxy that HA is not configured for makes every caller look like
+    the proxy's LAN address. So the client addresses in `X-Forwarded-For`, `X-Real-IP`,
+    `Forwarded`, `CF-Connecting-IP` and `True-Client-IP` must be local too; an unparsable one
+    counts as not local, and a refusal logs one warning naming the forwarded address.
 - **Stored secrets:**
   - Device keys live in `.storage/paperboard.<entry>.devices`.
   - Image tokens live in the config subentry (`.storage/core.config_entries`).

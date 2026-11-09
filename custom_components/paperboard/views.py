@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import hmac
 import json
+import logging
 import time
 from http import HTTPStatus
 from ipaddress import ip_address
@@ -23,6 +24,8 @@ from .const import DOMAIN, SIGNAL_CHECKIN
 from .devices import new_device
 from .runtime import HubRuntime, ScreenRuntime
 
+_LOGGER = logging.getLogger(__name__)
+
 IMAGE_URL = "/api/paperboard/image/{screen_id}/{token}/{filename}"
 
 
@@ -37,14 +40,60 @@ def base_url(hub: HubRuntime, request: web.Request) -> str:
     return hub.base_url or f"{request.scheme}://{request.host}"
 
 
+# Headers in which proxies name the client. HA only rewrites request.remote for a configured
+# trusted proxy (use_x_forwarded_for + trusted_proxies), so a proxy it does not know about
+# shows up only here. A panel talking to HA directly never sends any of them.
+_CLIENT_IP_HEADERS = ("X-Forwarded-For", "X-Real-IP", "CF-Connecting-IP", "True-Client-IP")
+
+
+def _parse_addr(value: str) -> str:
+    """'1.2.3.4', '1.2.3.4:5678', '[2001:db8::1]:443', '"[::1]"' -> the bare address."""
+    value = value.strip().strip('"')
+    if value.startswith("["):
+        return value[1:value.find("]")] if "]" in value else value
+    if value.count(":") == 1:  # IPv4 with a port; a bare IPv6 address has several colons
+        return value.split(":")[0]
+    return value
+
+
+def forwarded_clients(request: web.Request) -> list[str]:
+    """Every client address a proxy put in the request headers."""
+    found: list[str] = []
+    for name in _CLIENT_IP_HEADERS:
+        for value in request.headers.getall(name, []):
+            found += [_parse_addr(v) for v in value.split(",") if v.strip()]
+    for value in request.headers.getall("Forwarded", []):
+        for part in value.replace(",", ";").split(";"):
+            key, _, val = part.strip().partition("=")
+            if key.lower() == "for":
+                found.append(_parse_addr(val))
+    return found
+
+
 def from_local_network(hass: HomeAssistant, request: web.Request) -> bool:
-    """True for LAN/loopback clients that did not come in through Nabu Casa."""
+    """True for LAN/loopback clients that came in neither through Nabu Casa nor through a
+    proxy that names a client outside the LAN. An address that cannot be parsed (for example
+    an obfuscated `Forwarded: for=_hidden`) counts as not local."""
     if is_cloud_connection(hass):
         return False
     try:
-        return is_local(ip_address(request.remote or ""))
+        if not is_local(ip_address(request.remote or "")):
+            return False
     except ValueError:
         return False
+    for addr in forwarded_clients(request):
+        try:
+            local = is_local(ip_address(addr))
+        except ValueError:
+            local = False
+        if not local:
+            _LOGGER.warning(
+                "Pairing refused: the request came through a proxy on behalf of %s, which is "
+                "not on the local network. Pair the panel from the local network, or set "
+                "use_x_forwarded_for and trusted_proxies under http: if the proxy is yours",
+                addr[:64])
+            return False
+    return True
 
 
 MAX_ID_LEN = 64  # a MAC is 17; BYOD panels and emulators may send other IDs, so no format check

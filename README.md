@@ -76,7 +76,8 @@ short version:
    follows the model the device reports, from 58 TRMNL models, Kindles and BYOD panels.
 3. **Pair:** press the screen's **Pair device** button. You then have **5 minutes**.
    - On the device's setup portal, choose **Custom server** and enter the base URL.
-   - Pairing only works from your local network, never through the cloud URL.
+   - Pairing only works from your local network, never through the cloud URL or through a
+     proxy on behalf of a caller outside it.
    - After a factory reset, press **Pair device** again: a MAC address proves nothing, so a
      panel is never re-paired without the window.
 
