@@ -34,8 +34,8 @@ Use Home Assistant's language code as the file name (`de`, `nb`, `pt-BR`). Then:
 - **`holiday`** maps the English names Home Assistant's holiday calendar uses to your
   language; leave a name as it is if your language uses the English one.
 - **Short labels matter:** the screen is 800×480 and some cells are narrow. Render your
-  language and look at it: `python scripts/readme_images.py` writes the README images in the
-  default language; change `lang=` in it to see yours.
+  language and look at it: `python scripts/readme_images.py --lang <code> --out /tmp/pb`
+  writes every bundled layout in your language.
 - **Check:** `python -m pytest tests/test_i18n.py tests/test_i18n_core.py tests/test_i18n_render.py`.
   The parity test fails on a missing or extra key or a lost placeholder.
 - Open a pull request. A partial translation still works: anything missing falls back to

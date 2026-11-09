@@ -1,7 +1,7 @@
 # Sprint 04 — Internationalisation (0.2.0)
 **Status:** active (opened 2026-11-09)
-**Current ticket:** T-09
-**Last completed:** T-08
+**Current ticket:** T-11
+**Last completed:** T-10
 **Budget:** 31h estimated (band 80–120h). **Below the band on purpose:** the owner scoped this
 loop to the 0.2.0 internationalisation rows only (B-105 to B-115); B-116 is the owner's release.
 
@@ -26,8 +26,8 @@ language with two JSON files. Plan and test plan: `docs/design/i18n.md`.
 | T-06 | Numbers follow the language | 2 | T-01 | B-110 | done | fmt default en; now_block passed no lang (4 calls) |
 | T-07 | Test suite for i18n | 5 | T-02..T-06 | B-111 | done | stray-word tests both ways (mutation-checked), 7 `*_owner_en` goldens, empty in every language, renderer follows HA |
 | T-08 | HA UI texts audit | 1 | — | B-112 | done | already British and complete; spelling guard test added |
-| T-09 | Docs: add-a-language guide, README language section | 2 | T-01, T-05 | B-113 | todo | |
-| T-10 | README images from the English default | 1 | T-07 | B-114 | todo | |
+| T-09 | Docs: add-a-language guide, README language section | 2 | T-01, T-05 | B-113 | done | e4a02f1 |
+| T-10 | README images from the English default | 1 | T-07 | B-114 | done | images = English goldens, guarded by a test; --lang for translators |
 | T-11 | End-to-end language check in a throwaway HA | 2 | T-07 | B-115 | todo | |
 
 ## Scope changes
