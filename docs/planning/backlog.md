@@ -99,7 +99,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
 - ~~**B-060 · Schedule: time-of-day layouts**~~ — CLOSED 2026-11-08 (Sprint 03 T-06): see commit "T-06: Schedule: time-of-day layouts"
 - ~~**B-061 · Night sleep and refresh policy**~~ — CLOSED 2026-11-08 (Sprint 03 T-07): see commit "T-07: Night sleep and refresh policy"
 - ~~**B-062 · decision: which layout when**~~ — CLOSED 2026-11-08: owner accepted: Tavlan 06:30–08:00 on weekdays, Tidslinjen otherwise, 23:00–06:00 waking hourly (`hallen.yaml` on ha-host).
-- [ ] **B-063 · decision: decommission byos-host trmnl-byos and the screenshot cron** · 1h · prio P3 · needs: B-026, B-062 · src: V phase 3
+- [x] **B-063 · decision: decommission byos-host trmnl-byos and the screenshot cron** · done 2026-11-09 (owner): container removed, cron removed, HA dashboard and helper sensors removed · 1h · prio P3 · needs: B-026, B-062 · src: V phase 3
       After one stable week. Claude prepares the steps, and the owner OKs them.
 
 ## Phase 4 — Other panels (goal: a second panel type from the same layouts)
@@ -187,7 +187,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       - Text and commit messages: person and room names, the street, the commit address,
         internal IPs, host names and private paths are replaced with neutral ones.
       - The full-history scan finds 0 matches afterwards.
-- [ ] **B-096 · Type scale on big panels: pixel fonts stop at 21 px** · 3h · prio P3 · src: B-087 review 2026-11-09
+- [x] **B-096 · Type scale on big panels: pixel fonts stop at 21 px** · closed 2026-11-09 by the owner, not done · 3h · prio P3 · src: B-087 review 2026-11-09
       On TRMNL X (scale 1.8) spacing grows but the TRMNL pixel fonts cap at 21 px, so small and
       medium text looks sparse and the "Imorgon" badge is a 56 px box around 21 px text.
       Option: above a scale threshold, map xs/s/m to Inter at scaled sizes (Inter is crisp at
