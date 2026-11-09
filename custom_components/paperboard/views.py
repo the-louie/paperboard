@@ -47,6 +47,15 @@ def from_local_network(hass: HomeAssistant, request: web.Request) -> bool:
         return False
 
 
+MAX_ID_LEN = 64  # a MAC is 17; BYOD panels and emulators may send other IDs, so no format check
+
+
+def device_id(request: web.Request) -> str:
+    """The device's ID header, stripped, upper-cased and capped, the same everywhere it is read
+    so the stored value and the lookup value always match."""
+    return request.headers.get("ID", "").strip()[:MAX_ID_LEN].upper()
+
+
 def _json(payload: dict) -> web.Response:
     """Uncompressed JSON (HomeAssistantView.json() gzips bodies over 1 kB)."""
     return web.Response(text=json.dumps(payload), content_type="application/json")
@@ -107,7 +116,7 @@ class SetupView(HomeAssistantView):
 
     async def get(self, request: web.Request) -> web.Response:
         hub = _hub(self.hass)
-        mac = request.headers.get("ID", "").strip()
+        mac = device_id(request)
         if hub is None or not mac:
             return _json({"status": 404, "message": "Missing device ID"})
         # Pairing needs the window, also for a MAC this hub already knows: the MAC is visible to
@@ -143,7 +152,7 @@ TELEMETRY_HEADERS = ("Battery-Voltage", "RSSI", "FW-Version", "Model", "Width", 
 
 def _authenticated_screen(hub: HubRuntime | None, request: web.Request) -> ScreenRuntime | None:
     """The screen whose paired device matches the ID + Access-Token headers."""
-    mac = request.headers.get("ID", "").strip().upper()
+    mac = device_id(request)
     token = request.headers.get("Access-Token", "")
     screen_id = hub.devices.screen_for_mac(mac) if hub and mac else None
     device = hub.devices.devices.get(screen_id) if hub and screen_id else None
@@ -188,7 +197,7 @@ class DisplayView(HomeAssistantView):
                           "refresh_rate": 60})
         screen = _authenticated_screen(hub, request)
         if screen is None:
-            mac = request.headers.get("ID", "").strip().upper()
+            mac = device_id(request)
             hub.last_rejected = {"mac": mac or "?", "ip": request.remote or "?",
                                  "at": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
             # JSON status 500 without reset_firmware: the firmware drops its key and re-runs

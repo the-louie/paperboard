@@ -109,3 +109,14 @@ async def test_open_window_beats_known_device(hass: HomeAssistant, hub_entry,
     await _press_pair(hass)
     assert (await FakeTrmnl(client, mac="02:00:00:00:00:aa").setup())["status"] == 200
     assert hub_entry.runtime_data.pairing_target() is None
+
+
+async def test_long_id_is_capped_and_still_authenticates(hass: HomeAssistant, hub_entry,
+                                                         hass_client_no_auth) -> None:
+    """An ID header is stored at most 64 characters long; the same long ID still polls."""
+    client = await hass_client_no_auth()
+    await _press_pair(hass)
+    dev = FakeTrmnl(client, mac="x" * 100)
+    assert (await dev.setup())["status"] == 200
+    assert hub_entry.runtime_data.devices.devices["screen1"].mac == "X" * 64
+    assert (await dev.display())["status"] in (0, 202)
