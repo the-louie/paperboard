@@ -165,7 +165,7 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       docs/configuration.md (every setting; the roles table is generated from strings.json),
       docs/README.md (index); README badges, a configuration link and a Contributing section.
       All local doc links checked.
-- [ ] **B-099 · decision: privacy scrub before the repository goes public** · 2h · prio P1 · needs: owner · src: B-100 review 2026-11-09
+- [x] **B-099 · decision: privacy scrub before the repository goes public** · 2h · prio P1 · needs: owner · src: B-100 review 2026-11-09
       Found 2026-11-09:
       - The children's first names are in room-sensor names in `tests/fixtures/states/owner_2026-11-08.json`
         and so in the "owner" goldens and **the README screenshots** (footer: "Sovrum a …").
@@ -176,6 +176,17 @@ This is the first refinement pass of the 6-phase plan (R §phases).
       remove CLAUDE.md from the public tree (or .gitignore it); keep or drop the planning notes.
       History: the names are in earlier commits too, so going public needs either a fresh
       history (squash to one initial commit) or a history rewrite.
+      **Done 2026-11-09 (owner: "CLAUDE.md and other claude-files should never get committed ...
+      the same with persons names, addresses and similar, should not be committed and should be
+      removed from history"):** history rewritten with git-filter-repo, keeping all 265 commits.
+      - `CLAUDE.md` is removed from every commit and is now in `.gitignore`, with
+        `CLAUDE.local.md` and `.claude/`.
+      - Every PNG under `tests/golden/` and `docs/images/` is removed from history, then
+        regenerated from the scrubbed fixture in one commit. 27 of the 41 images are
+        pixel-identical; the rest differ only where names were.
+      - Text and commit messages: person and room names, the street, the commit address,
+        internal IPs, host names and private paths are replaced with neutral ones.
+      - The full-history scan finds 0 matches afterwards.
 - [ ] **B-096 · Type scale on big panels: pixel fonts stop at 21 px** · 3h · prio P3 · src: B-087 review 2026-11-09
       On TRMNL X (scale 1.8) spacing grows but the TRMNL pixel fonts cap at 21 px, so small and
       medium text looks sparse and the "Imorgon" badge is a 56 px box around 21 px text.

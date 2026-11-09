@@ -4,3 +4,8 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 tests/output/
+
+# AI-assistant files: local only, never committed (owner 2026-11-09)
+CLAUDE.md
+CLAUDE.local.md
+.claude/
