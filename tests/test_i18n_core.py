@@ -80,3 +80,23 @@ def test_numbers_follow_the_language() -> None:
     assert fmt.with_unit(-0.84, "°", 1, "sv") == "−0,8°"
     assert fmt.number(2.84, 1, "pt-BR") == "2,8"  # base language decides
     assert fmt.signed(1.25, 1, "en") == "+1.2" or fmt.signed(1.25, 1, "en") == "+1.3"
+
+
+def test_english_is_british() -> None:
+    """Owner 2026-11-09: British English is the default (colour, centre, grey, metre)."""
+    import json
+    import re
+    from pathlib import Path
+
+    base = Path(i18n.__file__).parent
+    american = re.compile(r"\b(colors?|centers?|centered|gray|behaviors?|favorites?|"
+                          r"customiz\w*|organiz\w*|prioritiz\w*|analyz\w*|catalogs?|dialogs?)\b",
+                          re.I)
+    product_names = {"Kobo Libra Color"}
+    files = (base / "strings.json", base / "translations" / "en.json", base / "i18n" / "en.json")
+    for path in files:
+        text = json.dumps(json.loads(path.read_text(encoding="utf-8")), ensure_ascii=False)
+        for name in product_names:
+            text = text.replace(name, "")
+        hits = {m.group(0) for m in american.finditer(text)}
+        assert not hits, (path.name, sorted(hits))
