@@ -13,8 +13,8 @@ All notable changes to this project are documented here. The format follows
 - A panel that was paired before and asks to pair again (after a reset) raises a Repairs
   issue telling you to press Pair device, with the address it asked from and the address it
   last checked in from.
-- A device that polls more than 10 times in an hour without a valid key raises a Repairs
-  issue.
+- A device on your network that polls more than 10 times in an hour without a valid key
+  raises a Repairs issue.
 
 ### Security
 - The image link's token is no longer in the image entity's attributes (`png_path`,

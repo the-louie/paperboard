@@ -117,8 +117,9 @@ Sources: research notes (firmware `5246feb`, 1.8.19) and the owner's working trm
    also the migration path from trmnl-service, whose MAC-derived key paperboard does not know.
    - It is returned, never raised, so HA's ip_ban is untouched (T-03).
    - Each such event updates a diagnostic "last rejected device" with MAC, time and IP. A
-     Repairs issue is raised when one device ID polls with a wrong key more than 10 times in
-     an hour (at most 50 IDs are tracked). The next pairing clears it.
+     Repairs issue is raised when one device ID on the LAN polls with a wrong key more than
+     10 times in an hour (at most 50 IDs are tracked; requests without an ID or from outside
+     the LAN are not counted). The next pairing clears it.
 5. **Re-pair:** pressing Pair on a screen that already has a device replaces the binding at
    the next setup. The old key stops working at once.
 

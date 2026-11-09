@@ -235,3 +235,28 @@ async def test_rejected_polls_raise_one_bounded_alert(hass: HomeAssistant, hub_e
     await _press_pair(hass)
     await FakeTrmnl(client, mac="02:00:00:00:00:aa").setup()
     assert issues.async_get_issue("paperboard", "unknown_device") is None
+
+
+async def test_rejected_polls_from_outside_or_without_id_do_not_alert(
+        hass: HomeAssistant, hub_entry, hass_client_no_auth) -> None:
+    """Internet scanners on an exposed HA must not raise "a device on your network"."""
+    from homeassistant.helpers import issue_registry as ir
+
+    client = await hass_client_no_auth()
+    for _ in range(15):
+        await client.get("/api/display")
+        await client.get("/api/display", headers={"ID": "02:00:00:00:00:ee",
+                                                  "Access-Token": "x",
+                                                  "X-Real-IP": "203.0.113.7"})
+    assert ir.async_get(hass).async_get_issue("paperboard", "unknown_device") is None
+    assert not hub_entry.runtime_data.rejected_polls
+
+
+async def test_repair_notice_check_does_not_log_pairing_refused(
+        hass: HomeAssistant, hub_entry, hass_client_no_auth, caplog) -> None:
+    client = await hass_client_no_auth()
+    await _press_pair(hass)
+    await FakeTrmnl(client, mac="02:00:00:00:00:aa").setup()
+    await client.get("/api/setup", headers={"ID": "02:00:00:00:00:aa",
+                                            "X-Real-IP": "203.0.113.7"})
+    assert "Pairing refused" not in caplog.text

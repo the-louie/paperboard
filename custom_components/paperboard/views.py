@@ -72,7 +72,7 @@ def forwarded_clients(request: web.Request) -> list[str]:
     return found
 
 
-def from_local_network(hass: HomeAssistant, request: web.Request) -> bool:
+def from_local_network(hass: HomeAssistant, request: web.Request, log: bool = True) -> bool:
     """True for LAN/loopback clients that came in neither through Nabu Casa nor through a
     proxy that names a client outside the LAN. An address that cannot be parsed (for example
     an obfuscated `Forwarded: for=_hidden`) counts as not local."""
@@ -89,6 +89,8 @@ def from_local_network(hass: HomeAssistant, request: web.Request) -> bool:
         except ValueError:
             local = False
         if not local:
+            if not log:
+                return False
             _LOGGER.warning(
                 "Pairing refused: the request came through a proxy on behalf of %s, which is "
                 "not on the local network. Pair the panel from the local network, or set "
@@ -162,7 +164,7 @@ def _ask_owner_to_repair(hass: HomeAssistant, hub: HubRuntime, mac: str,
     both addresses so a stranger using the panel's MAC stands out."""
     screen_id = hub.devices.screen_for_mac(mac)
     screen = hub.screens.get(screen_id) if screen_id else None
-    if screen is None or not from_local_network(hass, request):
+    if screen is None or not from_local_network(hass, request, log=False):
         return
     device = hub.devices.devices[screen.subentry_id]
     ir.async_create_issue(
@@ -177,11 +179,16 @@ MAX_TRACKED_REJECTED = 50
 REJECTED_ALERT_PER_HOUR = 10
 
 
-def _count_rejected(hass: HomeAssistant, hub: HubRuntime, mac: str, remote: str) -> None:
-    """Raise a Repairs issue when one device ID polls with a wrong key more than 10 times an
-    hour. Bounded: at most 50 IDs are tracked, so random IDs cannot fill memory."""
+def _count_rejected(hass: HomeAssistant, hub: HubRuntime, mac: str,
+                    request: web.Request) -> None:
+    """Raise a Repairs issue when one device ID on the LAN polls with a wrong key more than 10
+    times an hour. Requests without an ID or from outside the LAN (internet scanners on an
+    exposed HA) are not counted: the alert speaks of a device on your network. Bounded: at
+    most 50 IDs are tracked, so random IDs cannot fill memory."""
+    if not mac or not from_local_network(hass, request, log=False):
+        return
     now = time.time()
-    key = mac or "?"
+    key = mac
     polls = [t for t in hub.rejected_polls.pop(key, []) if now - t < 3600] + [now]
     hub.rejected_polls[key] = polls[-(REJECTED_ALERT_PER_HOUR + 1):]
     while len(hub.rejected_polls) > MAX_TRACKED_REJECTED:
@@ -190,7 +197,7 @@ def _count_rejected(hass: HomeAssistant, hub: HubRuntime, mac: str, remote: str)
         ir.async_create_issue(
             hass, DOMAIN, "unknown_device", is_fixable=False,
             severity=ir.IssueSeverity.WARNING, translation_key="unknown_device",
-            translation_placeholders={"mac": key[-5:], "ip": remote})
+            translation_placeholders={"mac": key[-5:], "ip": request.remote or "?"})
 
 
 def _notify_paired(hass: HomeAssistant, screen: ScreenRuntime, device: PairedDevice,
@@ -311,7 +318,7 @@ class DisplayView(HomeAssistantView):
             mac = device_id(request)
             hub.last_rejected = {"mac": mac or "?", "ip": request.remote or "?",
                                  "at": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
-            _count_rejected(self.hass, hub, mac, request.remote or "?")
+            _count_rejected(self.hass, hub, mac, request)
             # JSON status 500 without reset_firmware: the firmware drops its key and re-runs
             # setup (which only succeeds inside a pairing window). Never a full reset.
             return _json({"status": 500, "message": "Unknown device, re-running setup"})
