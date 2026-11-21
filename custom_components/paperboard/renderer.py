@@ -53,8 +53,12 @@ class ScreenRenderer:
     """Keeps one screen's frame current."""
 
     def __init__(self, hass: HomeAssistant, screen: ScreenRuntime, layout: Layout,
-                 profile: PanelProfile, fonts: FontRegistry, hub: Any = None) -> None:
-        self.hass, self.screen, self.layout, self.profile = hass, screen, layout, profile
+                 profile: PanelProfile, fonts: FontRegistry, hub: Any = None,
+                 rotation: int = 0) -> None:
+        self.hass, self.screen, self.layout = hass, screen, layout
+        self.rotation = rotation
+        self.profile = PanelProfile(profile.width, profile.height, profile.bit_depth,
+                                    profile.byte_limit, (profile.rotation + rotation) % 360)
         self.fonts = fonts
         self._measurer = Measurer(fonts)
         self._last_hash: str | None = None
@@ -153,7 +157,8 @@ class ScreenRenderer:
             return
         t = self.screen.telemetry
         prof = resolve_profile(t.get("Model"), to_int(t.get("Width")), to_int(t.get("Height")))
-        wanted = PanelProfile(prof.width, prof.height, prof.bit_depth, prof.byte_limit)
+        wanted = PanelProfile(prof.width, prof.height, prof.bit_depth, prof.byte_limit,
+                              (prof.rotation + self.rotation) % 360)
         if wanted == self.profile:
             return
         self.profile = wanted

@@ -12,6 +12,7 @@ from custom_components.paperboard.pipeline import (
     PipelineError,
     render,
 )
+from custom_components.paperboard.profiles import resolve
 
 SVG = ('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480">'
        '<rect width="800" height="480" fill="#fff"/>'
@@ -82,6 +83,26 @@ def test_4bit_has_sixteen_levels_at_most() -> None:
     assert set(img.convert("L").tobytes()) <= {i * 17 for i in range(16)}
 
 
+@pytest.mark.parametrize(("rotation", "size"), [(90, (480, 800)), (180, (800, 480)),
+                                                 (270, (480, 800))])
+def test_rotation_changes_output_orientation(rotation: int, size: tuple[int, int]) -> None:
+    frame = render(SVG, PanelProfile(rotation=rotation), FONT_DIR)
+    assert _decode(frame.png).size == size
+
+
+def test_kindle_5_preset_outputs_portrait_image() -> None:
+    model = resolve("amazon_kindle_5")
+    svg = SVG.replace('height="480"', 'height="600"', 1)
+    profile = PanelProfile(model.width, model.height, model.bit_depth, model.byte_limit,
+                           model.rotation)
+    assert _decode(render(svg, profile, FONT_DIR).png).size == (600, 800)
+
+
 def test_unsupported_depth() -> None:
     with pytest.raises(PipelineError):
         render(SVG, PanelProfile(bit_depth=3), FONT_DIR)
+
+
+def test_unsupported_rotation() -> None:
+    with pytest.raises(PipelineError, match="unsupported rotation"):
+        render(SVG, PanelProfile(rotation=45), FONT_DIR)

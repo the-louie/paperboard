@@ -93,10 +93,12 @@
             "name": "Name",
             "profile": "Panel",
             "layout": "Layout",
+            "rotation": "Image rotation",
             "refresh_rate": "Refresh interval"
           },
           "data_description": {
-            "layout": "Pick a bundled layout or one of your own files from /config/paperboard/, or type a name. A schedule file switches layouts by time of day."
+            "layout": "Pick a bundled layout or one of your own files from /config/paperboard/, or type a name. A schedule file switches layouts by time of day.",
+            "rotation": "Additional clockwise rotation applied to the generated image. Panel presets may also apply their built-in rotation."
           }
         },
         "reconfigure": {
@@ -106,10 +108,12 @@
             "name": "Name",
             "profile": "Panel",
             "layout": "Layout",
+            "rotation": "Image rotation",
             "refresh_rate": "Refresh interval"
           },
           "data_description": {
-            "layout": "Pick a bundled layout or one of your own files from /config/paperboard/, or type a name. A schedule file switches layouts by time of day."
+            "layout": "Pick a bundled layout or one of your own files from /config/paperboard/, or type a name. A schedule file switches layouts by time of day.",
+            "rotation": "Additional clockwise rotation applied to the generated image. Panel presets may also apply their built-in rotation."
           }
         }
       },
@@ -125,6 +129,7 @@
     "profile": {
       "options": {
         "auto": "Automatic (from the device)",
+        "amazon_kindle_5": "Amazon Kindle 5 (600×800, 8-bit)",
         "amazon_kindle_2024": "Amazon Kindle 2024 (1400×840, 8-bit)",
         "amazon_kindle_7": "Amazon Kindle 7 (800×600, 8-bit)",
         "amazon_kindle_oasis_2": "Amazon Kindle Oasis 2 (1680×1264, 8-bit)",

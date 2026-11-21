@@ -21,7 +21,7 @@ screen.
 | ESPHome `online_image` | PNG link, `format: PNG`, `type: BINARY` (1-bit profile) or `GRAYSCALE` | Sends `If-None-Match`; paperboard answers **304** while the frame is unchanged, so the ESP downloads only real changes. |
 | Old TRMNL firmware, custom BMP readers | BMP link | 1-bit BMP3, 800×480 = exactly 48 062 bytes (palette 0 = black). |
 | TRMNL "Alias" plugin, LaraPaper, Terminus, other BYOS servers | PNG link | Plain GET; `ETag`, `Content-Length` and `HEAD` are supported, and the response is never compressed. |
-| Kindle / Kobo screensaver scripts | PNG link, with the panel profile set to the device's model | The profile picks size and grey depth (4-bit for 8-bit panels). Rotation from the TRMNL model registry is not applied yet; rotate on the client. |
+| Kindle / Kobo screensaver scripts | PNG link, with the panel profile set to the device's model | The profile picks size, grey depth (4-bit for 8-bit panels) and its built-in rotation. The screen's **Image rotation** setting adds a clockwise quarter-turn (0°, 90°, 180° or 270°). |
 
 **Behaviour while a render is failing:** the last good image is served, with the
 `X-Paperboard-Stale: 1` header. Before the very first frame: 503 with `Retry-After: 60`.

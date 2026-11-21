@@ -41,9 +41,11 @@ from .const import (
     CONF_PROFILE,
     CONF_REFRESH_RATE,
     CONF_ROLES,
+    CONF_ROTATION,
     DEFAULT_LAYOUT,
     DEFAULT_PROFILE,
     DEFAULT_REFRESH_RATE,
+    DEFAULT_ROTATION,
     DOMAIN,
     FLAG_ROLES,
     LIST_ROLES,
@@ -187,6 +189,12 @@ def _screen_schema(defaults: dict[str, Any], hub_refresh: int,
         vol.Required(CONF_LAYOUT, default=defaults.get(CONF_LAYOUT, DEFAULT_LAYOUT)):
             SelectSelector(SelectSelectorConfig(options=layouts, custom_value=True,
                                                 mode=SelectSelectorMode.DROPDOWN)),
+        vol.Required(CONF_ROTATION,
+                     default=str(defaults.get(CONF_ROTATION, DEFAULT_ROTATION))):
+            SelectSelector(SelectSelectorConfig(
+                options=[SelectOptionDict(value=str(degrees), label=f"{degrees}°")
+                         for degrees in (0, 90, 180, 270)],
+                mode=SelectSelectorMode.DROPDOWN)),
         vol.Required(CONF_REFRESH_RATE, default=defaults.get(CONF_REFRESH_RATE, hub_refresh)):
             NumberSelector(NumberSelectorConfig(min=MIN_REFRESH_RATE, max=MAX_REFRESH_RATE,
                                                 step=60, unit_of_measurement="s",
@@ -204,6 +212,7 @@ class ScreenSubentryFlow(ConfigSubentryFlow):
     def _clean(user_input: dict[str, Any]) -> dict[str, Any]:
         return {CONF_NAME: user_input[CONF_NAME].strip(), CONF_PROFILE: user_input[CONF_PROFILE],
                 CONF_LAYOUT: user_input[CONF_LAYOUT].strip() or DEFAULT_LAYOUT,
+                CONF_ROTATION: int(user_input.get(CONF_ROTATION, DEFAULT_ROTATION)),
                 CONF_REFRESH_RATE: int(user_input[CONF_REFRESH_RATE])}
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None
