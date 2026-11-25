@@ -6,6 +6,9 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- A `fit` option for the `text` widget. When the text does not fit at its `size`, the widget tries one size smaller at a time until the text fits. At the smallest size it cuts the text with an ellipsis, as before.
+
 ## [0.2.2] - 2026-11-21
 
 ### Changed

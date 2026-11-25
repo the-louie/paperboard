@@ -90,7 +90,7 @@ language for your own layouts (`title: {en: Weather, sv: Vädret}`, English as t
 | `stat` | any one role or `rooms[n]` | `label`, `unit`, `decimals`, `size: s..hero` |
 | `sun_moon` | — (HA's own sun times) | `show: both \| sun \| moon` |
 | `agenda` | `calendars[]` | `days: 7` |
-| `text` | — | `template` (HA Jinja, text slots only), `size` |
+| `text` | — | `template` (HA Jinja, text slots only), `size`, `fit: true` (one size smaller at a time until the text fits in `max_lines`) |
 | `footer` | the screen's own telemetry | `left: rooms \| name \| none` |
 | `hourly_strip` | `weather` (hourly) | `hours: 12`, `title` |
 | `tomorrow` | `weather` (hourly) | `hour: 7` |

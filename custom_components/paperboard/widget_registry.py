@@ -328,7 +328,7 @@ def _agenda(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -
 def _text(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> bool:
     return text_slot(svg, r, snap, m, t, o.get("template"), o.get("auto"),
                      str(o.get("size", "m")), bool(o.get("bold", True)),
-                     int(o.get("max_lines", 3)))
+                     int(o.get("max_lines", 3)), bool(o.get("fit", False)))
 
 
 @widget("hourly_strip")

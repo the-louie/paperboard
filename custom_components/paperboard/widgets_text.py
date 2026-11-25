@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from . import fmt, i18n
 from .layouts import Snapshot
-from .style import Theme
+from .style import SCALE, Theme
 from .svg import Svg
 from .text import Measurer
 from .widgets import Rect
@@ -36,7 +36,7 @@ def auto_headline(snap: Snapshot) -> str:
 
 def text_slot(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme,
               template: str | None = None, auto: str | None = None, size: str = "m",
-              bold: bool = True, max_lines: int = 3) -> bool:
+              bold: bool = True, max_lines: int = 3, fit: bool = False) -> bool:
     if template is not None:
         content = snap.texts.get(template, "")
     elif auto == "headline":
@@ -46,9 +46,15 @@ def text_slot(svg: Svg, r: Rect, snap: Snapshot, measure: Measurer, theme: Theme
     content = " ".join(content.split())
     if not content:
         return False
-    style = theme.numeral(size) if size in ("l", "xl", "xxl", "hero") else theme.text(size, bold)
-    line_h = style.size * 1.15
-    lines = measure.wrap(content, style, r.w, max(1, min(max_lines, int(r.h // line_h))))
+    scale = list(SCALE)
+    sizes = scale[scale.index(size)::-1] if fit and size in SCALE else [size]
+    for candidate in sizes:
+        style = theme.numeral(candidate) if candidate in ("l", "xl", "xxl", "hero") \
+            else theme.text(candidate, bold)
+        line_h = style.size * 1.15
+        lines = measure.wrap(content, style, r.w, max(1, min(max_lines, int(r.h // line_h))))
+        if " ".join(lines) == content:
+            break
     for i, line in enumerate(lines):
         svg.text(r.x, r.y + style.size + i * line_h, line, style)
     return bool(lines)

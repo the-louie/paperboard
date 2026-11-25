@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import pytest
 from homeassistant.config_entries import ConfigSubentryData
 from homeassistant.core import HomeAssistant
 from homeassistant.setup import async_setup_component
@@ -42,6 +43,20 @@ def test_text_golden() -> None:
                      bold=False)
     assert text_slot(svg, Rect(20, 200, 260, 80), snap, m, t) is False
     assert_golden("text_slots", render(str(svg), PanelProfile(), FONT_DIR).png)
+
+
+@pytest.mark.parametrize(("value", "width", "fit", "size", "cut"), [
+    ("9.9°", 180, True, 74, False), ("10.0°", 180, True, 58, False),
+    ("10.0°", 180, False, 74, True), ("Unreadable", 40, True, 12, True),
+])
+def test_text_fit(value: str, width: int, fit: bool, size: int, cut: bool) -> None:
+    snap = Snapshot(lang="en", now=NOW, width=800, height=480, screen_name="x",
+                    texts={"{{ t }}": value})
+    svg = Svg(800, 480)
+    assert text_slot(svg, Rect(10, 10, width, 84), snap, Measurer(load_fonts()), Theme(),
+                     template="{{ t }}", size="hero", max_lines=1, fit=fit)
+    assert f'font-size="{size}"' in str(svg)
+    assert ("…" in str(svg)) is cut
 
 
 async def test_templates_render_in_loop(hass: HomeAssistant, monkeypatch) -> None:
