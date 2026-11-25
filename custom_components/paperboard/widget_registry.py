@@ -178,6 +178,8 @@ def _now(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict) -> b
         if "dew_point" in attrs else None,
         "pressure": fmt.with_unit(attrs.get("pressure"), "hPa", 0, lang)
         if "pressure" in attrs else None,
+        "uv_index": fmt.number(attrs.get("uv_index"), 0, lang)
+        if "uv_index" in attrs else None,
         "rain_today": fmt.with_unit(role_value(snap, "rain_today")[0], "mm", 1, lang)
         if snap.roles.get("rain_today") else None,
     }
@@ -384,6 +386,9 @@ def _now_grid(svg: Svg, r: Rect, snap: Snapshot, m: Measurer, t: Theme, o: dict)
         elif key == "pressure" and "pressure" in attrs:
             cells.append((i18n.t(lang, "now_rows.pressure"),
                           fmt.with_unit(attrs.get("pressure"), "hPa", 0, lang)))
+        elif key == "uv_index" and "uv_index" in attrs:
+            cells.append((i18n.t(lang, "now_rows.uv_index"),
+                          fmt.number(attrs.get("uv_index"), 0, lang)))
         elif key == "rain_today" and snap.roles.get("rain_today"):
             cells.append((i18n.t(lang, "now_grid.rain_today"),
                           fmt.with_unit(role_value(snap, "rain_today")[0], "mm", 1, lang)))

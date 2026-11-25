@@ -129,6 +129,7 @@
     "wind": "Wind",
     "dew_point": "Dew point",
     "pressure": "Pressure",
+    "uv_index": "UV index",
     "rain_today": "Rain today"
   },
   "footer": {

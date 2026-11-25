@@ -129,6 +129,7 @@
     "wind": "Vind",
     "dew_point": "Daggpunkt",
     "pressure": "Tryck",
+    "uv_index": "UV-index",
     "rain_today": "Regn idag"
   },
   "footer": {

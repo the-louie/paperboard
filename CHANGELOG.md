@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- A `uv_index` row for the `now` and `now_grid` widgets: the weather entity's UV index. It is
+  not in the default rows, so a layout lists it in `rows` to show it.
+
 ## [0.2.2] - 2026-11-21
 
 ### Changed
