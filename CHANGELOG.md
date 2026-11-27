@@ -6,6 +6,9 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- Added an Amazon Kindle 5 panel preset and per-screen image rotation (0°, 90°, 180° or 270°).
+
 ## [0.2.2] - 2026-11-21
 
 ### Changed

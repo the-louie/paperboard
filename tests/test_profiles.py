@@ -17,6 +17,9 @@ def test_known_model_and_depth_cap() -> None:
     assert (x.width, x.height, x.scale_factor) == (1872, 1404, 1.8)
     assert x.bit_depth == 4
     assert resolve("amazon_kindle_7").bit_depth == 4  # 8-bit panels get 16 greys
+    kindle_5 = resolve("amazon_kindle_5")
+    assert (kindle_5.width, kindle_5.height, kindle_5.bit_depth, kindle_5.rotation) == \
+        (800, 600, 4, 90)
     assert resolve("og_plus").bit_depth == 2
 
 

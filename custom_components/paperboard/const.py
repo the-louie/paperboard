@@ -13,11 +13,13 @@ SUBENTRY_SCREEN = "screen"
 CONF_NAME = "name"
 CONF_PROFILE = "profile"
 CONF_LAYOUT = "layout"
+CONF_ROTATION = "rotation"
 CONF_MAC = "mac"
 CONF_API_KEY = "api_key"
 CONF_IMAGE_TOKEN = "image_token"
 
 DEFAULT_LAYOUT = "tidslinjen"
+DEFAULT_ROTATION = 0
 
 # Panel profile: "auto" (from the device's Model/Width/Height headers) or a TRMNL model name
 # from models.json. The two early ids are kept as aliases for screens created before B-064.

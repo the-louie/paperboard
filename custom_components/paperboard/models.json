@@ -64,6 +64,15 @@
    "rotation": 90,
    "byte_limit": 750000
   },
+  "amazon_kindle_5": {
+   "label": "Amazon Kindle 5",
+   "width": 800,
+   "height": 600,
+   "bit_depth": 8,
+   "scale_factor": 1.0,
+   "rotation": 90,
+   "byte_limit": 750000
+  },
   "playdate": {
    "label": "Playdate",
    "width": 400,

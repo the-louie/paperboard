@@ -24,6 +24,7 @@ from .const import (
     CONF_PROFILE,
     CONF_REFRESH_RATE,
     CONF_ROLES,
+    CONF_ROTATION,
     DEFAULT_PROFILE,
     DEFAULT_REFRESH_RATE,
     DOMAIN,
@@ -148,7 +149,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: PaperboardConfigEntry) -
         renderer = ScreenRenderer(hass, screen,
                                   layout_for(watcher, data.get(CONF_LAYOUT, ""), prof.bit_depth),
                                   PanelProfile(prof.width, prof.height, prof.bit_depth,
-                                               prof.byte_limit), fonts, hub)
+                                               prof.byte_limit, prof.rotation), fonts, hub,
+                                  rotation=int(data.get(CONF_ROTATION, 0)))
         renderer.auto_profile = auto
         renderer.layout_name = data.get(CONF_LAYOUT, "")
         spec = watcher.result.layouts.get(renderer.layout_name)

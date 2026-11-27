@@ -93,10 +93,12 @@
             "name": "Namn",
             "profile": "Panel",
             "layout": "Layout",
+            "rotation": "Bildrotation",
             "refresh_rate": "Uppdateringsintervall"
           },
           "data_description": {
-            "layout": "Välj en medföljande layout eller en av dina egna filer i /config/paperboard/, eller skriv ett namn. En schemafil byter layout efter tid på dygnet."
+            "layout": "Välj en medföljande layout eller en av dina egna filer i /config/paperboard/, eller skriv ett namn. En schemafil byter layout efter tid på dygnet.",
+            "rotation": "Extra medurs rotation av den genererade bilden. Panelprofiler kan också ha en inbyggd rotation."
           }
         },
         "reconfigure": {
@@ -106,10 +108,12 @@
             "name": "Namn",
             "profile": "Panel",
             "layout": "Layout",
+            "rotation": "Bildrotation",
             "refresh_rate": "Uppdateringsintervall"
           },
           "data_description": {
-            "layout": "Välj en medföljande layout eller en av dina egna filer i /config/paperboard/, eller skriv ett namn. En schemafil byter layout efter tid på dygnet."
+            "layout": "Välj en medföljande layout eller en av dina egna filer i /config/paperboard/, eller skriv ett namn. En schemafil byter layout efter tid på dygnet.",
+            "rotation": "Extra medurs rotation av den genererade bilden. Panelprofiler kan också ha en inbyggd rotation."
           }
         }
       },
@@ -125,6 +129,7 @@
     "profile": {
       "options": {
         "auto": "Automatiskt (från enheten)",
+        "amazon_kindle_5": "Amazon Kindle 5 (600×800, 8-bit)",
         "amazon_kindle_2024": "Amazon Kindle 2024 (1400×840, 8-bit)",
         "amazon_kindle_7": "Amazon Kindle 7 (800×600, 8-bit)",
         "amazon_kindle_oasis_2": "Amazon Kindle Oasis 2 (1680×1264, 8-bit)",

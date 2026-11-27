@@ -45,6 +45,7 @@ class PanelProfile:
     height: int = 480
     bit_depth: int = 1  # 1, 2 or 4
     byte_limit: int = 90_000  # TRMNL OG without PSRAM
+    rotation: int = 0  # clockwise, applied after rendering the layout
 
 
 @dataclass(frozen=True)
@@ -160,11 +161,15 @@ QUANTIZERS = {1: quantize_1bit, 2: quantize_2bit, 4: quantize_4bit}
 def render(svg: str, profile: PanelProfile, font_dir: Path) -> Frame:
     """The whole pipeline. Raises PipelineError; never returns a partial frame."""
     gray = rasterize(svg, profile, font_dir)
+    if profile.rotation not in (0, 90, 180, 270):
+        raise PipelineError(f"unsupported rotation {profile.rotation}")
+    if profile.rotation:
+        gray = gray.rotate(-profile.rotation, expand=True)
     quantize = QUANTIZERS.get(profile.bit_depth)
     if quantize is None:
         raise PipelineError(f"unsupported bit depth {profile.bit_depth}")
     rows = quantize(gray)
-    png = encode_png_gray(rows, profile.width, profile.height, profile.bit_depth)
+    png = encode_png_gray(rows, gray.width, gray.height, profile.bit_depth)
     if len(png) > profile.byte_limit:
         raise ImageTooLargeError(f"{len(png)} bytes > limit {profile.byte_limit}")
     return Frame(png=png, sha=hashlib.sha256(png).hexdigest()[:16])

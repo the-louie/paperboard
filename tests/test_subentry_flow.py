@@ -16,12 +16,13 @@ from custom_components.paperboard.const import (
     CONF_NAME,
     CONF_PROFILE,
     CONF_REFRESH_RATE,
+    CONF_ROTATION,
     DOMAIN,
     SUBENTRY_SCREEN,
 )
 
 SCREEN = {CONF_NAME: "Hallen", CONF_PROFILE: "auto", CONF_LAYOUT: "tidslinjen",
-          CONF_REFRESH_RATE: 900}
+          CONF_REFRESH_RATE: 900, CONF_ROTATION: "0"}
 
 
 async def _hub(hass: HomeAssistant) -> MockConfigEntry:
@@ -75,13 +76,15 @@ async def test_reconfigure_keeps_pairing_data(hass: HomeAssistant) -> None:
     assert links["png_url"].endswith(path)
     assert links["bmp_url"].endswith("/latest.bmp")
     result = await hass.config_entries.subentries.async_configure(
-        result["flow_id"], {**SCREEN, CONF_NAME: "Köket", CONF_REFRESH_RATE: 300})
+        result["flow_id"], {**SCREEN, CONF_NAME: "Köket", CONF_REFRESH_RATE: 300,
+                            CONF_ROTATION: "270"})
     assert result["type"] is FlowResultType.ABORT
     await hass.async_block_till_done(wait_background_tasks=True)  # let the reload finish
     updated = entry.subentries[subentry.subentry_id]
     assert updated.title == "Köket"
     assert updated.data[CONF_MAC] == "AA:BB"
     assert updated.data[CONF_REFRESH_RATE] == 300
+    assert updated.data[CONF_ROTATION] == 270
 
 
 async def test_delete_screen_removes_device(hass: HomeAssistant) -> None:
@@ -99,6 +102,13 @@ def _layout_selector(result: dict):
         if str(key) == CONF_LAYOUT:
             return selector
     raise AssertionError("no layout field")
+
+
+def _rotation_selector(result: dict):
+    for key, selector in result["data_schema"].schema.items():
+        if str(key) == CONF_ROTATION:
+            return selector
+    raise AssertionError("no rotation field")
 
 
 async def test_layout_is_a_dropdown_with_bundled_and_own_files(hass: HomeAssistant,
@@ -123,6 +133,8 @@ async def test_layout_is_a_dropdown_with_bundled_and_own_files(hass: HomeAssista
     assert labels["hallen"] == "hallen (your schedule file)"
     assert labels["tavlan"] == "Board (bundled)"  # English display name; the id is unchanged
     assert labels["tidslinjen"] == "Timeline (bundled)"
+    assert [option["value"] for option in _rotation_selector(result).config["options"]] == [
+        "0", "90", "180", "270"]
     # Free text is still accepted (a file added a second ago).
     done = await hass.config_entries.subentries.async_configure(
         result["flow_id"], {**SCREEN, CONF_LAYOUT: "not_yet_written"})

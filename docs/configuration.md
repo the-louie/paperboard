@@ -53,6 +53,9 @@ Each screen is one physical panel (or one image URL). **Add screen** asks for:
 - **Panel:** leave it on *Automatic*. Paperboard then follows the model the device reports,
   from 58 TRMNL models plus Kindle and BYOD panels. Pick a model only for a client that
   doesn't report one.
+- **Image rotation:** adds a clockwise rotation of 0°, 90°, 180° or 270° to the panel
+  profile's built-in rotation. Use it to correct the image orientation for clients such as
+  Kindle screensavers.
 - **Layout:** a dropdown of the bundled layouts and your own files from layer 3. You can also
   type a name, for a file you are about to create.
 - **Refresh interval:** overrides the integration's default for this screen.
